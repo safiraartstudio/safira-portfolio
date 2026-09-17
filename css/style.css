@@ -1,0 +1,197 @@
+:root{
+  --rosa-claro:#e8a8a8;
+  --rosa-escuro:#8a3d47;
+  --texto-claro:#ffffff;
+  --texto-escuro:#4a2530;
+  --card-bg:#fdf3f0;
+  --card-borda:#f0d9d3;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+
+body{
+  font-family:'Poppins', sans-serif;
+  color:var(--texto-escuro);
+  background:var(--rosa-claro);
+  min-height:100vh;
+}
+
+/* =========================================================
+   FUNDO DA PÁGINA (imagem ou GIF)
+   Troque o arquivo em img/fundo.jpg (ou .gif) pela sua arte.
+   Se usar GIF, o navegador anima ele automaticamente sozinho —
+   não precisa de nada além de trocar a extensão/arquivo aqui.
+   ========================================================= */
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:60px 20px 40px;
+  text-align:center;
+  overflow:hidden;
+
+  background-image:
+    linear-gradient(180deg, rgba(138,61,71,0.15) 0%, rgba(138,61,71,0.55) 100%),
+    url("../img/fundo.jpg");
+  background-size:cover;
+  background-position:center;
+  background-color:var(--rosa-claro); /* aparece caso a imagem não carregue */
+}
+
+/* =========================================================
+   IMAGEM CENTRAL — sem moldura, sem fundo, "solta" na tela
+   ========================================================= */
+.hero-img{
+  width:min(340px, 65vw);
+  height:auto;
+  margin-bottom:28px;
+  filter:drop-shadow(0 14px 24px rgba(0,0,0,0.3));
+}
+
+/* aparece só se a imagem não for encontrada, pra você saber
+   que precisa colocar o arquivo em img/personagem.png */
+.hero-img.img-missing{
+  width:min(280px, 55vw);
+  aspect-ratio:1/1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--texto-claro);
+  font-size:0.85rem;
+  border:2px dashed rgba(255,255,255,0.6);
+}
+
+.hero-title{
+  font-family:'Fredoka', sans-serif;
+  font-weight:700;
+  font-size:clamp(2.4rem, 8vw, 4.2rem);
+  color:var(--texto-claro);
+  letter-spacing:1px;
+  text-shadow:0 3px 12px rgba(0,0,0,0.25);
+}
+
+.hero-subtitle{
+  margin-top:18px;
+  font-size:1rem;
+  color:var(--texto-claro);
+  opacity:0.95;
+}
+
+/* ===== BOTÕES DE REDES SOCIAIS ===== */
+.social-row{
+  display:flex;
+  gap:16px;
+  margin-top:22px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.social-btn{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.85);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--texto-escuro);
+  text-decoration:none;
+  transition:transform 0.15s ease, background 0.15s ease;
+}
+.social-btn:hover{
+  transform:translateY(-3px);
+  background:#ffffff;
+}
+.social-btn svg{ width:22px; height:22px; }
+
+/* ===== CARD/CAIXA COM BORDAS ARREDONDADAS (links de página) ===== */
+.links-section{
+  width:100%;
+  max-width:520px;
+  margin-top:44px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.link-card{
+  background:var(--card-bg);
+  border:1px solid var(--card-borda);
+  border-radius:18px;
+  padding:18px 22px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  text-decoration:none;
+  color:var(--texto-escuro);
+  transition:transform 0.15s ease, box-shadow 0.15s ease;
+}
+.link-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 18px rgba(138,61,71,0.18);
+}
+
+.link-card-text{ text-align:left; }
+
+.link-card-title{
+  font-weight:600;
+  font-size:1rem;
+  color:var(--rosa-escuro);
+}
+
+.link-card-desc{
+  font-size:0.82rem;
+  color:#7a5b60;
+  margin-top:2px;
+}
+
+.link-card-arrow{
+  font-size:1.3rem;
+  color:var(--rosa-escuro);
+  flex-shrink:0;
+  margin-left:12px;
+}
+
+/* ===== RODAPÉ ===== */
+.footer{
+  margin-top:50px;
+  font-size:0.78rem;
+  color:rgba(255,255,255,0.85);
+  padding-bottom:10px;
+}
+
+/* =========================================================
+   FADE-IN SEQUENCIAL AO CARREGAR A PÁGINA
+   Cada elemento tem a classe "fade-item" + a variável --delay
+   definida inline no HTML (style="--delay:0.3s"), controlando
+   a ordem: imagem → título → subtítulo → botões → caixa de links.
+   Feito só com CSS, sem precisar de JavaScript.
+   ========================================================= */
+.fade-item{
+  opacity:0;
+  transform:translateY(16px);
+  animation:fadeInUp 0.7s ease forwards;
+  animation-delay:var(--delay, 0s);
+}
+
+@keyframes fadeInUp{
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .fade-item{
+    animation:none;
+    opacity:1;
+    transform:none;
+  }
+}
+
+@media (max-width:480px){
+  .hero{ padding:40px 16px 30px; }
+  .link-card{ padding:16px 18px; }
+}
