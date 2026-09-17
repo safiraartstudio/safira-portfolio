@@ -12,59 +12,82 @@
 
 <div class="page">
 
-  <a class="page-back fade-item" style="--delay:0s" href="../index.html">← Voltar</a>
+  <!-- EDITAR: personagem grande do canto, fica esmaecida atrás da
+       galeria. Troque o src pela sua arte (pode reaproveitar
+       img/personagem.png ou usar uma pose diferente). -->
+  <img
+    class="page-character"
+    src="../img/personagem-comissoes.png"
+    alt=""
+    onerror="this.style.display='none'">
 
-  <h1 class="page-title fade-item" style="--delay:0.1s">Comissões e Preços</h1>
+  <div class="page-inner">
 
-  <!-- ===== GALERIA DE EXEMPLOS =====
-       Cada slot aparece em sequência, da esquerda pra direita.
-       EDITAR: troque src="../img/comissao-1.jpg" pelas suas imagens
-       (mesmo nome de arquivo, ou ajuste o caminho aqui).
-       Pra adicionar mais slots, copie um bloco .gallery-item inteiro
-       e aumente o valor de --delay em 0.15s a cada novo item. -->
-  <div class="gallery">
-
-    <div class="gallery-item fade-item" style="--delay:0.3s">
-      <img src="../img/comissao-1.jpg" alt="Exemplo de comissão 1" onerror="this.classList.add('img-missing'); this.removeAttribute('src'); this.alt='Coloque aqui img/comissao-1.jpg';">
+    <div class="text-col">
+      <a class="page-back fade-item" style="--delay:0s" href="../index.html">← Voltar</a>
+      <h1 class="page-title fade-item" style="--delay:0.1s">Comissões e Preços</h1>
     </div>
 
-    <div class="gallery-item fade-item" style="--delay:0.45s">
-      <img src="../img/comissao-2.jpg" alt="Exemplo de comissão 2" onerror="this.classList.add('img-missing'); this.removeAttribute('src'); this.alt='Coloque aqui img/comissao-2.jpg';">
+    <!-- ===== GALERIA DE EXEMPLOS =====
+         Clicável: clicar numa imagem abre ela maior (lightbox).
+         Cada slot aparece em sequência, da esquerda pra direita.
+         EDITAR: troque os src pelas suas imagens. Pra adicionar
+         mais slots, copie um bloco .gallery-item inteiro e some
+         0.15s ao --delay do novo item. -->
+    <div class="gallery">
+
+      <div class="gallery-item fade-item" style="--delay:0.3s">
+        <img src="../img/comissao-1.jpg" alt="Exemplo de comissão 1" onerror="this.classList.add('img-missing'); this.removeAttribute('src'); this.alt='Coloque aqui img/comissao-1.jpg';">
+      </div>
+
+      <div class="gallery-item fade-item" style="--delay:0.45s">
+        <img src="../img/comissao-2.jpg" alt="Exemplo de comissão 2" onerror="this.classList.add('img-missing'); this.removeAttribute('src'); this.alt='Coloque aqui img/comissao-2.jpg';">
+      </div>
+
+      <div class="gallery-item fade-item" style="--delay:0.6s">
+        <img src="../img/comissao-3.jpg" alt="Exemplo de comissão 3" onerror="this.classList.add('img-missing'); this.removeAttribute('src'); this.alt='Coloque aqui img/comissao-3.jpg';">
+      </div>
+
     </div>
 
-    <div class="gallery-item fade-item" style="--delay:0.6s">
-      <img src="../img/comissao-3.jpg" alt="Exemplo de comissão 3" onerror="this.classList.add('img-missing'); this.removeAttribute('src'); this.alt='Coloque aqui img/comissao-3.jpg';">
+    <div class="text-col">
+      <div class="divider fade-item" style="--delay:0.9s"></div>
+
+      <!-- ===== BLOCO DE TIPO DE COMISSÃO =====
+           Copie esse bloco inteiro pra adicionar outros tipos
+           (Full Color, Sketch, Ref Sheet...), somando --delay
+           em cada bloco novo pra continuar a sequência descendo. -->
+      <div class="commission-block fade-item" style="--delay:1.1s">
+        <div class="commission-heading">✦ Tipo de comissão: Flat Color</div>
+        <div class="commission-text">
+          <ul>
+            <li>Esse estilo contém arte com linhas limpas e cor base, sem sombra/luz.</li>
+            <li>Inclui um fundo em gradiente. Um fundo simples pode ser adicionado por um valor extra.</li>
+          </ul>
+          <div class="commission-price">A partir de R$ 00,00</div>
+        </div>
+      </div>
+
+      <div class="commission-block fade-item" style="--delay:1.3s">
+        <div class="commission-heading">✦ Como encomendar</div>
+        <div class="commission-text">
+          <ul>
+            <li>Descreva aqui os passos: onde pedir, formas de pagamento, prazo médio.</li>
+          </ul>
+        </div>
+      </div>
     </div>
 
-  </div>
-
-  <div class="divider fade-item" style="--delay:0.9s"></div>
-
-  <!-- ===== BLOCO DE TIPO DE COMISSÃO =====
-       Copie esse bloco inteiro pra adicionar outros tipos
-       (Full Color, Sketch, Ref Sheet...), aumentando --delay
-       em cada bloco novo pra continuar a sequência descendo. -->
-  <div class="commission-block fade-item" style="--delay:1.1s">
-    <div class="commission-heading">✦ Tipo de comissão: Flat Color</div>
-    <div class="commission-text">
-      <ul>
-        <li>Esse estilo contém arte com linhas limpas e cor base, sem sombra/luz.</li>
-        <li>Inclui um fundo em gradiente. Um fundo simples pode ser adicionado por um valor extra.</li>
-      </ul>
-      <div class="commission-price">A partir de R$ 00,00</div>
-    </div>
-  </div>
-
-  <div class="commission-block fade-item" style="--delay:1.3s">
-    <div class="commission-heading">✦ Como encomendar</div>
-    <div class="commission-text">
-      <ul>
-        <li>Descreva aqui os passos: onde pedir, formas de pagamento, prazo médio.</li>
-      </ul>
-    </div>
   </div>
 
 </div>
 
+<!-- Lightbox: fica escondida até uma imagem da galeria ser clicada -->
+<div class="lightbox">
+  <button class="lightbox-close" aria-label="Fechar">✕</button>
+  <img src="" alt="">
+</div>
+
+<script src="../js/script.js"></script>
 </body>
 </html>
