@@ -34,7 +34,7 @@ body{
 
   background-image:
     linear-gradient(180deg, rgba(138,61,71,0.15) 0%, rgba(138,61,71,0.55) 100%),
-    url("../img/fundo.jpg");
+    url("../img/fundo.webp");
   background-size:cover;
   background-position:center;
   background-color:var(--rosa-claro); /* aparece caso a imagem não carregue */
