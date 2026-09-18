@@ -1,6 +1,3 @@
-// Lightbox da galeria de comissões: clique numa imagem pra abrir
-// em tela cheia, feche clicando no X ou fora da imagem.
-// Não faz nada em páginas que não têm galeria (como a inicial).
 document.addEventListener('DOMContentLoaded', () => {
   const lightbox = document.querySelector('.lightbox');
   if (!lightbox) return; // página sem galeria/lightbox — não faz nada
@@ -20,14 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.querySelectorAll('.gallery-item img').forEach((img) => {
-    // ignora os placeholders (imagens ainda não adicionadas)
+    // ignora os placeholders
     if (img.classList.contains('img-missing')) return;
     img.addEventListener('click', () => openLightbox(img.currentSrc || img.src, img.alt));
   });
 
   closeBtn.addEventListener('click', closeLightbox);
 
-  // fecha ao clicar fora da imagem (no fundo escuro)
+  // fecha ao clicar fora da imagem
   lightbox.addEventListener('click', (e) => {
     if (e.target === lightbox) closeLightbox();
   });
