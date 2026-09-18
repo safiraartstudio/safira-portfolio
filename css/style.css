@@ -16,12 +16,6 @@ body{
   min-height:100vh;
 }
 
-/* =========================================================
-   FUNDO DA PÁGINA (imagem ou GIF)
-   Troque o arquivo em img/fundo.jpg (ou .gif) pela sua arte.
-   Se usar GIF, o navegador anima ele automaticamente sozinho —
-   não precisa de nada além de trocar a extensão/arquivo aqui.
-   ========================================================= */
 .hero{
   position:relative;
   min-height:100vh;
@@ -50,8 +44,6 @@ body{
   filter:drop-shadow(0 14px 24px rgba(0,0,0,0.3));
 }
 
-/* aparece só se a imagem não for encontrada, pra você saber
-   que precisa colocar o arquivo em img/personagem.png */
 .hero-img.img-missing{
   width:min(280px, 55vw);
   aspect-ratio:1/1;
@@ -106,7 +98,7 @@ body{
 }
 .social-btn svg{ width:22px; height:22px; }
 
-/* ===== CARD/CAIXA COM BORDAS ARREDONDADAS (links de página) ===== */
+/* ===== CARD/CAIXA (links de página) ===== */
 .links-section{
   width:100%;
   max-width:520px;
@@ -162,13 +154,6 @@ body{
   padding-bottom:10px;
 }
 
-/* =========================================================
-   FADE-IN SEQUENCIAL AO CARREGAR A PÁGINA
-   Cada elemento tem a classe "fade-item" + a variável --delay
-   definida inline no HTML (style="--delay:0.3s"), controlando
-   a ordem: imagem → título → subtítulo → botões → caixa de links.
-   Feito só com CSS, sem precisar de JavaScript.
-   ========================================================= */
 .fade-item{
   opacity:0;
   transform:translateY(16px);
@@ -207,9 +192,6 @@ body{
   overflow:hidden;
 }
 
-/* Personagem grande no canto, esmaecida — fica atrás do conteúdo,
-   as imagens da galeria (opacas) sobrepõem ela e por isso se
-   destacam mais na tela. */
 .page-character{
   position:absolute;
   top:0;
@@ -233,9 +215,6 @@ body{
   margin:0 auto;
 }
 
-/* Título, botão voltar e textos ficam presos numa coluna mais
-   estreita do lado esquerdo — o "outro lado" da personagem —
-   pra não brigar visualmente com ela. */
 .text-col{
   max-width:560px;
 }
@@ -258,8 +237,6 @@ body{
   margin-bottom:36px;
 }
 
-/* Galeria — imagens de exemplo dos trabalhos.
-   Ocupa a largura toda, podendo se sobrepor à personagem do fundo. */
 .gallery{
   width:100%;
   display:grid;
@@ -289,7 +266,6 @@ body{
   transform:scale(1.04);
 }
 
-/* placeholder visível enquanto a imagem real não é adicionada */
 .gallery-item img.img-missing{
   display:flex;
   align-items:center;
@@ -308,8 +284,6 @@ body{
   margin-bottom:36px;
 }
 
-/* Bloco de tipo de comissão — fica na coluna estreita (text-col)
-   junto com o título, do lado oposto à personagem. */
 .commission-block{
   margin-bottom:38px;
   text-align:left;
@@ -323,9 +297,6 @@ body{
   margin-bottom:14px;
 }
 
-/* Cada categoria (Chibi, Halfbody, Referência...) tem seu próprio
-   título, galeria de 3 imagens e texto — copie o bloco inteiro
-   no HTML pra adicionar uma nova categoria. */
 .category-block{
   margin-bottom:10px;
 }
@@ -338,7 +309,7 @@ body{
   margin-bottom:16px;
 }
 
-/* ===== CARD "COMO ENCOMENDAR" (pagamento + contato) ===== */
+/* ===== CARD "COMO ENCOMENDAR" ===== */
 .order-card{
   background:var(--card-bg);
   border:1px solid var(--card-borda);
@@ -434,9 +405,6 @@ body{
   .page{ padding:36px 16px 50px; }
 }
 
-/* =========================================================
-   LIGHTBOX — abre a imagem clicada em tela cheia
-   ========================================================= */
 .lightbox{
   position:fixed;
   inset:0;
