@@ -378,6 +378,7 @@ body{
   flex-shrink:0;
 }
 .order-icon svg{ width:20px; height:20px; }
+.order-icon img{ width:20px; height:20px; object-fit:contain; }
 
 .order-row-text{ flex:1; text-align:left; }
 
