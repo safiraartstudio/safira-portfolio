@@ -13,6 +13,9 @@
 
 <div class="page">
 
+  <!-- EDITAR: personagem grande do canto, fica esmaecida atrás da
+       galeria. Troque o src pela sua arte (pode reaproveitar
+       img/personagem.png ou usar uma pose diferente). -->
   <img
     class="page-character"
     src="../img/personagem-comissoes.jpg"
@@ -27,7 +30,10 @@
     </div>
 
     <!-- ===== CATEGORIAS DE COMISSÃO =====
-         Cada categoria tem: título, 3 imagens de exemplo. -->
+         Cada categoria tem: título, 3 imagens de exemplo (clicáveis,
+         abrem em lightbox) e um texto com descrição + preço.
+         Copie um bloco .category-block inteiro pra adicionar uma
+         nova categoria, mantendo essa mesma estrutura interna. -->
     <div class="category-block">
       <div class="text-col">
         <h2 class="category-title fade-item" style="--delay:0s">✦ Chibi</h2>
@@ -265,10 +271,13 @@
       <div class="commission-block fade-item" style="--delay:0s">
         <div class="commission-heading">✦ Como encomendar</div>
 
+        <!-- EDITAR: troque o href do Telegram pelo link real da sua DM
+             (ex: https://t.me/seu_usuario) -->
         <div class="order-card">
           <div class="order-row">
+            <!-- EDITAR: coloque o arquivo da logo do Pix em img/pix-icon.webp -->
             <span class="order-icon">
-              <img src="../img/pix-icon.png" alt="Pix" onerror="this.outerHTML='<svg viewBox=\'0 0 24 24\' fill=\'currentColor\'><path d=\'M12 2 4 8.5l8 6.5 8-6.5Z\'/><path d=\'M12 22 4 15.5l8-6.5 8 6.5Z\'/></svg>'">
+              <img src="../img/pix-icon.webp" alt="Pix" onerror="this.outerHTML='<svg viewBox=\'0 0 24 24\' fill=\'currentColor\'><path d=\'M12 2 4 8.5l8 6.5 8-6.5Z\'/><path d=\'M12 22 4 15.5l8-6.5 8 6.5Z\'/></svg>'">
             </span>
             <div class="order-row-text">
               <div class="order-row-title">Pagamento via Pix</div>
