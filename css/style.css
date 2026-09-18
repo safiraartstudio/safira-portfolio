@@ -200,22 +200,52 @@ body{
    PÁGINA DE COMISSÕES (pages/comissoes.html)
    ========================================================= */
 .page{
+  position:relative;
   min-height:100vh;
   background:linear-gradient(180deg, var(--rosa-escuro) 0%, #6e2f38 100%);
   padding:50px 20px 70px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  overflow:hidden;
+}
+
+/* Personagem grande no canto, esmaecida — fica atrás do conteúdo,
+   as imagens da galeria (opacas) sobrepõem ela e por isso se
+   destacam mais na tela. */
+.page-character{
+  position:absolute;
+  top:0;
+  right:0;
+  height:100%;
+  width:auto;
+  max-width:55%;
+  object-fit:cover;
+  opacity:0.3;
+  z-index:0;
+  pointer-events:none;
+  -webkit-mask-image:linear-gradient(to left, black 35%, transparent 95%);
+  mask-image:linear-gradient(to left, black 35%, transparent 95%);
+}
+
+.page-inner{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:1100px;
+  margin:0 auto;
+}
+
+/* Título, botão voltar e textos ficam presos numa coluna mais
+   estreita do lado esquerdo — o "outro lado" da personagem —
+   pra não brigar visualmente com ela. */
+.text-col{
+  max-width:560px;
 }
 
 .page-back{
-  align-self:flex-start;
-  max-width:900px;
-  width:100%;
-  margin:0 auto 24px;
+  display:block;
   color:rgba(255,255,255,0.85);
   text-decoration:none;
   font-size:0.9rem;
+  margin-bottom:24px;
 }
 .page-back:hover{ color:#fff; }
 
@@ -224,16 +254,16 @@ body{
   font-weight:700;
   font-size:clamp(2rem, 6vw, 3rem);
   color:var(--texto-claro);
-  text-align:center;
+  text-align:left;
   margin-bottom:36px;
 }
 
-/* Galeria — imagens de exemplo dos trabalhos */
+/* Galeria — imagens de exemplo dos trabalhos.
+   Ocupa a largura toda, podendo se sobrepor à personagem do fundo. */
 .gallery{
   width:100%;
-  max-width:900px;
   display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
   gap:18px;
   margin-bottom:44px;
 }
@@ -244,6 +274,7 @@ body{
   overflow:hidden;
   background:rgba(255,255,255,0.08);
   border:1px solid rgba(255,255,255,0.18);
+  cursor:pointer;
 }
 
 .gallery-item img{
@@ -251,6 +282,11 @@ body{
   height:100%;
   object-fit:cover;
   display:block;
+  transition:transform 0.2s ease;
+}
+
+.gallery-item:hover img:not(.img-missing){
+  transform:scale(1.04);
 }
 
 /* placeholder visível enquanto a imagem real não é adicionada */
@@ -262,21 +298,19 @@ body{
   font-size:0.85rem;
   text-align:center;
   padding:16px;
+  cursor:default;
 }
 
 .divider{
   width:100%;
-  max-width:900px;
   height:1px;
   background:rgba(255,255,255,0.25);
   margin-bottom:36px;
 }
 
-/* Bloco de tipo de comissão — copie esse bloco inteiro no HTML
-   pra adicionar mais tipos (Flat Color, Full Color, Sketch...) */
+/* Bloco de tipo de comissão — fica na coluna estreita (text-col)
+   junto com o título, do lado oposto à personagem. */
 .commission-block{
-  width:100%;
-  max-width:900px;
   margin-bottom:38px;
   text-align:left;
 }
@@ -322,3 +356,45 @@ body{
 @media (max-width:480px){
   .page{ padding:36px 16px 50px; }
 }
+
+/* =========================================================
+   LIGHTBOX — abre a imagem clicada em tela cheia
+   ========================================================= */
+.lightbox{
+  position:fixed;
+  inset:0;
+  background:rgba(20,8,10,0.9);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+  padding:30px;
+}
+
+.lightbox.active{ display:flex; }
+
+.lightbox img{
+  max-width:90vw;
+  max-height:85vh;
+  border-radius:10px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.5);
+}
+
+.lightbox-close{
+  position:absolute;
+  top:20px;
+  right:24px;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  border:none;
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+  font-size:1.4rem;
+  line-height:1;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.lightbox-close:hover{ background:rgba(255,255,255,0.3); }
