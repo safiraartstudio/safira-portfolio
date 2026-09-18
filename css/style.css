@@ -323,6 +323,82 @@ body{
   margin-bottom:14px;
 }
 
+/* Cada categoria (Chibi, Halfbody, Referência...) tem seu próprio
+   título, galeria de 3 imagens e texto — copie o bloco inteiro
+   no HTML pra adicionar uma nova categoria. */
+.category-block{
+  margin-bottom:10px;
+}
+
+.category-title{
+  font-family:'Fredoka', sans-serif;
+  font-weight:600;
+  font-size:1.3rem;
+  color:var(--texto-claro);
+  margin-bottom:16px;
+}
+
+/* ===== CARD "COMO ENCOMENDAR" (pagamento + contato) ===== */
+.order-card{
+  background:var(--card-bg);
+  border:1px solid var(--card-borda);
+  border-radius:18px;
+  overflow:hidden;
+}
+
+.order-row{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:16px 20px;
+  text-decoration:none;
+  color:var(--texto-escuro);
+}
+
+.order-row + .order-row{
+  border-top:1px solid var(--card-borda);
+}
+
+.order-row-link{
+  transition:background 0.15s ease;
+}
+.order-row-link:hover{
+  background:rgba(138,61,71,0.07);
+}
+
+.order-icon{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:rgba(138,61,71,0.1);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--rosa-escuro);
+  flex-shrink:0;
+}
+.order-icon svg{ width:20px; height:20px; }
+
+.order-row-text{ flex:1; text-align:left; }
+
+.order-row-title{
+  font-weight:600;
+  font-size:0.95rem;
+  color:var(--rosa-escuro);
+}
+
+.order-row-desc{
+  font-size:0.8rem;
+  color:#7a5b60;
+  margin-top:2px;
+}
+
+.order-row-arrow{
+  font-size:1.3rem;
+  color:var(--rosa-escuro);
+  flex-shrink:0;
+}
+
 .commission-text{
   color:rgba(255,255,255,0.9);
   font-size:0.95rem;
