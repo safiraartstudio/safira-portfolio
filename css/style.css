@@ -199,6 +199,26 @@ body.page-fade.page-out{ opacity:0; }
   100%{ opacity:0; transform:translate(calc(-50% + var(--drift, 0px)), -140px) scale(0.9); }
 }
 
+/* ===== EFEITO "ESTALO" (desintegração do personagem) ===== */
+.dust-container{
+  position:absolute;
+  pointer-events:none;
+  z-index:6;
+}
+
+.dust-cell{
+  position:absolute;
+  background-repeat:no-repeat;
+  animation:dust-away 1.1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  will-change:transform, opacity;
+}
+
+@keyframes dust-away{
+  0%{ opacity:1; transform:translate(0, 0) rotate(0deg) scale(1); }
+  55%{ opacity:0.85; }
+  100%{ opacity:0; transform:translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.25); }
+}
+
 /* ===== BOTÃO VOLTAR AO TOPO ===== */
 .back-to-top{
   position:fixed;
