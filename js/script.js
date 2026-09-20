@@ -1,3 +1,15 @@
+// ===== LIBERA A ANIMAÇÃO DE ENTRADA (fade-item) DEPOIS QUE ACABA =====
+// Uma animação com "forwards" prende a propriedade transform no
+// valor final pra sempre — o que impede outros efeitos (tipo o
+// hover 3D da galeria) de mudar o transform depois. Assim que cada
+// fade-item termina de animar, trocamos pra uma classe estática
+// (fade-done) que solta o transform de volta pro controle normal.
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.fade-item').forEach((el) => {
+    el.addEventListener('animationend', () => el.classList.add('fade-done'), { once: true });
+  });
+});
+
 // ===== BOTÃO DE MODO CLARO/ESCURO =====
 // A leitura do tema salvo já acontece antes, num script inline no
 // <head> de cada página (evita o "flash" da cor errada). Aqui só
