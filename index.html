@@ -77,13 +77,12 @@
   <!-- EDITAR: status das comissões — pra trocar entre aberto/fechado,
        troque a classe "status-open" por "status-closed" (ou vice-versa)
        E o texto dentro do <span>. Só isso, nada mais precisa mudar. -->
-  <!-- id="statusBadge" e a bolha de fala abaixo alimentam a
-       brincadeira em script.js: clique 4x com o status fechado
-       pra ver. Não faz nada com o status aberto. -->
+  <!-- id="statusBadge"/"statusLabel" alimentam a brincadeira em
+       script.js: clique 4x com o status fechado pra ver o texto se
+       reescrever sozinho. Não faz nada com o status aberto. -->
   <div class="status-badge status-closed fade-item" id="statusBadge" style="--delay:0.85s">
     <span class="status-dot"></span>
-    <span>Comissões Fechadas</span>
-    <span class="status-speech" id="statusSpeech"></span>
+    <span id="statusLabel">Comissões Fechadas</span>
   </div>
 
   <div class="links-section fade-item" style="--delay:1s">
