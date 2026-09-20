@@ -53,13 +53,29 @@ document.addEventListener('DOMContentLoaded', () => {
       const triggerDistance = 130;
 
       if (dist < triggerDistance) {
-        const angle = Math.atan2(dy, dx);
         const jump = 160;
         const margin = 16;
-        let newLeft = r.left + Math.cos(angle) * jump;
-        let newTop = r.top + Math.sin(angle) * jump;
-        newLeft = Math.min(Math.max(margin, newLeft), window.innerWidth - r.width - margin);
-        newTop = Math.min(Math.max(margin, newTop), window.innerHeight - r.height - margin);
+        const maxLeft = window.innerWidth - r.width - margin;
+        const maxTop = window.innerHeight - r.height - margin;
+
+        // Pequena aleatoriedade no ângulo pra não ficar sempre
+        // quicando exatamente na mesma direção (evita ping-pong
+        // previsível entre duas paredes).
+        const jitter = (Math.random() - 0.5) * 0.6;
+        let vx = Math.cos(Math.atan2(dy, dx) + jitter);
+        let vy = Math.sin(Math.atan2(dy, dx) + jitter);
+
+        // Se o pulo for bater numa borda, inverte a direção desse
+        // eixo — ele "quica" pra longe da parede em vez de ficar
+        // prensado nela, o que tornaria fácil de encurralar.
+        if (r.left + vx * jump < margin || r.left + vx * jump > maxLeft) vx = -vx;
+        if (r.top + vy * jump < margin || r.top + vy * jump > maxTop) vy = -vy;
+
+        let newLeft = r.left + vx * jump;
+        let newTop = r.top + vy * jump;
+        newLeft = Math.min(Math.max(margin, newLeft), maxLeft);
+        newTop = Math.min(Math.max(margin, newTop), maxTop);
+
         badge.style.left = `${newLeft}px`;
         badge.style.top = `${newTop}px`;
       }
@@ -68,8 +84,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   badge.addEventListener('click', () => {
     clicks += 1;
-    if (messages[clicks]) rewriteLabel(messages[clicks], clicks !== 6);
-    if (clicks === 6) startDodging();
+
+    if (clicks < 6) {
+      if (messages[clicks]) rewriteLabel(messages[clicks], true);
+      return;
+    }
+
+    if (clicks === 6) {
+      rewriteLabel(messages[6], false);
+      startDodging();
+      return;
+    }
+
+    // Se a pessoa ainda assim conseguir clicar de novo (pegou o
+    // botão fujão), prega a peça de verdade.
+    window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank', 'noopener');
   });
 });
 
