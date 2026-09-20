@@ -4,20 +4,34 @@
 // Haha!" e o botão passa a desviar do cursor pelo resto da visita.
 document.addEventListener('DOMContentLoaded', () => {
   const badge = document.getElementById('statusBadge');
-  const speech = document.getElementById('statusSpeech');
-  if (!badge || !speech || !badge.classList.contains('status-closed')) return;
+  const label = document.getElementById('statusLabel');
+  if (!badge || !label || !badge.classList.contains('status-closed')) return;
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const originalText = label.textContent;
   const messages = { 4: 'O que foi?', 5: 'Quer comissionar?', 6: 'Brincadeirinha Haha!' };
   let clicks = 0;
-  let speechTimer = null;
-  let dodging = false;
+  let labelTimer = null;
 
-  function showSpeech(text) {
-    speech.textContent = text;
-    speech.classList.add('visible');
-    clearTimeout(speechTimer);
-    speechTimer = setTimeout(() => speech.classList.remove('visible'), 2200);
+  // Troca o texto do próprio badge (com uma piscadinha rápida) em
+  // vez de abrir uma bolha de fala à parte. No 6º clique, o texto
+  // fica em "Brincadeirinha Haha!" e não volta mais ao original.
+  function rewriteLabel(text, revert) {
+    label.style.opacity = '0';
+    clearTimeout(labelTimer);
+    labelTimer = setTimeout(() => {
+      label.textContent = text;
+      label.style.opacity = '1';
+      if (revert) {
+        labelTimer = setTimeout(() => {
+          label.style.opacity = '0';
+          setTimeout(() => {
+            label.textContent = originalText;
+            label.style.opacity = '1';
+          }, 150);
+        }, 2000);
+      }
+    }, 150);
   }
 
   function startDodging() {
@@ -53,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   badge.addEventListener('click', () => {
     clicks += 1;
-    if (messages[clicks]) showSpeech(messages[clicks]);
+    if (messages[clicks]) rewriteLabel(messages[clicks], clicks !== 6);
     if (clicks === 6) startDodging();
   });
 });
