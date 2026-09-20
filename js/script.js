@@ -315,8 +315,8 @@ function disintegrate(img, hero) {
     return;
   }
 
-  const cols = 10;
-  const rows = 10;
+  const cols = 20;
+  const rows = 20;
   const cellW = w / cols;
   const cellH = h / rows;
 
