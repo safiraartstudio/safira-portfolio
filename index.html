@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SafiraWolfFox — Portfólio</title>
+<!-- Aplica o tema salvo ANTES da página pintar, pra não piscar a cor errada -->
+<script>if(localStorage.getItem('theme')==='light')document.documentElement.setAttribute('data-theme','light');</script>
 <!-- EDITAR: coloque o arquivo do ícone em img/favicon.png (ideal: quadrado, 32x32 ou 64x64) -->
 <link rel="icon" type="image/png" href="img/favicon.png">
 
@@ -28,7 +30,19 @@
 </head>
 <body>
 
+<!-- Botão de modo claro/escuro (aparece fixo em todas as páginas) -->
+<button class="theme-toggle" id="themeToggle" aria-label="Alternar tema claro/escuro">
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v3M12 18.5v3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M2.5 12h3M18.5 12h3M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></svg>
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.8 14.5A8.5 8.5 0 1 1 9.5 3.2a6.8 6.8 0 0 0 9.3 9.3c.7-.1 1.4-.3 2-.6.2.5.2 1 0 1.6Z"/></svg>
+</button>
+
 <div class="hero">
+
+  <!-- Partículas/brilho decorativo no fundo -->
+  <div class="sparkles">
+    <span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span>
+    <span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span>
+  </div>
 
   <!-- EDITAR: troque o src pela sua imagem/recorte "saltado" da tela.
        Sem moldura, sem fundo — use PNG com fundo transparente pra dar
