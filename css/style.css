@@ -427,6 +427,17 @@ body.page-fade.page-out{ opacity:0; }
   animation-delay:var(--delay, 0s);
 }
 
+/* Assim que a animação de entrada termina, o JS troca pra essa
+   classe (ver script.js) — isso "solta" a propriedade transform,
+   que uma animação com "forwards" prende pra sempre, permitindo
+   que outros efeitos (como o hover 3D da galeria) voltem a
+   funcionar normalmente nesse elemento depois da entrada. */
+.fade-item.fade-done{
+  animation:none;
+  opacity:1;
+  transform:none;
+}
+
 @keyframes fadeInUp{
   to{
     opacity:1;
