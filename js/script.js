@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const messages = { 4: 'O que foi?', 5: 'Quer comissionar?', 6: 'Brincadeirinha Haha!' };
   let clicks = 0;
   let labelTimer = null;
+  let dodging = false;
 
   // Troca o texto do próprio badge (com uma piscadinha rápida) em
   // vez de abrir uma bolha de fala à parte. No 6º clique, o texto
