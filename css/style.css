@@ -81,6 +81,15 @@ a, button, .gallery-item{
   cursor: url("../img/cursor-hover.png") 6 6, url("../img/cursor.png") 6 6, pointer;
 }
 
+/* Cursor de "hover" também aparece ENQUANTO você clica em QUALQUER
+   lugar da página, mesmo em área vazia sem link/botão nenhum —
+   é uma "interação vazia", só um feedback visual do clique.
+   :active dispara em qualquer elemento enquanto o botão do mouse
+   está pressionado, e volta ao normal assim que solta o clique. */
+body:active{
+  cursor: url("../img/cursor-hover.png") 6 6, url("../img/cursor.png") 6 6, auto;
+}
+
 /* ===== TRANSIÇÃO ENTRE PÁGINAS =====
    O body começa invisível; o JS adiciona "page-in" assim que a
    página carrega e troca por "page-out" antes de navegar pra um
