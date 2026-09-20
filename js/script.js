@@ -1,3 +1,16 @@
+// ===== BLOQUEIO CASUAL DE CÓPIA DE IMAGEM =====
+// Impede o menu de botão direito ("salvar imagem como") e o
+// arrastar de qualquer <img> da página. Junto com o CSS que tira a
+// seleção de texto, isso cobre os jeitos mais comuns de copiar
+// conteúdo casualmente — mas não é proteção real (print de tela,
+// ferramentas de desenvolvedor etc. sempre contornam isso).
+document.addEventListener('contextmenu', (e) => {
+  if (e.target.tagName === 'IMG') e.preventDefault();
+});
+document.addEventListener('dragstart', (e) => {
+  if (e.target.tagName === 'IMG') e.preventDefault();
+});
+
 // ===== LIBERA A ANIMAÇÃO DE ENTRADA (fade-item) DEPOIS QUE ACABA =====
 // Uma animação com "forwards" prende a propriedade transform no
 // valor final pra sempre — o que impede outros efeitos (tipo o
