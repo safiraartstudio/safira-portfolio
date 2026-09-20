@@ -341,41 +341,6 @@ body.page-fade.page-out{ opacity:0; }
   transition:left 0.18s ease, top 0.18s ease;
 }
 
-/* Bolha de fala que aparece nos cliques 4, 5 e 6 (ver script.js) */
-.status-speech{
-  position:absolute;
-  bottom:calc(100% + 10px);
-  left:50%;
-  transform:translateX(-50%) translateY(4px);
-  background:var(--card-bg);
-  border:1px solid var(--card-borda);
-  color:var(--card-text);
-  padding:8px 14px;
-  border-radius:12px;
-  font-size:0.78rem;
-  font-weight:600;
-  text-transform:none;
-  letter-spacing:normal;
-  white-space:nowrap;
-  box-shadow:0 8px 18px rgba(0,0,0,0.22);
-  opacity:0;
-  pointer-events:none;
-  transition:opacity 0.2s ease, transform 0.2s ease;
-}
-.status-speech.visible{
-  opacity:1;
-  transform:translateX(-50%) translateY(0);
-}
-.status-speech::after{
-  content:"";
-  position:absolute;
-  top:100%;
-  left:50%;
-  transform:translateX(-50%);
-  border:6px solid transparent;
-  border-top-color:var(--card-borda);
-}
-
 /* Modo "fujão": o badge vira posicionamento fixo pra poder desviar
    do cursor livremente pela tela, em vez de ficar preso no fluxo
    normal da página. */
@@ -389,6 +354,8 @@ body.page-fade.page-out{ opacity:0; }
   .status-badge{ transition:none; }
   .status-badge.dodging{ position:relative; } /* desativa a fuga pra quem prefere menos movimento */
 }
+
+#statusLabel{ transition:opacity 0.15s ease; }
 
 .status-open{ color:var(--status-open-color); }
 .status-closed{ color:var(--status-closed-color); }
