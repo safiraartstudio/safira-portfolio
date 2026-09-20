@@ -91,3 +91,90 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
   });
 });
+
+// ===== SKELETON LOADING =====
+// Tira o "brilho passando" (classe is-loading) assim que a imagem
+// termina de carregar — ou falha, nesse caso ela vira o placeholder
+// de sempre (img-missing) em vez de ficar brilhando pra sempre.
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.gallery-item').forEach((item) => {
+    const img = item.querySelector('img');
+    if (!img) return;
+
+    const markLoaded = () => {
+      img.classList.add('loaded');
+      item.classList.remove('is-loading');
+    };
+
+    if (img.complete && img.naturalWidth > 0) {
+      markLoaded();
+    } else {
+      img.addEventListener('load', markLoaded);
+      img.addEventListener('error', () => item.classList.remove('is-loading'));
+    }
+  });
+});
+
+// ===== HOVER 3D NA GALERIA =====
+// A caixa da imagem se inclina seguindo a posição do mouse.
+// Desativado se a pessoa tiver "reduzir movimento" ativado no sistema.
+document.addEventListener('DOMContentLoaded', () => {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return;
+
+  document.querySelectorAll('.gallery-item').forEach((item) => {
+    item.addEventListener('mousemove', (e) => {
+      const rect = item.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width;
+      const py = (e.clientY - rect.top) / rect.height;
+      const rotateY = (px - 0.5) * 12;
+      const rotateX = (0.5 - py) * 12;
+      item.style.transform = `perspective(700px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+    });
+
+    item.addEventListener('mouseleave', () => {
+      item.style.transform = '';
+    });
+  });
+});
+
+// ===== EASTER EGG: CORAÇÕES AO CLICAR NO PERSONAGEM =====
+// Só existe na página inicial (.hero-img). Cada clique solta um
+// coraçãozinho que sobe e desaparece — decorativo, sem função real.
+document.addEventListener('DOMContentLoaded', () => {
+  const heroImg = document.querySelector('.hero-img');
+  const hero = document.querySelector('.hero');
+  if (!heroImg || !hero) return;
+
+  heroImg.addEventListener('click', (e) => {
+    const rect = hero.getBoundingClientRect();
+    const heart = document.createElement('span');
+    heart.className = 'floating-heart';
+    heart.textContent = '💗';
+    heart.style.left = `${e.clientX - rect.left}px`;
+    heart.style.top = `${e.clientY - rect.top}px`;
+    heart.style.setProperty('--drift', `${Math.random() * 50 - 25}px`);
+    hero.appendChild(heart);
+    heart.addEventListener('animationend', () => heart.remove());
+  });
+});
+
+// ===== BOTÃO VOLTAR AO TOPO =====
+// Aparece depois de rolar um pouco a página (só existe nas páginas
+// que têm o botão no HTML — Comissões e TOS, que são mais longas).
+document.addEventListener('DOMContentLoaded', () => {
+  const backToTop = document.getElementById('backToTop');
+  if (!backToTop) return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const toggleVisible = () => {
+    backToTop.classList.toggle('visible', window.scrollY > 400);
+  };
+  window.addEventListener('scroll', toggleVisible, { passive: true });
+  toggleVisible();
+
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+  });
+});
