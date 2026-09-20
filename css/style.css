@@ -5,6 +5,26 @@
   --texto-escuro:#4a2530;
   --card-bg:#fdf3f0;
   --card-borda:#f0d9d3;
+
+  /* Cores das páginas internas (comissões/TOS) — trocam no modo claro.
+     O hero da home usa foto de fundo, então mantém o mesmo overlay
+     escuro nos dois modos (a foto continua legível de qualquer jeito). */
+  --page-bg-start:var(--rosa-escuro);
+  --page-bg-end:#6e2f38;
+  --page-text:var(--texto-claro);
+  --page-text-secondary:rgba(255,255,255,0.9);
+  --page-divider:rgba(255,255,255,0.25);
+}
+
+/* ===== MODO CLARO =====
+   Ativado via atributo data-theme="light" na tag <html>,
+   trocado pelo botão de sol/lua (.theme-toggle no HTML/JS). */
+:root[data-theme="light"]{
+  --page-bg-start:#fdf1ee;
+  --page-bg-end:#f6dfd9;
+  --page-text:var(--rosa-escuro);
+  --page-text-secondary:#6e4048;
+  --page-divider:rgba(138,61,71,0.2);
 }
 
 *{ box-sizing:border-box; margin:0; padding:0; }
@@ -14,6 +34,82 @@ body{
   color:var(--texto-escuro);
   background:var(--rosa-claro);
   min-height:100vh;
+  /* cursor customizado (patinha) em todo o site */
+  cursor:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCIgdmlld0JveD0iMCAwIDI4IDI4Ij48ZyBmaWxsPSIjOGEzZDQ3Ij48ZWxsaXBzZSBjeD0iMTQiIGN5PSIxOCIgcng9IjciIHJ5PSI2Ii8+PGVsbGlwc2UgY3g9IjYiIGN5PSIxMCIgcng9IjMiIHJ5PSIzLjYiIHRyYW5zZm9ybT0icm90YXRlKC0yMCA2IDEwKSIvPjxlbGxpcHNlIGN4PSIxMiIgY3k9IjUuNSIgcng9IjMiIHJ5PSIzLjYiLz48ZWxsaXBzZSBjeD0iMTgiIGN5PSI1LjUiIHJ4PSIzIiByeT0iMy42Ii8+PGVsbGlwc2UgY3g9IjIyIiBjeT0iMTAiIHJ4PSIzIiByeT0iMy42IiB0cmFuc2Zvcm09InJvdGF0ZSgyMCAyMiAxMCkiLz48L2c+PC9zdmc+") 14 14, auto;
+}
+
+/* ===== TRANSIÇÃO ENTRE PÁGINAS =====
+   O body começa invisível; o JS adiciona "page-in" assim que a
+   página carrega e troca por "page-out" antes de navegar pra um
+   link interno, criando um fade suave entre as páginas. */
+body.page-fade{
+  opacity:0;
+  transition:opacity 0.28s ease;
+}
+body.page-fade.page-in{ opacity:1; }
+body.page-fade.page-out{ opacity:0; }
+
+@media (prefers-reduced-motion: reduce){
+  body.page-fade{ opacity:1 !important; transition:none; }
+}
+
+/* ===== BOTÃO DE MODO CLARO/ESCURO ===== */
+.theme-toggle{
+  position:fixed;
+  top:16px;
+  right:16px;
+  z-index:500;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  border:none;
+  background:rgba(255,255,255,0.85);
+  color:var(--rosa-escuro);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 14px rgba(0,0,0,0.18);
+  transition:transform 0.15s ease;
+}
+.theme-toggle:hover{ transform:scale(1.06); }
+.theme-toggle svg{ width:19px; height:19px; }
+.theme-toggle .icon-moon{ display:none; }
+:root[data-theme="light"] .theme-toggle .icon-sun{ display:none; }
+:root[data-theme="light"] .theme-toggle .icon-moon{ display:block; }
+
+/* ===== PARTÍCULAS / BRILHO SUTIL DE FUNDO ===== */
+.sparkles{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:-1;
+}
+.sparkle{
+  position:absolute;
+  width:4px;
+  height:4px;
+  background:#fff;
+  border-radius:50%;
+  opacity:0;
+  animation:sparkle-twinkle 3.6s ease-in-out infinite;
+}
+.sparkle:nth-child(1){ top:8%;  left:12%; animation-delay:0s;   }
+.sparkle:nth-child(2){ top:20%; left:78%; animation-delay:.4s;  width:3px; height:3px; }
+.sparkle:nth-child(3){ top:34%; left:40%; animation-delay:.9s;  }
+.sparkle:nth-child(4){ top:54%; left:88%; animation-delay:1.3s; width:5px; height:5px; }
+.sparkle:nth-child(5){ top:64%; left:18%; animation-delay:1.8s; }
+.sparkle:nth-child(6){ top:80%; left:60%; animation-delay:2.2s; width:3px; height:3px; }
+.sparkle:nth-child(7){ top:14%; left:55%; animation-delay:2.6s; }
+.sparkle:nth-child(8){ top:46%; left:6%;  animation-delay:3s;   width:5px; height:5px; }
+
+@keyframes sparkle-twinkle{
+  0%, 100%{ opacity:0; transform:scale(0.6) translateY(0); }
+  50%{ opacity:0.85; transform:scale(1.2) translateY(-6px); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .sparkle{ animation:none; opacity:0.35; }
 }
 
 /* =========================================================
@@ -256,7 +352,7 @@ body{
 .page{
   position:relative;
   min-height:100vh;
-  background:linear-gradient(180deg, var(--rosa-escuro) 0%, #6e2f38 100%);
+  background:linear-gradient(180deg, var(--page-bg-start) 0%, var(--page-bg-end) 100%);
   padding:50px 20px 70px;
   overflow:hidden;
 }
@@ -296,18 +392,18 @@ body{
 
 .page-back{
   display:block;
-  color:rgba(255,255,255,0.85);
+  color:var(--page-text-secondary);
   text-decoration:none;
   font-size:0.9rem;
   margin-bottom:24px;
 }
-.page-back:hover{ color:#fff; }
+.page-back:hover{ color:var(--page-text); }
 
 .page-title{
   font-family:'Fredoka', sans-serif;
   font-weight:700;
   font-size:clamp(2rem, 6vw, 3rem);
-  color:var(--texto-claro);
+  color:var(--page-text);
   text-align:left;
   margin-bottom:36px;
 }
@@ -358,7 +454,7 @@ body{
 .divider{
   width:100%;
   height:1px;
-  background:rgba(255,255,255,0.25);
+  background:var(--page-divider);
   margin-bottom:36px;
 }
 
@@ -373,7 +469,7 @@ body{
   font-family:'Fredoka', sans-serif;
   font-weight:600;
   font-size:1.4rem;
-  color:var(--texto-claro);
+  color:var(--page-text);
   margin-bottom:14px;
 }
 
@@ -388,7 +484,7 @@ body{
   font-family:'Fredoka', sans-serif;
   font-weight:600;
   font-size:1.3rem;
-  color:var(--texto-claro);
+  color:var(--page-text);
   margin-bottom:16px;
 }
 
@@ -455,7 +551,7 @@ body{
 }
 
 .commission-text{
-  color:rgba(255,255,255,0.9);
+  color:var(--page-text-secondary);
   font-size:0.95rem;
   line-height:1.7;
 }
