@@ -164,6 +164,52 @@ body.page-fade.page-out{ opacity:0; }
   .sparkle{ animation:none; opacity:0.35; }
 }
 
+/* ===== EASTER EGG: CORAÇÕES ===== */
+.floating-heart{
+  position:absolute;
+  font-size:1.4rem;
+  pointer-events:none;
+  transform:translate(-50%, -50%);
+  animation:heart-float 1.1s ease-out forwards;
+  z-index:5;
+}
+
+@keyframes heart-float{
+  0%{ opacity:0; transform:translate(-50%, -50%) scale(0.5); }
+  15%{ opacity:1; transform:translate(-50%, -50%) scale(1.1); }
+  100%{ opacity:0; transform:translate(calc(-50% + var(--drift, 0px)), -140px) scale(0.9); }
+}
+
+/* ===== BOTÃO VOLTAR AO TOPO ===== */
+.back-to-top{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  z-index:400;
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  border:1px solid var(--card-borda);
+  background:var(--card-bg);
+  color:var(--card-text);
+  font-size:1.3rem;
+  line-height:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 14px rgba(0,0,0,0.18);
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(10px);
+  transition:opacity 0.2s ease, transform 0.2s ease;
+}
+
+.back-to-top.visible{
+  opacity:1;
+  pointer-events:auto;
+  transform:translateY(0);
+}
+
 /* =========================================================
    FUNDO DA PÁGINA (imagem ou GIF)
    Troque o arquivo em img/fundo.jpg (ou .gif) pela sua arte.
@@ -480,6 +526,37 @@ body.page-fade.page-out{ opacity:0; }
   background:var(--gallery-item-bg);
   border:1px solid var(--gallery-item-border);
   /* cursor de hover já definido na regra "a, button, .gallery-item" */
+
+  /* efeito 3D ao passar o mouse (o JS calcula o ângulo e escreve
+     direto no style; esse transition só deixa o movimento suave e
+     faz a inclinação voltar ao normal quando o mouse sai) */
+  transition:transform 0.15s ease;
+  transform-style:preserve-3d;
+  will-change:transform;
+}
+
+/* ===== SKELETON LOADING =====
+   Efeito de "brilho passando" enquanto a imagem carrega. O JS
+   remove a classe "is-loading" assim que a imagem termina de
+   carregar (ou falha), revelando a imagem real com um fade. */
+.gallery-item.is-loading{
+  background:linear-gradient(
+    100deg,
+    var(--gallery-item-bg) 30%,
+    rgba(255,255,255,0.18) 50%,
+    var(--gallery-item-bg) 70%
+  );
+  background-size:250% 100%;
+  animation:skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer{
+  0%{ background-position:100% 0; }
+  100%{ background-position:-100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .gallery-item.is-loading{ animation:none; }
 }
 
 .gallery-item img{
@@ -487,7 +564,13 @@ body.page-fade.page-out{ opacity:0; }
   height:100%;
   object-fit:cover;
   display:block;
-  transition:transform 0.2s ease;
+  opacity:0;
+  transition:opacity 0.35s ease, transform 0.2s ease;
+}
+
+.gallery-item img.loaded,
+.gallery-item img.img-missing{
+  opacity:1;
 }
 
 .gallery-item:hover img:not(.img-missing){
