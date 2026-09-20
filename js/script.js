@@ -275,7 +275,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const hero = document.querySelector('.hero');
   if (!heroImg || !hero) return;
 
+  const DISINTEGRATE_AT = 12; // cliques até o "estalo"
+  let clickCount = 0;
+  let gone = false;
+
   heroImg.addEventListener('click', (e) => {
+    if (gone) return;
+
     const rect = hero.getBoundingClientRect();
     const heart = document.createElement('span');
     heart.className = 'floating-heart';
@@ -285,8 +291,75 @@ document.addEventListener('DOMContentLoaded', () => {
     heart.style.setProperty('--drift', `${Math.random() * 50 - 25}px`);
     hero.appendChild(heart);
     heart.addEventListener('animationend', () => heart.remove());
+
+    clickCount += 1;
+    if (clickCount >= DISINTEGRATE_AT) {
+      gone = true;
+      disintegrate(heroImg, hero);
+    }
   });
 });
+
+// Fatia a imagem numa grade de pedacinhos (cada um mostrando só o
+// seu recorte da própria imagem via background-position) e anima
+// cada um voando pra longe e sumindo, tipo poeira ao vento — dá o
+// efeito do estalo sem precisar de canvas nem de outro arquivo.
+function disintegrate(img, hero) {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const w = img.offsetWidth;
+  const h = img.offsetHeight;
+
+  if (reduceMotion || !w || !h) {
+    img.style.transition = 'opacity 0.6s ease';
+    img.style.opacity = '0';
+    return;
+  }
+
+  const cols = 10;
+  const rows = 10;
+  const cellW = w / cols;
+  const cellH = h / rows;
+
+  const container = document.createElement('div');
+  container.className = 'dust-container';
+  container.style.left = `${img.offsetLeft}px`;
+  container.style.top = `${img.offsetTop}px`;
+  container.style.width = `${w}px`;
+  container.style.height = `${h}px`;
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const cell = document.createElement('span');
+      cell.className = 'dust-cell';
+      cell.style.left = `${col * cellW}px`;
+      cell.style.top = `${row * cellH}px`;
+      cell.style.width = `${cellW}px`;
+      cell.style.height = `${cellH}px`;
+      cell.style.backgroundImage = `url("${img.currentSrc || img.src}")`;
+      cell.style.backgroundSize = `${w}px ${h}px`;
+      cell.style.backgroundPosition = `-${col * cellW}px -${row * cellH}px`;
+
+      const dx = 30 + Math.random() * 150;       // deriva pra direita
+      const dy = -(30 + Math.random() * 170);    // deriva pra cima
+      const rot = Math.random() * 120 - 60;
+      // colunas mais à esquerda somem primeiro, criando o efeito de
+      // "varredura" — igual ao estalo, que começa de um lado
+      const sweepDelay = (col / cols) * 0.5 + Math.random() * 0.25;
+
+      cell.style.setProperty('--dx', `${dx}px`);
+      cell.style.setProperty('--dy', `${dy}px`);
+      cell.style.setProperty('--rot', `${rot}deg`);
+      cell.style.animationDelay = `${sweepDelay}s`;
+
+      container.appendChild(cell);
+    }
+  }
+
+  hero.appendChild(container);
+  img.style.opacity = '0'; // a poeira já cobre o mesmo espaço da imagem original
+
+  setTimeout(() => container.remove(), 2200);
+}
 
 // ===== BOTÃO VOLTAR AO TOPO =====
 // Aparece depois de rolar um pouco a página (só existe nas páginas
