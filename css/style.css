@@ -67,31 +67,18 @@ body{
   color:var(--texto-escuro);
   background:var(--rosa-claro);
   min-height:100vh;
-  /* Cursor customizado. Ordem de prioridade (o navegador tenta cada
-     um até um funcionar):
-     1) img/cursor.png — SE VOCÊ COLOCAR esse arquivo (PNG, fundo
-        transparente, até 128x128px por lado), ele é usado
-        automaticamente. Ajustado aqui pro seu arquivo de 64x74,
-        com o ponto de clique no canto superior esquerdo (6 6).
-     2) Se não existir, cai na patinha desenhada em SVG (embutida
-        aqui embaixo) como reserva.
-     3) Se nada funcionar, volta pro cursor padrão do sistema. */
-  cursor:
-    url("../img/cursor.png") 6 6,
-    url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCIgdmlld0JveD0iMCAwIDI4IDI4Ij48ZyBmaWxsPSIjOGEzZDQ3Ij48ZWxsaXBzZSBjeD0iMTQiIGN5PSIxOCIgcng9IjciIHJ5PSI2Ii8+PGVsbGlwc2UgY3g9IjYiIGN5PSIxMCIgcng9IjMiIHJ5PSIzLjYiIHRyYW5zZm9ybT0icm90YXRlKC0yMCA2IDEwKSIvPjxlbGxpcHNlIGN4PSIxMiIgY3k9IjUuNSIgcng9IjMiIHJ5PSIzLjYiLz48ZWxsaXBzZSBjeD0iMTgiIGN5PSI1LjUiIHJ4PSIzIiByeT0iMy42Ii8+PGVsbGlwc2UgY3g9IjIyIiBjeT0iMTAiIHJ4PSIzIiByeT0iMy42IiB0cmFuc2Zvcm09InJvdGF0ZSgyMCAyMiAxMCkiLz48L2c+PC9zdmc+") 14 14,
-    auto;
+  /* Cursor customizado (img/cursor.png, 64x74, ponto de clique 6 6).
+     Cadeia curta de propósito: navegadores ficam inconsistentes
+     quando você empilha 3-4 url() diferentes numa cadeia de cursor
+     (o SVG embutido de reserva foi removido daqui por causa disso). */
+  cursor: url("../img/cursor.png") 6 6, auto;
 }
 
-/* Cursor ao passar por cima de qualquer botão/link — por padrão
-   usa a mesma patinha (só troca o "auto" final por "pointer" de
-   reserva). Pra usar um cursor DIFERENTE só no hover, coloque um
-   arquivo img/cursor-hover.png — ele tem prioridade automática. */
+/* Cursor diferente ao passar por cima de botões/links, usando o
+   segundo arquivo (img/cursor-hover.png). Cadeia igualmente curta:
+   só o arquivo de hover + a mesma patinha normal como reserva. */
 a, button, .gallery-item{
-  cursor:
-    url("../img/cursor-hover.png") 6 6,
-    url("../img/cursor.png") 6 6,
-    url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCIgdmlld0JveD0iMCAwIDI4IDI4Ij48ZyBmaWxsPSIjOGEzZDQ3Ij48ZWxsaXBzZSBjeD0iMTQiIGN5PSIxOCIgcng9IjciIHJ5PSI2Ii8+PGVsbGlwc2UgY3g9IjYiIGN5PSIxMCIgcng9IjMiIHJ5PSIzLjYiIHRyYW5zZm9ybT0icm90YXRlKC0yMCA2IDEwKSIvPjxlbGxpcHNlIGN4PSIxMiIgY3k9IjUuNSIgcng9IjMiIHJ5PSIzLjYiLz48ZWxsaXBzZSBjeD0iMTgiIGN5PSI1LjUiIHJ4PSIzIiByeT0iMy42Ii8+PGVsbGlwc2UgY3g9IjIyIiBjeT0iMTAiIHJ4PSIzIiByeT0iMy42IiB0cmFuc2Zvcm09InJvdGF0ZSgyMCAyMiAxMCkiLz48L2c+PC9zdmc+") 14 14,
-    pointer;
+  cursor: url("../img/cursor-hover.png") 6 6, url("../img/cursor.png") 6 6, pointer;
 }
 
 /* ===== TRANSIÇÃO ENTRE PÁGINAS =====
@@ -483,7 +470,7 @@ body.page-fade.page-out{ opacity:0; }
   overflow:hidden;
   background:var(--gallery-item-bg);
   border:1px solid var(--gallery-item-border);
-  /* cursor customizado já definido mais acima (regra "a, button, .gallery-item") */
+  /* cursor de hover já definido na regra "a, button, .gallery-item" */
 }
 
 .gallery-item img{
