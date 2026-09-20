@@ -62,6 +62,25 @@
 
 *{ box-sizing:border-box; margin:0; padding:0; }
 
+/* ===== TEXTO NÃO SELECIONÁVEL / IMAGENS NÃO ARRASTÁVEIS =====
+   Impede o "marcar em azul pra copiar" no texto (clique duplo/triplo)
+   e o arrastar de imagens pra fora da página. IMPORTANTE: isso é só
+   uma barreira casual — não impede print da tela, "salvar como" via
+   botão direito (bloqueado à parte, no JS) nem alguém ver o código-
+   fonte. Não existe proteção 100% eficaz contra cópia na web. */
+*{
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+}
+
+img{
+  -webkit-user-drag:none;
+  user-drag:none;
+  -webkit-touch-callout:none; /* evita o menu de "salvar imagem" no toque longo do iOS */
+}
+
 body{
   font-family:'Poppins', sans-serif;
   color:var(--texto-escuro);
