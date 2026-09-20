@@ -3,12 +3,28 @@
   --rosa-escuro:#8a3d47;
   --texto-claro:#ffffff;
   --texto-escuro:#4a2530;
-  --card-bg:#fdf3f0;
-  --card-borda:#f0d9d3;
 
-  /* Cores das páginas internas (comissões/TOS) — trocam no modo claro.
-     O hero da home usa foto de fundo, então mantém o mesmo overlay
-     escuro nos dois modos (a foto continua legível de qualquer jeito). */
+  /* ===== MODO ESCURO (padrão do site) =====
+     Cores dos "botões" (link-card, order-card, status-badge,
+     ícones sociais) e do overlay da foto do hero. */
+  --card-bg:#3d1a20;
+  --card-borda:rgba(255,255,255,0.16);
+  --card-text:#f7e2e4;
+  --card-text-secondary:rgba(247,226,228,0.72);
+  --card-accent:#f2b8bf;
+  --card-hover:rgba(255,255,255,0.07);
+  --card-icon-bg:rgba(255,255,255,0.12);
+
+  --gallery-item-bg:rgba(255,255,255,0.08);
+  --gallery-item-border:rgba(255,255,255,0.18);
+
+  --hero-overlay-1:rgba(20,8,10,0.45);
+  --hero-overlay-2:rgba(20,8,10,0.85);
+
+  --status-open-color:#7fd88a;
+  --status-closed-color:#ef8a86;
+
+  /* Cores das páginas internas (comissões/TOS) */
   --page-bg-start:var(--rosa-escuro);
   --page-bg-end:#6e2f38;
   --page-text:var(--texto-claro);
@@ -20,6 +36,23 @@
    Ativado via atributo data-theme="light" na tag <html>,
    trocado pelo botão de sol/lua (.theme-toggle no HTML/JS). */
 :root[data-theme="light"]{
+  --card-bg:#fdf3f0;
+  --card-borda:#f0d9d3;
+  --card-text:var(--rosa-escuro);
+  --card-text-secondary:#7a5b60;
+  --card-accent:var(--rosa-escuro);
+  --card-hover:rgba(138,61,71,0.07);
+  --card-icon-bg:rgba(138,61,71,0.1);
+
+  --gallery-item-bg:rgba(138,61,71,0.05);
+  --gallery-item-border:rgba(138,61,71,0.15);
+
+  --hero-overlay-1:rgba(138,61,71,0.12);
+  --hero-overlay-2:rgba(138,61,71,0.42);
+
+  --status-open-color:#2e7d32;
+  --status-closed-color:#c62828;
+
   --page-bg-start:#fdf1ee;
   --page-bg-end:#f6dfd9;
   --page-text:var(--rosa-escuro);
@@ -34,8 +67,31 @@ body{
   color:var(--texto-escuro);
   background:var(--rosa-claro);
   min-height:100vh;
-  /* cursor customizado (patinha) em todo o site */
-  cursor:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCIgdmlld0JveD0iMCAwIDI4IDI4Ij48ZyBmaWxsPSIjOGEzZDQ3Ij48ZWxsaXBzZSBjeD0iMTQiIGN5PSIxOCIgcng9IjciIHJ5PSI2Ii8+PGVsbGlwc2UgY3g9IjYiIGN5PSIxMCIgcng9IjMiIHJ5PSIzLjYiIHRyYW5zZm9ybT0icm90YXRlKC0yMCA2IDEwKSIvPjxlbGxpcHNlIGN4PSIxMiIgY3k9IjUuNSIgcng9IjMiIHJ5PSIzLjYiLz48ZWxsaXBzZSBjeD0iMTgiIGN5PSI1LjUiIHJ4PSIzIiByeT0iMy42Ii8+PGVsbGlwc2UgY3g9IjIyIiBjeT0iMTAiIHJ4PSIzIiByeT0iMy42IiB0cmFuc2Zvcm09InJvdGF0ZSgyMCAyMiAxMCkiLz48L2c+PC9zdmc+") 14 14, auto;
+  /* Cursor customizado. Ordem de prioridade (o navegador tenta cada
+     um até um funcionar):
+     1) img/cursor.png — SE VOCÊ COLOCAR esse arquivo (PNG, fundo
+        transparente, até 128x128px por lado), ele é usado
+        automaticamente. Ajustado aqui pro seu arquivo de 64x74,
+        com o ponto de clique no canto superior esquerdo (6 6).
+     2) Se não existir, cai na patinha desenhada em SVG (embutida
+        aqui embaixo) como reserva.
+     3) Se nada funcionar, volta pro cursor padrão do sistema. */
+  cursor:
+    url("../img/cursor.png") 6 6,
+    url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCIgdmlld0JveD0iMCAwIDI4IDI4Ij48ZyBmaWxsPSIjOGEzZDQ3Ij48ZWxsaXBzZSBjeD0iMTQiIGN5PSIxOCIgcng9IjciIHJ5PSI2Ii8+PGVsbGlwc2UgY3g9IjYiIGN5PSIxMCIgcng9IjMiIHJ5PSIzLjYiIHRyYW5zZm9ybT0icm90YXRlKC0yMCA2IDEwKSIvPjxlbGxpcHNlIGN4PSIxMiIgY3k9IjUuNSIgcng9IjMiIHJ5PSIzLjYiLz48ZWxsaXBzZSBjeD0iMTgiIGN5PSI1LjUiIHJ4PSIzIiByeT0iMy42Ii8+PGVsbGlwc2UgY3g9IjIyIiBjeT0iMTAiIHJ4PSIzIiByeT0iMy42IiB0cmFuc2Zvcm09InJvdGF0ZSgyMCAyMiAxMCkiLz48L2c+PC9zdmc+") 14 14,
+    auto;
+}
+
+/* Cursor ao passar por cima de qualquer botão/link — por padrão
+   usa a mesma patinha (só troca o "auto" final por "pointer" de
+   reserva). Pra usar um cursor DIFERENTE só no hover, coloque um
+   arquivo img/cursor-hover.png — ele tem prioridade automática. */
+a, button, .gallery-item{
+  cursor:
+    url("../img/cursor-hover.png") 6 6,
+    url("../img/cursor.png") 6 6,
+    url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCIgdmlld0JveD0iMCAwIDI4IDI4Ij48ZyBmaWxsPSIjOGEzZDQ3Ij48ZWxsaXBzZSBjeD0iMTQiIGN5PSIxOCIgcng9IjciIHJ5PSI2Ii8+PGVsbGlwc2UgY3g9IjYiIGN5PSIxMCIgcng9IjMiIHJ5PSIzLjYiIHRyYW5zZm9ybT0icm90YXRlKC0yMCA2IDEwKSIvPjxlbGxpcHNlIGN4PSIxMiIgY3k9IjUuNSIgcng9IjMiIHJ5PSIzLjYiLz48ZWxsaXBzZSBjeD0iMTgiIGN5PSI1LjUiIHJ4PSIzIiByeT0iMy42Ii8+PGVsbGlwc2UgY3g9IjIyIiBjeT0iMTAiIHJ4PSIzIiByeT0iMy42IiB0cmFuc2Zvcm09InJvdGF0ZSgyMCAyMiAxMCkiLz48L2c+PC9zdmc+") 14 14,
+    pointer;
 }
 
 /* ===== TRANSIÇÃO ENTRE PÁGINAS =====
@@ -62,9 +118,9 @@ body.page-fade.page-out{ opacity:0; }
   width:42px;
   height:42px;
   border-radius:50%;
-  border:none;
-  background:rgba(255,255,255,0.85);
-  color:var(--rosa-escuro);
+  border:1px solid var(--card-borda);
+  background:var(--card-bg);
+  color:var(--card-text);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -129,7 +185,7 @@ body.page-fade.page-out{ opacity:0; }
   overflow:hidden;
 
   background-image:
-    linear-gradient(180deg, rgba(138,61,71,0.15) 0%, rgba(138,61,71,0.55) 100%),
+    linear-gradient(180deg, var(--hero-overlay-1) 0%, var(--hero-overlay-2) 100%),
     url("../img/fundo.webp");
   background-size:cover;
   background-position:center;
@@ -188,17 +244,18 @@ body.page-fade.page-out{ opacity:0; }
   width:52px;
   height:52px;
   border-radius:50%;
-  background:rgba(255,255,255,0.85);
+  background:var(--card-bg);
+  border:1px solid var(--card-borda);
   display:flex;
   align-items:center;
   justify-content:center;
-  color:var(--texto-escuro);
+  color:var(--card-text);
   text-decoration:none;
   transition:transform 0.15s ease, background 0.15s ease;
 }
 .social-btn:hover{
   transform:translateY(-3px);
-  background:#ffffff;
+  background:var(--card-hover);
 }
 .social-btn svg{ width:22px; height:22px; }
 
@@ -215,13 +272,14 @@ body.page-fade.page-out{ opacity:0; }
   font-size:0.82rem;
   letter-spacing:0.6px;
   text-transform:uppercase;
-  background:#ffffff;
+  background:var(--card-bg);
+  border:1px solid var(--card-borda);
   box-shadow:0 6px 18px rgba(0,0,0,0.2);
   margin-top:24px;
 }
 
-.status-open{ color:#2e7d32; }
-.status-closed{ color:#c62828; }
+.status-open{ color:var(--status-open-color); }
+.status-closed{ color:var(--status-closed-color); }
 
 .status-dot{
   width:10px;
@@ -231,12 +289,12 @@ body.page-fade.page-out{ opacity:0; }
 }
 
 .status-open .status-dot{
-  background:#43a047;
+  background:var(--status-open-color);
   animation:status-pulse-green 1.7s infinite;
 }
 
 .status-closed .status-dot{
-  background:#e53935;
+  background:var(--status-closed-color);
   animation:status-pulse-red 1.7s infinite;
 }
 
@@ -275,12 +333,13 @@ body.page-fade.page-out{ opacity:0; }
   align-items:center;
   justify-content:space-between;
   text-decoration:none;
-  color:var(--texto-escuro);
-  transition:transform 0.15s ease, box-shadow 0.15s ease;
+  color:var(--card-text);
+  transition:transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 .link-card:hover{
   transform:translateY(-2px);
-  box-shadow:0 8px 18px rgba(138,61,71,0.18);
+  background:var(--card-hover);
+  box-shadow:0 8px 18px rgba(0,0,0,0.18);
 }
 
 .link-card-text{ text-align:left; }
@@ -288,18 +347,18 @@ body.page-fade.page-out{ opacity:0; }
 .link-card-title{
   font-weight:600;
   font-size:1rem;
-  color:var(--rosa-escuro);
+  color:var(--card-text);
 }
 
 .link-card-desc{
   font-size:0.82rem;
-  color:#7a5b60;
+  color:var(--card-text-secondary);
   margin-top:2px;
 }
 
 .link-card-arrow{
   font-size:1.3rem;
-  color:var(--rosa-escuro);
+  color:var(--card-accent);
   flex-shrink:0;
   margin-left:12px;
 }
@@ -422,9 +481,9 @@ body.page-fade.page-out{ opacity:0; }
   aspect-ratio:1/1;
   border-radius:14px;
   overflow:hidden;
-  background:rgba(255,255,255,0.08);
-  border:1px solid rgba(255,255,255,0.18);
-  cursor:pointer;
+  background:var(--gallery-item-bg);
+  border:1px solid var(--gallery-item-border);
+  /* cursor customizado já definido mais acima (regra "a, button, .gallery-item") */
 }
 
 .gallery-item img{
@@ -444,11 +503,10 @@ body.page-fade.page-out{ opacity:0; }
   display:flex;
   align-items:center;
   justify-content:center;
-  color:rgba(255,255,255,0.7);
+  color:var(--page-text-secondary);
   font-size:0.85rem;
   text-align:center;
   padding:16px;
-  cursor:default;
 }
 
 .divider{
@@ -502,7 +560,7 @@ body.page-fade.page-out{ opacity:0; }
   gap:14px;
   padding:16px 20px;
   text-decoration:none;
-  color:var(--texto-escuro);
+  color:var(--card-text);
 }
 
 .order-row + .order-row{
@@ -513,18 +571,18 @@ body.page-fade.page-out{ opacity:0; }
   transition:background 0.15s ease;
 }
 .order-row-link:hover{
-  background:rgba(138,61,71,0.07);
+  background:var(--card-hover);
 }
 
 .order-icon{
   width:40px;
   height:40px;
   border-radius:50%;
-  background:rgba(138,61,71,0.1);
+  background:var(--card-icon-bg);
   display:flex;
   align-items:center;
   justify-content:center;
-  color:var(--rosa-escuro);
+  color:var(--card-text);
   flex-shrink:0;
 }
 .order-icon svg{ width:20px; height:20px; }
@@ -535,18 +593,18 @@ body.page-fade.page-out{ opacity:0; }
 .order-row-title{
   font-weight:600;
   font-size:0.95rem;
-  color:var(--rosa-escuro);
+  color:var(--card-text);
 }
 
 .order-row-desc{
   font-size:0.8rem;
-  color:#7a5b60;
+  color:var(--card-text-secondary);
   margin-top:2px;
 }
 
 .order-row-arrow{
   font-size:1.3rem;
-  color:var(--rosa-escuro);
+  color:var(--card-accent);
   flex-shrink:0;
 }
 
