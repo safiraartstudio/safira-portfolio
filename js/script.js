@@ -1,3 +1,63 @@
+// ===== EASTER EGG: BOTÃO FUJÃO NO STATUS "FECHADAS" =====
+// Só ativa se o badge estiver com a classe status-closed. Clique
+// 4x: "O que foi?" / 5x: "Quer comissionar?" / 6x: "Brincadeirinha
+// Haha!" e o botão passa a desviar do cursor pelo resto da visita.
+document.addEventListener('DOMContentLoaded', () => {
+  const badge = document.getElementById('statusBadge');
+  const speech = document.getElementById('statusSpeech');
+  if (!badge || !speech || !badge.classList.contains('status-closed')) return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const messages = { 4: 'O que foi?', 5: 'Quer comissionar?', 6: 'Brincadeirinha Haha!' };
+  let clicks = 0;
+  let speechTimer = null;
+  let dodging = false;
+
+  function showSpeech(text) {
+    speech.textContent = text;
+    speech.classList.add('visible');
+    clearTimeout(speechTimer);
+    speechTimer = setTimeout(() => speech.classList.remove('visible'), 2200);
+  }
+
+  function startDodging() {
+    if (dodging || reduceMotion) return; // respeita "reduzir movimento"
+    dodging = true;
+    const rect = badge.getBoundingClientRect();
+    badge.classList.add('dodging');
+    badge.style.left = `${rect.left}px`;
+    badge.style.top = `${rect.top}px`;
+
+    document.addEventListener('mousemove', (e) => {
+      const r = badge.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const dx = cx - e.clientX;
+      const dy = cy - e.clientY;
+      const dist = Math.hypot(dx, dy);
+      const triggerDistance = 130;
+
+      if (dist < triggerDistance) {
+        const angle = Math.atan2(dy, dx);
+        const jump = 160;
+        const margin = 16;
+        let newLeft = r.left + Math.cos(angle) * jump;
+        let newTop = r.top + Math.sin(angle) * jump;
+        newLeft = Math.min(Math.max(margin, newLeft), window.innerWidth - r.width - margin);
+        newTop = Math.min(Math.max(margin, newTop), window.innerHeight - r.height - margin);
+        badge.style.left = `${newLeft}px`;
+        badge.style.top = `${newTop}px`;
+      }
+    });
+  }
+
+  badge.addEventListener('click', () => {
+    clicks += 1;
+    if (messages[clicks]) showSpeech(messages[clicks]);
+    if (clicks === 6) startDodging();
+  });
+});
+
 // ===== BLOQUEIO CASUAL DE CÓPIA DE IMAGEM =====
 // Impede o menu de botão direito ("salvar imagem como") e o
 // arrastar de qualquer <img> da página. Junto com o CSS que tira a
