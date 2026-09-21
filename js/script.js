@@ -443,6 +443,14 @@ window.addEventListener('pageshow', (event) => {
   if (event.persisted) {
     document.body.classList.remove('page-out');
     document.body.classList.add('page-in');
+
+    // Mesmo motivo do fade: a página restaurada do cache pode não
+    // refletir o idioma mais atual salvo no localStorage (ex: se
+    // foi trocado em outra aba, ou o "instantâneo" congelado ficou
+    // desatualizado por algum motivo). Reaplica pra garantir.
+    let lang = 'pt';
+    try { lang = localStorage.getItem('siteLang') || 'pt'; } catch (err) { /* ignora */ }
+    applyLang(lang);
   }
 });
 
