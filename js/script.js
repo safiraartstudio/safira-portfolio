@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let hasError = false;
   audio.addEventListener('error', () => {
     hasError = true;
-    musicToggle.title = 'Coloque o arquivo em audio/trilha.opus';
+    musicToggle.title = 'Coloque o arquivo em audio/trilha.mp3';
     musicToggle.style.opacity = '0.5';
   });
 
@@ -279,6 +279,22 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => { window.location.href = href; }, 260);
     });
   });
+});
+
+// ===== CORREÇÃO DO BOTÃO VOLTAR NO CELULAR (bfcache) =====
+// Ao voltar pela seta do navegador, o celular costuma restaurar a
+// página exatamente como ela ficou "congelada" ao sair — nesse
+// caso, com a classe "page-out" (invisível), porque o clique de
+// saída já tinha rodado antes de você navegar. Como isso é uma
+// restauração de cache, o DOMContentLoaded acima não dispara de
+// novo pra corrigir. O evento "pageshow" dispara nos dois casos
+// (carregamento normal E restauração), com event.persisted=true só
+// na restauração — é aí que garantimos que o body volte a aparecer.
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted) {
+    document.body.classList.remove('page-out');
+    document.body.classList.add('page-in');
+  }
 });
 
 // Lightbox da galeria de comissões: clique numa imagem pra abrir
