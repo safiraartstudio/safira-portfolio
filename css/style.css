@@ -148,6 +148,94 @@ body.page-fade.page-out{ opacity:0; }
 :root[data-theme="light"] .theme-toggle .icon-sun{ display:none; }
 :root[data-theme="light"] .theme-toggle .icon-moon{ display:block; }
 
+/* ===== PLAYER DE ÁUDIO (trilha sonora opcional) ===== */
+.music-player{
+  position:fixed;
+  top:68px;
+  right:16px;
+  z-index:500;
+  display:flex;
+  flex-direction:row-reverse; /* botão fica fixo na ponta, painel abre pra esquerda */
+  align-items:center;
+  gap:10px;
+}
+
+.music-toggle{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  border:1px solid var(--card-borda);
+  background:var(--card-bg);
+  color:var(--card-text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 14px rgba(0,0,0,0.18);
+  transition:transform 0.15s ease;
+  flex-shrink:0;
+}
+.music-toggle:hover{ transform:scale(1.06); }
+.music-toggle svg{ width:18px; height:18px; }
+
+/* Painel que "abre pro lado" — largura anima de 0 até o conteúdo */
+.music-panel{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  height:42px;
+  background:var(--card-bg);
+  border:1px solid var(--card-borda);
+  border-radius:999px;
+  box-shadow:0 4px 14px rgba(0,0,0,0.18);
+  max-width:0;
+  padding:0;
+  overflow:hidden;
+  opacity:0;
+  transition:max-width 0.3s ease, opacity 0.25s ease, padding 0.3s ease;
+}
+.music-panel.expanded{
+  max-width:220px;
+  padding:0 14px 0 6px;
+  opacity:1;
+}
+
+.music-play{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  border:none;
+  background:var(--card-icon-bg);
+  color:var(--card-text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+.music-play svg{ width:14px; height:14px; }
+.music-play .icon-pause{ display:none; }
+.music-play.is-playing .icon-play{ display:none; }
+.music-play.is-playing .icon-pause{ display:block; }
+
+.music-progress{
+  position:relative;
+  flex:1;
+  min-width:110px;
+  height:4px;
+  border-radius:999px;
+  background:var(--card-borda);
+  cursor:pointer;
+}
+
+.music-progress-fill{
+  position:absolute;
+  left:0;
+  top:0;
+  height:100%;
+  width:0%;
+  border-radius:999px;
+  background:var(--card-accent);
+}
+
 /* ===== PARTÍCULAS / BRILHO SUTIL DE FUNDO ===== */
 .sparkles{
   position:absolute;
