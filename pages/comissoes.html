@@ -30,6 +30,25 @@
   <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.8 14.5A8.5 8.5 0 1 1 9.5 3.2a6.8 6.8 0 0 0 9.3 9.3c.7-.1 1.4-.3 2-.6.2.5.2 1 0 1.6Z"/></svg>
 </button>
 
+<!-- EDITAR: coloque o arquivo em ../audio/trilha.mp3 (MP3, 128kbps é
+     um bom equilíbrio de qualidade/tamanho pra música de fundo).
+     Player 100% opt-in: nada toca sozinho, só ao clicar. -->
+<div class="music-player" id="musicPlayer">
+  <button class="music-toggle" id="musicToggle" aria-label="Tocar/mostrar trilha sonora" title="Trilha sonora">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 3v10.55A4 4 0 1 0 11 17V7h6V3H9Z"/></svg>
+  </button>
+  <div class="music-panel" id="musicPanel">
+    <button class="music-play" id="musicPlay" aria-label="Pausar/tocar música">
+      <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7L8 5Z"/></svg>
+      <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6V5Zm8 0h4v14h-4V5Z"/></svg>
+    </button>
+    <div class="music-progress" id="musicProgress">
+      <div class="music-progress-fill" id="musicProgressFill"></div>
+    </div>
+  </div>
+  <audio id="bgAudio" src="../audio/trilha.opus" preload="none" loop></audio>
+</div>
+
 <div class="page">
 
   <!-- Partículas/brilho decorativo no fundo -->
