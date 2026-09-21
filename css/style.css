@@ -307,6 +307,50 @@ body.page-fade.page-out{ opacity:0; }
   100%{ opacity:0; transform:translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.25); }
 }
 
+/* ===== SELETOR DE IDIOMA (PT/EN) ===== */
+.lang-toggle{
+  position:fixed;
+  bottom:20px;
+  right:16px;
+  z-index:500;
+  display:flex;
+  gap:2px;
+  background:var(--card-bg);
+  border:1px solid var(--card-borda);
+  border-radius:999px;
+  padding:4px;
+  box-shadow:0 4px 14px rgba(0,0,0,0.18);
+}
+
+/* Nas páginas que já têm o botão "voltar ao topo" (mesmo canto),
+   o seletor de idioma sobe pra não ficar em cima dele. */
+.lang-toggle--stacked{
+  bottom:76px;
+}
+
+.lang-btn{
+  border:none;
+  background:transparent;
+  color:var(--card-text-secondary);
+  font-size:0.75rem;
+  font-weight:700;
+  letter-spacing:0.4px;
+  padding:6px 12px;
+  border-radius:999px;
+  transition:background 0.15s ease, color 0.15s ease;
+}
+
+.lang-btn.active{
+  background:var(--card-text);
+  color:var(--card-bg);
+}
+
+/* Ícone de pagamento: Pix em português, cartão genérico em inglês
+   (não usamos a logo oficial do PayPal por ser marca registrada). */
+.pay-icon-en{ display:none; }
+:root[data-lang="en"] .pay-icon-pt{ display:none; }
+:root[data-lang="en"] .pay-icon-en{ display:block; }
+
 /* ===== BOTÃO VOLTAR AO TOPO ===== */
 .back-to-top{
   position:fixed;
