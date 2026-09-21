@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SafiraWolfFox — Portfólio</title>
+<title data-i18n="idx.title">SafiraWolfFox — Portfólio</title>
 <!-- Aplica o tema salvo ANTES da página pintar, pra não piscar a cor errada -->
 <script>if(localStorage.getItem('theme')==='light')document.documentElement.setAttribute('data-theme','light');</script>
 <!-- EDITAR: coloque o arquivo do ícone em img/favicon.png (ideal: quadrado, 32x32 ou 64x64) -->
@@ -31,7 +31,7 @@
 <body>
 
 <!-- Botão de modo claro/escuro (aparece fixo em todas as páginas) -->
-<button class="theme-toggle" id="themeToggle" aria-label="Alternar tema claro/escuro">
+<button class="theme-toggle" id="themeToggle" aria-label="Alternar tema claro/escuro" data-i18n="theme.label" data-i18n-attr="aria-label">
   <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v3M12 18.5v3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M2.5 12h3M18.5 12h3M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></svg>
   <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.8 14.5A8.5 8.5 0 1 1 9.5 3.2a6.8 6.8 0 0 0 9.3 9.3c.7-.1 1.4-.3 2-.6.2.5.2 1 0 1.6Z"/></svg>
 </button>
@@ -40,11 +40,11 @@
      um bom equilíbrio de qualidade/tamanho pra música de fundo).
      Player 100% opt-in: nada toca sozinho, só ao clicar. -->
 <div class="music-player" id="musicPlayer">
-  <button class="music-toggle" id="musicToggle" aria-label="Tocar/mostrar trilha sonora" title="Trilha sonora">
+  <button class="music-toggle" id="musicToggle" aria-label="Tocar/mostrar trilha sonora" title="Trilha sonora" data-i18n="music.toggle" data-i18n-attr="aria-label,title">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 3v10.55A4 4 0 1 0 11 17V7h6V3H9Z"/></svg>
   </button>
   <div class="music-panel" id="musicPanel">
-    <button class="music-play" id="musicPlay" aria-label="Pausar/tocar música">
+    <button class="music-play" id="musicPlay" aria-label="Pausar/tocar música" data-i18n="music.play" data-i18n-attr="aria-label">
       <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7L8 5Z"/></svg>
       <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6V5Zm8 0h4v14h-4V5Z"/></svg>
     </button>
@@ -53,6 +53,13 @@
     </div>
   </div>
   <audio id="bgAudio" src="audio/trilha.opus" preload="none" loop></audio>
+</div>
+
+<!-- Seletor de idioma — fixo no canto inferior direito. A lógica
+     de troca (dicionário PT/EN) fica em js/script.js. -->
+<div class="lang-toggle" id="langToggle">
+  <button class="lang-btn" data-lang="pt" aria-label="Português">PT</button>
+  <button class="lang-btn" data-lang="en" aria-label="English">EN</button>
 </div>
 
 <div class="hero">
@@ -74,14 +81,14 @@
     onerror="this.classList.add('img-missing')">
 
   <h1 class="hero-title fade-item" style="--delay:0.3s">SAFIRA WOLF FOX</h1>
-  <p class="hero-subtitle fade-item" style="--delay:0.5s">Veja meu trabalho nas minhas redes</p>
+  <p class="hero-subtitle fade-item" style="--delay:0.5s" data-i18n="idx.subtitle">Veja meu trabalho nas minhas redes</p>
 
   <!-- EDITAR: troque o href do Telegram e do quadro pelos links reais -->
   <div class="social-row fade-item" style="--delay:0.7s">
     <a class="social-btn" href="https://t.me/tafirawolffox" target="_blank" title="Telegram">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.6 20c-.2 1-.8 1.2-1.6.8l-4.5-3.3-2.2 2.1c-.2.2-.4.4-.9.4l.3-4.6 8.4-7.6c.4-.3-.1-.5-.5-.2L6.3 13 1.9 11.6c-1-.3-1-1 .2-1.4L20.5 3c.8-.3 1.6.2 1.4 1.3Z"/></svg>
     </a>
-    <a class="social-btn" href="https://trello.com/b/VYx0L8r1" target="_blank" title="Quadro de comissões">
+    <a class="social-btn" href="https://trello.com/b/VYx0L8r1" target="_blank" title="Quadro de comissões" data-i18n="idx.board" data-i18n-attr="title">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <rect x="3" y="4" width="18" height="16" rx="2.5"/>
         <rect x="6" y="7.2" width="4" height="6" rx="1" fill="currentColor" stroke="none"/>
@@ -108,23 +115,23 @@
 
     <a class="link-card" href="pages/comissoes.html">
       <div class="link-card-text">
-        <div class="link-card-title">Comissões e preços</div>
-        <div class="link-card-desc">Tipos, valores e como encomendar</div>
+        <div class="link-card-title" data-i18n="idx.card1.title">Comissões e preços</div>
+        <div class="link-card-desc" data-i18n="idx.card1.desc">Tipos, valores e como encomendar</div>
       </div>
       <span class="link-card-arrow">›</span>
     </a>
 
     <a class="link-card" href="pages/tos.html">
       <div class="link-card-text">
-        <div class="link-card-title">Termos de Uso (TOS)</div>
-        <div class="link-card-desc">Regras para comissões/uso da arte</div>
+        <div class="link-card-title" data-i18n="idx.card2.title">Termos de Uso (TOS)</div>
+        <div class="link-card-desc" data-i18n="idx.card2.desc">Regras para comissões/uso da arte</div>
       </div>
       <span class="link-card-arrow">›</span>
     </a>
 
   </div>
 
-  <p class="footer fade-item" style="--delay:1.2s">© 2026 SafiraWolfFox — todos os direitos reservados</p>
+  <p class="footer fade-item" style="--delay:1.2s" data-i18n="idx.footer">© 2026 SafiraWolfFox — todos os direitos reservados</p>
 
 </div>
 
