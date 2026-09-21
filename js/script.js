@@ -1,3 +1,147 @@
+// ===== TRADUÇÃO PT/EN =====
+// Dicionário central: cada chave tem o texto em pt e em en. Os
+// elementos que devem trocar de texto têm um atributo data-i18n
+// com essa chave (e, quando precisam traduzir um atributo em vez
+// do texto visível, data-i18n-attr="aria-label" ou "aria-label,title").
+const I18N = {
+  'idx.title': { pt: 'SafiraWolfFox — Portfólio', en: 'SafiraWolfFox — Portfolio' },
+  'theme.label': { pt: 'Alternar tema claro/escuro', en: 'Toggle light/dark theme' },
+  'music.toggle': { pt: 'Trilha sonora', en: 'Soundtrack' },
+  'music.play': { pt: 'Pausar/tocar música', en: 'Play/pause music' },
+  'idx.subtitle': { pt: 'Veja meu trabalho nas minhas redes', en: 'Check out my work on my socials' },
+  'idx.board': { pt: 'Quadro de comissões', en: 'Commission board' },
+  'idx.card1.title': { pt: 'Comissões e preços', en: 'Commissions & Prices' },
+  'idx.card1.desc': { pt: 'Tipos, valores e como encomendar', en: 'Types, prices and how to order' },
+  'idx.card2.title': { pt: 'Termos de Uso (TOS)', en: 'Terms of Service (TOS)' },
+  'idx.card2.desc': { pt: 'Regras para comissões/uso da arte', en: 'Rules for commissions/art usage' },
+  'idx.footer': { pt: '© 2026 SafiraWolfFox — todos os direitos reservados', en: '© 2026 SafiraWolfFox — All rights reserved' },
+
+  'nav.back': { pt: '← Voltar', en: '← Back' },
+  'nav.top': { pt: 'Voltar ao topo', en: 'Back to top' },
+  'nav.close': { pt: 'Fechar', en: 'Close' },
+
+  'status.open': { pt: 'Comissões Abertas', en: 'Commissions Open' },
+  'status.closed': { pt: 'Comissões Fechadas', en: 'Commissions Closed' },
+  'egg.4': { pt: 'O que foi?', en: 'What?' },
+  'egg.5': { pt: 'Quer comissionar?', en: 'Want to commission me?' },
+  'egg.6': { pt: 'Brincadeirinha Haha!', en: 'Just kidding, haha!' },
+
+  'com.title': { pt: 'Comissões e Preços — Safira Wolf Fox', en: 'Commissions & Prices — Safira Wolf Fox' },
+  'com.h1': { pt: 'Comissões e Preços', en: 'Commissions & Prices' },
+
+  'cat.chibi.title': { pt: '✦ Chibi', en: '✦ Chibi' },
+  'cat.chibi.desc': { pt: '[Farei seu personagem em uma estetica reduzida e mais fofo , tentando manter aspectos gerais, porem de forma mais simplificada!]', en: "[I'll draw your character in a smaller, cuter style, keeping the general look but simplified!]" },
+  'cat.chibi.price': { pt: 'A partir de R$ 30,00', en: 'Starting at $6' },
+
+  'cat.icone.title': { pt: '✦ Icone/Busto', en: '✦ Icon/Bust' },
+  'cat.icone.desc': { pt: '[Icone ou até abaixo da margem do busto com sombreado detalhado]', en: '[Icon or down to below the bust line, with detailed shading]' },
+  'cat.icone.price': { pt: 'A partir de R$ 45,00', en: 'Starting at $9' },
+
+  'cat.halfbody.title': { pt: '✦ Halfbody', en: '✦ Halfbody' },
+  'cat.halfbody.desc': { pt: '[Meio corpo , até a cintura com sombreado detalhado!]', en: '[Half body, down to the waist, with detailed shading!]' },
+  'cat.halfbody.price': { pt: 'A partir de R$ 60,00', en: 'Starting at $12' },
+
+  'cat.fullbody.title': { pt: '✦ Fullbody', en: '✦ Fullbody' },
+  'cat.fullbody.desc': { pt: '[Corpo todo e extras com sombreado detalhado!]', en: '[Full body plus extras, with detailed shading!]' },
+  'cat.fullbody.price': { pt: 'A partir de R$ 80,00', en: 'Starting at $16' },
+
+  'cat.referencia.title': { pt: '✦ Referência', en: '✦ Reference Sheet' },
+  'cat.referencia.desc1': { pt: 'Esse estilo contém arte com linhas limpas e cor base, sem sombra/luz.', en: 'This style has clean line art with flat base colors, no shading or lighting.' },
+  'cat.referencia.desc2': { pt: 'Inclui um fundo em gradiente. Um fundo simples ou com padrões pode ser adicionado por um valor extra.', en: 'Includes a gradient background. A simple or patterned background can be added for an extra fee.' },
+  'cat.referencia.price': { pt: 'A partir de R$ 70,00', en: 'Starting at $14' },
+
+  'cat.quadrinhos.title': { pt: '✦ Quadrinhos', en: '✦ Comic Panels' },
+  'cat.quadrinhos.desc': { pt: '[Uma página pode conter até 6 quadros, o valor varia dependendo da complexidade e quantidade de personagens e cenario!]', en: '[A page can have up to 6 panels; price varies depending on complexity and the number of characters/backgrounds!]' },
+  'cat.quadrinhos.price': { pt: 'A partir de R$ 170,00', en: 'Starting at $34' },
+
+  'cat.doodles.title': { pt: '✦ Pacote de Doodles', en: '✦ Doodle Pack' },
+  'cat.doodles.desc': { pt: '[1 Fullbody + 1 halfbody +1 chibi]', en: '[1 Fullbody + 1 Halfbody + 1 Chibi]' },
+  'cat.doodles.price': { pt: 'A partir de R$ 35,00', en: 'Starting at $7' },
+
+  "cat.ych.title": { pt: "✦ YCH's em Rotação", en: "✦ Rotating YCH's" },
+  'cat.ych.desc': { pt: '[Episódio da Praia de 1 a 4 Personagens]', en: '[Beach Episode, 1 to 4 characters]' },
+  'cat.ych.price': { pt: 'A partir de R$ 25,00 até R$ 80,00', en: 'Starting at $5 up to $16' },
+
+  'com.order.heading': { pt: '✦ Como encomendar', en: '✦ How to order' },
+  'com.order.pay.title': { pt: 'Pagamento via Pix', en: 'Payment via PayPal' },
+  'com.order.pay.desc': { pt: 'Chave enviada após confirmar seu pedido', en: 'Details sent once your order is confirmed' },
+  'com.order.tg.title': { pt: 'Fale comigo no Telegram', en: 'Message me on Telegram' },
+  'com.order.tg.desc': { pt: 'Clique para me mandar uma DM', en: 'Click to send me a DM' },
+
+  'tos.title': { pt: 'Termos de Serviço — Safira Wolf Fox', en: 'Terms of Service — Safira Wolf Fox' },
+  'tos.h1': { pt: 'Termos de Serviço', en: 'Terms of Service' },
+  'tos.intro': { pt: 'Ao solicitar meus serviços de qualquer forma, você confirma que leu, compreendeu e concordou com os termos abaixo.', en: 'By requesting my services in any way, you confirm that you have read, understood and agreed to the terms below.' },
+
+  'tos.h.precos': { pt: '✦ Preços', en: '✦ Prices' },
+  'tos.precos.1': { pt: 'Os preços das comissões são apenas para uso pessoal, a menos que tenha sido previamente acordado de outra forma.', en: 'Commission prices are for personal use only, unless otherwise agreed in advance.' },
+  'tos.precos.2': { pt: 'Os preços base são apenas uma referência; podem sofrer alterações devido a detalhes do personagem, fundo complexo, etc.', en: 'Base prices are just a reference; they may change depending on character details, complex backgrounds, etc.' },
+
+  'tos.h.direitos': { pt: '✦ Direitos e uso da arte', en: '✦ Rights & art usage' },
+  'tos.direitos.1': { pt: 'Reservo-me o direito sobre todas as minhas obras de arte. O trabalho será utilizado como amostra de comissão e será publicado online, a menos que tenha sido previamente acordado de outra forma.', en: 'I retain the rights to all of my artwork. The piece will be used as a commission sample and posted online, unless otherwise agreed in advance.' },
+  'tos.direitos.2': { pt: 'Por favor, não utilize nenhuma das minhas obras como referência para IA nem para NFTs.', en: 'Please do not use any of my artwork as AI training reference or for NFTs.' },
+
+  'tos.h.prazo': { pt: '✦ Prazo', en: '✦ Turnaround time' },
+  'tos.prazo.1': { pt: 'Para garantir a melhor qualidade, levarei de 3 semanas a 2 meses para concluir sua comissão, dependendo da complexidade.', en: "To ensure the best quality, I'll take anywhere from 3 weeks to 2 months to finish your commission, depending on complexity." },
+  'tos.prazo.2': { pt: 'Por favor, avise se houver um prazo a cumprir.', en: 'Please let me know in advance if you have a deadline to meet.' },
+
+  'tos.h.antes': { pt: '✦ Antes de encomendar', en: '✦ Before ordering' },
+  'tos.antes.1': { pt: 'Dê uma olhada nos meus trabalhos pra ver o que faço de melhor. Também posso recusar sua comissão se for muito difícil pra mim realizá-la.', en: "Take a look at my previous work to see what I do best. I may also decline a commission if it's too difficult for me to complete." },
+  'tos.antes.2': { pt: 'Não desenho pessoas.', en: "I don't draw humans." },
+  'tos.antes.3': { pt: 'Indique qual personagem você quer que eu desenhe e envie referências coloridas o mais detalhadas possível. Não aceito comissão apenas com texto.', en: "Please specify which character you want me to draw and send colored references, as detailed as possible. I don't accept commissions based on a text description alone." },
+
+  'tos.h.processo': { pt: '✦ Durante o processo', en: '✦ During the process' },
+  'tos.processo.1': { pt: 'Enviarei esboços pra você dar uma olhada antes.', en: "I'll send you sketches to review before continuing." },
+  'tos.processo.2': { pt: 'Não altere personagens ou ideias após o término do processo de lineart.', en: "Please don't change characters or ideas after the lineart stage is finished." },
+
+  'tos.h.pagamento': { pt: '✦ Pagamento e reembolso', en: '✦ Payment & refunds' },
+  'tos.pagamento.1': { pt: 'Não ofereço reembolso para comissões concluídas ou depois de eu ter começado a trabalhar. Reembolsos totais só serão concedidos se eu ainda não tiver começado ou se não puder concluir a obra devido a circunstâncias pessoais.', en: "I don't offer refunds for completed commissions, or after I've already started working. Full refunds are only given if I haven't started yet, or if I'm unable to finish the piece due to personal circumstances." },
+  'tos.pagamento.2': { pt: 'Não aceito criptomoedas como forma de pagamento.', en: "I don't accept cryptocurrency as a payment method." },
+  'tos.pagamento.3': { pt: 'Clientes internacionais podem pagar via PayPal, com valores convertidos para dólar.', en: 'International clients can pay via PayPal, with prices converted to US dollars.' },
+};
+
+function applyLang(lang) {
+  document.documentElement.setAttribute('data-lang', lang);
+  document.documentElement.lang = lang === 'en' ? 'en' : 'pt-br';
+
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
+    const entry = I18N[el.getAttribute('data-i18n')];
+    if (!entry) return;
+    const text = entry[lang] || entry.pt;
+    const attrList = el.getAttribute('data-i18n-attr');
+    if (attrList) {
+      attrList.split(',').forEach((attr) => el.setAttribute(attr.trim(), text));
+    } else {
+      el.textContent = text;
+    }
+  });
+
+  // O texto do status (aberto/fechado) depende de qual classe está
+  // ativa no badge — não dá pra usar uma chave fixa, porque você
+  // pode trocar status-open/status-closed a qualquer momento.
+  const statusLabel = document.getElementById('statusLabel');
+  const statusBadge = document.getElementById('statusBadge');
+  if (statusLabel && statusBadge) {
+    const key = statusBadge.classList.contains('status-open') ? 'status.open' : 'status.closed';
+    statusLabel.textContent = I18N[key][lang];
+  }
+
+  document.querySelectorAll('.lang-btn').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+
+  try { localStorage.setItem('siteLang', lang); } catch (err) { /* ignora */ }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  let lang = 'pt';
+  try { lang = localStorage.getItem('siteLang') || 'pt'; } catch (err) { /* ignora */ }
+  applyLang(lang);
+
+  document.querySelectorAll('.lang-btn').forEach((btn) => {
+    btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+  });
+});
+
 // ===== EASTER EGG: BOTÃO FUJÃO NO STATUS "FECHADAS" =====
 // Só ativa se o badge estiver com a classe status-closed. Clique
 // 4x: "O que foi?" / 5x: "Quer comissionar?" / 6x: "Brincadeirinha
@@ -8,8 +152,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!badge || !label || !badge.classList.contains('status-closed')) return;
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const originalText = label.textContent;
-  const messages = { 4: 'O que foi?', 5: 'Quer comissionar?', 6: 'Brincadeirinha Haha!' };
+  const currentLang = () => document.documentElement.getAttribute('data-lang') || 'pt';
+  const originalText = () => I18N['status.closed'][currentLang()];
+  const messages = {
+    4: () => I18N['egg.4'][currentLang()],
+    5: () => I18N['egg.5'][currentLang()],
+    6: () => I18N['egg.6'][currentLang()],
+  };
   let clicks = 0;
   let labelTimer = null;
   let dodging = false;
@@ -27,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
         labelTimer = setTimeout(() => {
           label.style.opacity = '0';
           setTimeout(() => {
-            label.textContent = originalText;
+            label.textContent = originalText();
             label.style.opacity = '1';
           }, 150);
         }, 2000);
@@ -86,12 +235,12 @@ document.addEventListener('DOMContentLoaded', () => {
     clicks += 1;
 
     if (clicks < 6) {
-      if (messages[clicks]) rewriteLabel(messages[clicks], true);
+      if (messages[clicks]) rewriteLabel(messages[clicks](), true);
       return;
     }
 
     if (clicks === 6) {
-      rewriteLabel(messages[6], false);
+      rewriteLabel(messages[6](), false);
       startDodging();
       return;
     }
