@@ -127,6 +127,106 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// ===== PLAYER DE ÁUDIO (trilha sonora opcional) =====
+// 100% opt-in: nada toca sozinho. O botão de nota expande/recolhe
+// o painel com a barra de progresso; o play/pause de dentro do
+// painel controla a música sem fechar o painel. Recolher o painel
+// (clicando de novo no botão de nota) só esconde a barra — não
+// pausa a música, ela continua tocando se já estiver tocando.
+document.addEventListener('DOMContentLoaded', () => {
+  const musicToggle = document.getElementById('musicToggle');
+  const musicPanel = document.getElementById('musicPanel');
+  const musicPlay = document.getElementById('musicPlay');
+  const progress = document.getElementById('musicProgress');
+  const progressFill = document.getElementById('musicProgressFill');
+  const audio = document.getElementById('bgAudio');
+  if (!musicToggle || !audio) return;
+
+  const STORAGE_KEY = 'sw_musicState';
+
+  // Salva tempo atual, se está tocando, e se o painel está aberto —
+  // assim a próxima página consegue continuar de onde parou.
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        time: audio.currentTime || 0,
+        playing: !audio.paused,
+        expanded: musicPanel.classList.contains('expanded'),
+      }));
+    } catch (err) { /* localStorage pode falhar em modo privado — ignora */ }
+  }
+
+  let hasError = false;
+  audio.addEventListener('error', () => {
+    hasError = true;
+    musicToggle.title = 'Coloque o arquivo em audio/trilha.opus';
+    musicToggle.style.opacity = '0.5';
+  });
+
+  musicToggle.addEventListener('click', () => {
+    if (hasError) return;
+    const expanded = musicPanel.classList.toggle('expanded');
+    if (expanded && audio.paused) {
+      audio.play().catch(() => {});
+    }
+    saveState();
+  });
+
+  musicPlay.addEventListener('click', () => {
+    if (audio.paused) audio.play().catch(() => {});
+    else audio.pause();
+  });
+
+  audio.addEventListener('play', () => { musicPlay.classList.add('is-playing'); saveState(); });
+  audio.addEventListener('pause', () => { musicPlay.classList.remove('is-playing'); saveState(); });
+
+  audio.addEventListener('timeupdate', () => {
+    if (!audio.duration) return;
+    progressFill.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
+  });
+
+  progress.addEventListener('click', (e) => {
+    if (!audio.duration) return;
+    const rect = progress.getBoundingClientRect();
+    const ratio = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
+    audio.currentTime = ratio * audio.duration;
+    saveState();
+  });
+
+  // Salva periodicamente enquanto toca, e também ao sair da página
+  // (troca de página, fechar aba) — cobre o caso de o navegador não
+  // disparar 'pause' a tempo antes de navegar.
+  setInterval(saveState, 3000);
+  window.addEventListener('pagehide', saveState);
+
+  // ===== RETOMA DE ONDE PAROU =====
+  // Lê o estado salvo pela página anterior e continua a música daqui.
+  let saved = null;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) saved = JSON.parse(raw);
+  } catch (err) { /* ignora se não der pra ler */ }
+
+  if (saved) {
+    if (saved.expanded) musicPanel.classList.add('expanded');
+
+    const applyTime = () => {
+      if (saved.time) audio.currentTime = saved.time;
+    };
+    if (audio.readyState >= 1) applyTime();
+    else audio.addEventListener('loadedmetadata', applyTime, { once: true });
+
+    if (saved.playing) {
+      audio.play().catch(() => {
+        // Navegadores bloqueiam autoplay sem gesto do usuário nessa
+        // página nova — deixa o painel aberto, pausado, pronto pra
+        // retomar com 1 clique.
+        musicPanel.classList.add('expanded');
+      });
+    }
+  }
+});
+
 // ===== BOTÃO DE MODO CLARO/ESCURO =====
 // A leitura do tema salvo já acontece antes, num script inline no
 // <head> de cada página (evita o "flash" da cor errada). Aqui só
