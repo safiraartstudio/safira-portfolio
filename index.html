@@ -16,18 +16,25 @@
      (og:image) pelo link completo de uma imagem sua já publicada
      no repositório, ex: https://yoshirodrautine.github.io/safira-portfolio/img/personagem.png -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="Safira Wolf Fox — Portfólio">
-<meta property="og:description" content="Confira meus trabalhos, comissões abertas e termos de serviço.">
+<meta property="og:title" content="Safira Wolf Fox — Portfólio" data-i18n="og.idx.title" data-i18n-attr="content">
+<meta property="og:description" content="Confira meus trabalhos, comissões abertas e termos de serviço." data-i18n="og.idx.desc" data-i18n-attr="content">
 <meta property="og:image" content="https://yoshirodrautine.github.io/safira-portfolio/img/page-handle.jpg">
 <meta property="og:url" content="https://yoshirodrautine.github.io/safira-portfolio/">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Safira Wolf Fox — Portfólio">
-<meta name="twitter:description" content="Confira meus trabalhos, comissões abertas e termos de serviço.">
+<meta name="twitter:title" content="Safira Wolf Fox — Portfólio" data-i18n="og.idx.title" data-i18n-attr="content">
+<meta name="twitter:description" content="Confira meus trabalhos, comissões abertas e termos de serviço." data-i18n="og.idx.desc" data-i18n-attr="content">
 <meta name="twitter:image" content="https://yoshirodrautine.github.io/safira-portfolio/img/page-handle.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
+<!--
+  ✦ Ei, obrigada por dar uma espiadinha no código-fonte! ✦
+  Esse site foi feito com muito carinho pra mostrar meu trabalho.
+  Se você é curioso(a) o suficiente pra estar lendo isso, espero
+  que também curta minhas artes. 💗
+  — Safira
+-->
 <body>
 
 <!-- Botão de modo claro/escuro (aparece fixo em todas as páginas) -->
@@ -109,6 +116,12 @@
   <div class="status-badge status-closed fade-item" id="statusBadge" style="--delay:0.85s">
     <span class="status-dot"></span>
     <span id="statusLabel">Comissões Fechadas</span>
+  </div>
+
+  <!-- EDITAR: troque os números de vagas abaixo quando quiser.
+       Se preferir esconder o contador, é só apagar essa div inteira. -->
+  <div class="slots-counter fade-item" style="--delay:0.92s">
+    <span data-i18n="slots.label">Vagas disponíveis</span>: <strong id="slotsValue">3/5</strong>
   </div>
 
   <div class="links-section fade-item" style="--delay:1s">
