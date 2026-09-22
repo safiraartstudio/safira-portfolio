@@ -913,8 +913,37 @@ body.page-fade.page-out{ opacity:0; }
 .commission-price{
   margin-top:14px;
   font-weight:600;
-  color:var(--texto-claro);
+  color:var(--page-text);
   font-size:1.05rem;
+}
+
+/* Preço com mais de uma faixa (ex: Referência simples/padrão) —
+   copie um bloco .price-tier pra adicionar mais faixas. */
+.price-tiers{
+  margin-top:14px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.price-tier{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  max-width:280px;
+  gap:16px;
+}
+
+.price-tier-name{
+  font-size:0.88rem;
+  color:var(--page-text-secondary);
+}
+
+.price-tier-value{
+  font-weight:600;
+  color:var(--page-text);
+  font-size:1.05rem;
+  white-space:nowrap;
 }
 
 @media (max-width:480px){
