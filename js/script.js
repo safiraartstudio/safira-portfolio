@@ -15,6 +15,20 @@ const I18N = {
   'idx.card2.title': { pt: 'Termos de Uso (TOS)', en: 'Terms of Service (TOS)' },
   'idx.card2.desc': { pt: 'Regras para comissões/uso da arte', en: 'Rules for commissions/art usage' },
   'idx.footer': { pt: '© 2026 SafiraWolfFox — todos os direitos reservados', en: '© 2026 SafiraWolfFox — All rights reserved' },
+  'slots.label': { pt: 'Vagas disponíveis', en: 'Slots available' },
+
+  'og.idx.title': { pt: 'Safira Wolf Fox — Portfólio', en: 'Safira Wolf Fox — Portfolio' },
+  'og.idx.desc': { pt: 'Confira meus trabalhos, comissões abertas e termos de serviço.', en: 'Check out my work, open commissions and terms of service.' },
+  'og.com.title': { pt: 'Comissões e Preços — Safira Wolf Fox', en: 'Commissions & Prices — Safira Wolf Fox' },
+  'og.com.desc': { pt: 'Tipos de comissão, valores e como encomendar.', en: 'Commission types, prices and how to order.' },
+  'og.tos.title': { pt: 'Termos de Serviço — Safira Wolf Fox', en: 'Terms of Service — Safira Wolf Fox' },
+  'og.tos.desc': { pt: 'Leia os termos antes de solicitar uma comissão.', en: 'Read the terms before requesting a commission.' },
+
+  'com.form.heading': { pt: '✦ Peça sua comissão', en: '✦ Request your commission' },
+  'com.form.name': { pt: 'Nome do personagem', en: "Character's name" },
+  'com.form.type': { pt: 'Tipo de comissão', en: 'Commission type' },
+  'com.form.notes': { pt: 'Detalhes extras (opcional)', en: 'Extra details (optional)' },
+  'com.form.submit': { pt: 'Enviar pelo Telegram', en: 'Send via Telegram' },
 
   'nav.back': { pt: '← Voltar', en: '← Back' },
   'nav.top': { pt: 'Voltar ao topo', en: 'Back to top' },
@@ -171,6 +185,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.lang-btn').forEach((btn) => {
     btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+  });
+});
+
+// ===== FORMULÁRIO DE ENCOMENDA =====
+// Monta uma mensagem com os dados preenchidos e abre o Telegram já
+// com o texto pronto (o link https://t.me/usuario?text=... faz o
+// Telegram preencher a caixa de mensagem sozinho).
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('orderForm');
+  if (!form) return;
+
+  const TELEGRAM_HANDLE = 'Safirawolffox'; // EDITAR aqui se trocar de usuário
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('formName').value.trim();
+    const typeSelect = document.getElementById('formType');
+    const type = typeSelect.options[typeSelect.selectedIndex].textContent.trim();
+    const notes = document.getElementById('formNotes').value.trim();
+    const lang = document.documentElement.getAttribute('data-lang') || 'pt';
+
+    const message = lang === 'en'
+      ? `Hi! I'd like to request a commission.\nCharacter: ${name}\nType: ${type}\nDetails: ${notes || '-'}`
+      : `Olá! Gostaria de uma comissão.\nPersonagem: ${name}\nTipo: ${type}\nDetalhes: ${notes || '-'}`;
+
+    const url = `https://t.me/${TELEGRAM_HANDLE}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank', 'noopener');
   });
 });
 
