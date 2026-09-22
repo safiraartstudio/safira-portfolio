@@ -11,18 +11,25 @@
 <!-- EDITAR: mesma ideia da página inicial — troque a URL de og:image
      pelo link completo de uma imagem sua já publicada no repositório -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="Comissões e Preços — Safira Wolf Fox">
-<meta property="og:description" content="Tipos de comissão, valores e como encomendar.">
+<meta property="og:title" content="Comissões e Preços — Safira Wolf Fox" data-i18n="og.com.title" data-i18n-attr="content">
+<meta property="og:description" content="Tipos de comissão, valores e como encomendar." data-i18n="og.com.desc" data-i18n-attr="content">
 <meta property="og:image" content="https://yoshirodrautine.github.io/safira-portfolio/img/page-handle.jpg">
 <meta property="og:url" content="https://yoshirodrautine.github.io/safira-portfolio/pages/comissoes.html">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Comissões e Preços — Safira Wolf Fox">
-<meta name="twitter:description" content="Tipos de comissão, valores e como encomendar.">
+<meta name="twitter:title" content="Comissões e Preços — Safira Wolf Fox" data-i18n="og.com.title" data-i18n-attr="content">
+<meta name="twitter:description" content="Tipos de comissão, valores e como encomendar." data-i18n="og.com.desc" data-i18n-attr="content">
 <meta name="twitter:image" content="https://yoshirodrautine.github.io/safira-portfolio/img/page-handle.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
 </head>
+<!--
+  ✦ Ei, obrigada por dar uma espiadinha no código-fonte! ✦
+  Esse site foi feito com muito carinho pra mostrar meu trabalho.
+  Se você é curioso(a) o suficiente pra estar lendo isso, espero
+  que também curta minhas artes. 💗
+  — Safira
+-->
 <body>
 
 <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema claro/escuro" data-i18n="theme.label" data-i18n-attr="aria-label">
@@ -398,6 +405,36 @@
             <span class="order-row-arrow">›</span>
           </a>
         </div>
+      </div>
+
+      <!-- ===== FORMULÁRIO DE ENCOMENDA =====
+           Monta uma mensagem já formatada e abre no seu Telegram
+           (EDITAR: troque o handle em js/script.js se mudar de
+           usuário — procure por TELEGRAM_HANDLE). -->
+      <div class="commission-block fade-item" style="--delay:0.15s">
+        <div class="commission-heading" data-i18n="com.form.heading">✦ Peça sua comissão</div>
+
+        <form class="order-form" id="orderForm">
+          <label class="order-form-label" for="formName" data-i18n="com.form.name">Nome do personagem</label>
+          <input class="order-form-input" type="text" id="formName" required>
+
+          <label class="order-form-label" for="formType" data-i18n="com.form.type">Tipo de comissão</label>
+          <select class="order-form-input" id="formType">
+            <option data-i18n="cat.chibi.title">✦ Chibi</option>
+            <option data-i18n="cat.icone.title">✦ Icone/Busto</option>
+            <option data-i18n="cat.halfbody.title">✦ Halfbody</option>
+            <option data-i18n="cat.fullbody.title">✦ Fullbody</option>
+            <option data-i18n="cat.referencia.title">✦ Referência</option>
+            <option data-i18n="cat.quadrinhos.title">✦ Quadrinhos</option>
+            <option data-i18n="cat.doodles.title">✦ Pacote de Doodles</option>
+            <option data-i18n="cat.ych.title">✦ YCH's em Rotação</option>
+          </select>
+
+          <label class="order-form-label" for="formNotes" data-i18n="com.form.notes">Detalhes extras (opcional)</label>
+          <textarea class="order-form-input" id="formNotes" rows="3"></textarea>
+
+          <button type="submit" class="order-form-submit" data-i18n="com.form.submit">Enviar pelo Telegram</button>
+        </form>
       </div>
     </div>
 
