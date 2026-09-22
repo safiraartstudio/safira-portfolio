@@ -4,12 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-i18n="com.title">Comissões e Preços — Safira Wolf Fox</title>
-<!-- Aplica o tema salvo ANTES da página pintar, pra não piscar a cor errada -->
 <script>if(localStorage.getItem('theme')==='light')document.documentElement.setAttribute('data-theme','light');</script>
 <link rel="icon" type="image/png" href="../img/favicon.png">
 
-<!-- EDITAR: mesma ideia da página inicial — troque a URL de og:image
-     pelo link completo de uma imagem sua já publicada no repositório -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Comissões e Preços — Safira Wolf Fox" data-i18n="og.com.title" data-i18n-attr="content">
 <meta property="og:description" content="Tipos de comissão, valores e como encomendar." data-i18n="og.com.desc" data-i18n-attr="content">
@@ -37,9 +34,6 @@
   <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.8 14.5A8.5 8.5 0 1 1 9.5 3.2a6.8 6.8 0 0 0 9.3 9.3c.7-.1 1.4-.3 2-.6.2.5.2 1 0 1.6Z"/></svg>
 </button>
 
-<!-- EDITAR: coloque o arquivo em ../audio/trilha.mp3 (MP3, 128kbps é
-     um bom equilíbrio de qualidade/tamanho pra música de fundo).
-     Player 100% opt-in: nada toca sozinho, só ao clicar. -->
 <div class="music-player" id="musicPlayer">
   <button class="music-toggle" id="musicToggle" aria-label="Tocar/mostrar trilha sonora" title="Trilha sonora" data-i18n="music.toggle" data-i18n-attr="aria-label,title">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 3v10.55A4 4 0 1 0 11 17V7h6V3H9Z"/></svg>
@@ -56,8 +50,6 @@
   <audio id="bgAudio" src="../audio/trilha.opus" preload="none" loop></audio>
 </div>
 
-<!-- Seletor de idioma — fixo no canto inferior direito (empilhado
-     acima do botão "voltar ao topo" nessa página, pra não sobrepor). -->
 <div class="lang-toggle lang-toggle--stacked" id="langToggle">
   <button class="lang-btn" data-lang="pt" aria-label="Português">PT</button>
   <button class="lang-btn" data-lang="en" aria-label="English">EN</button>
@@ -65,16 +57,12 @@
 
 <div class="page">
 
-  <!-- Partículas/brilho decorativo no fundo -->
-  <div class="sparkles">
+    <div class="sparkles">
     <span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span>
     <span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span>
   </div>
 
-  <!-- EDITAR: personagem grande do canto, fica esmaecida atrás da
-       galeria. Troque o src pela sua arte (pode reaproveitar
-       img/personagem.png ou usar uma pose diferente). -->
-  <img
+    <img
     class="page-character"
     src="../img/personagem-comissoes.jpg"
     alt=""
@@ -87,12 +75,7 @@
       <h1 class="page-title fade-item" style="--delay:0.1s" data-i18n="com.h1">Comissões e Preços</h1>
     </div>
 
-    <!-- ===== CATEGORIAS DE COMISSÃO =====
-         Cada categoria tem: título, 3 imagens de exemplo (clicáveis,
-         abrem em lightbox) e um texto com descrição + preço.
-         Copie um bloco .category-block inteiro pra adicionar uma
-         nova categoria, mantendo essa mesma estrutura interna. -->
-    <div class="category-block">
+        <div class="category-block">
       <div class="text-col">
         <h2 class="category-title fade-item" style="--delay:0s" data-i18n="cat.chibi.title">✦ Chibi</h2>
       </div>
@@ -377,14 +360,9 @@
       <div class="commission-block fade-item" style="--delay:0s">
         <div class="commission-heading" data-i18n="com.order.heading">✦ Como encomendar</div>
 
-        <!-- EDITAR: troque o href do Telegram pelo link real da sua DM
-             (ex: https://t.me/seu_usuario) -->
-        <div class="order-card">
+                <div class="order-card">
           <div class="order-row">
-            <!-- EDITAR: coloque o arquivo da logo do Pix em img/pix-icon.webp.
-                 Em inglês, o ícone vira um cartão genérico (não usamos a
-                 logo oficial do PayPal por ser marca registrada). -->
-            <span class="order-icon">
+                        <span class="order-icon">
               <img class="pay-icon-pt" src="../img/pix-icon.webp" alt="Pix" onerror="this.outerHTML='<svg viewBox=\'0 0 24 24\' fill=\'currentColor\'><path d=\'M12 2 4 8.5l8 6.5 8-6.5Z\'/><path d=\'M12 22 4 15.5l8-6.5 8 6.5Z\'/></svg>'">
               <svg class="pay-icon-en" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16a2 2 0 0 1 2 2v2H2V6a2 2 0 0 1 2-2Zm-2 6h20v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8Zm3 5h6v2H5v-2Z"/></svg>
             </span>
@@ -407,11 +385,7 @@
         </div>
       </div>
 
-      <!-- ===== FORMULÁRIO DE ENCOMENDA =====
-           Monta uma mensagem já formatada e abre no seu Telegram
-           (EDITAR: troque o handle em js/script.js se mudar de
-           usuário — procure por TELEGRAM_HANDLE). -->
-      <div class="commission-block fade-item" style="--delay:0.15s">
+            <div class="commission-block fade-item" style="--delay:0.15s">
         <div class="commission-heading" data-i18n="com.form.heading">✦ Peça sua comissão</div>
 
         <form class="order-form" id="orderForm">
@@ -442,7 +416,6 @@
 
 </div>
 
-<!-- Lightbox: fica escondida até uma imagem da galeria ser clicada -->
 <div class="lightbox">
   <button class="lightbox-close" aria-label="Fechar" data-i18n="nav.close" data-i18n-attr="aria-label">✕</button>
   <img src="" alt="">
