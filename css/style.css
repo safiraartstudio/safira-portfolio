@@ -545,12 +545,19 @@ body.page-fade.page-out{ opacity:0; }
   .status-dot{ animation:none; }
 }
 
-/* ===== CONTADOR DE VAGAS ===== */
+/* ===== CONTADOR DE VAGAS =====
+   Só aparece quando o badge de status está com a classe
+   status-open — se estiver status-closed, fica escondido
+   automaticamente (não precisa apagar a div na mão). */
 .slots-counter{
+  display:none;
   margin-top:10px;
   font-size:0.82rem;
   color:var(--texto-claro);
   opacity:0.9;
+}
+.status-badge.status-open + .slots-counter{
+  display:block;
 }
 .slots-counter strong{
   font-weight:700;
