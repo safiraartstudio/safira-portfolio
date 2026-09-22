@@ -4,10 +4,7 @@
   --texto-claro:#ffffff;
   --texto-escuro:#4a2530;
 
-  /* ===== MODO ESCURO (padrão do site) =====
-     Cores dos "botões" (link-card, order-card, status-badge,
-     ícones sociais) e do overlay da foto do hero. */
-  --card-bg:#3d1a20;
+    --card-bg:#3d1a20;
   --card-borda:rgba(255,255,255,0.16);
   --card-text:#f7e2e4;
   --card-text-secondary:rgba(247,226,228,0.72);
@@ -24,17 +21,13 @@
   --status-open-color:#7fd88a;
   --status-closed-color:#ef8a86;
 
-  /* Cores das páginas internas (comissões/TOS) */
-  --page-bg-start:var(--rosa-escuro);
+    --page-bg-start:var(--rosa-escuro);
   --page-bg-end:#6e2f38;
   --page-text:var(--texto-claro);
   --page-text-secondary:rgba(255,255,255,0.9);
   --page-divider:rgba(255,255,255,0.25);
 }
 
-/* ===== MODO CLARO =====
-   Ativado via atributo data-theme="light" na tag <html>,
-   trocado pelo botão de sol/lua (.theme-toggle no HTML/JS). */
 :root[data-theme="light"]{
   --card-bg:#fdf3f0;
   --card-borda:#f0d9d3;
@@ -62,12 +55,6 @@
 
 *{ box-sizing:border-box; margin:0; padding:0; }
 
-/* ===== TEXTO NÃO SELECIONÁVEL / IMAGENS NÃO ARRASTÁVEIS =====
-   Impede o "marcar em azul pra copiar" no texto (clique duplo/triplo)
-   e o arrastar de imagens pra fora da página. IMPORTANTE: isso é só
-   uma barreira casual — não impede print da tela, "salvar como" via
-   botão direito (bloqueado à parte, no JS) nem alguém ver o código-
-   fonte. Não existe proteção 100% eficaz contra cópia na web. */
 *{
   -webkit-user-select:none;
   -moz-user-select:none;
@@ -78,41 +65,24 @@
 img{
   -webkit-user-drag:none;
   user-drag:none;
-  -webkit-touch-callout:none; /* evita o menu de "salvar imagem" no toque longo do iOS */
-}
+  -webkit-touch-callout:none; }
 
 body{
   font-family:'Poppins', sans-serif;
   color:var(--texto-escuro);
   background:var(--rosa-claro);
   min-height:100vh;
-  /* Cursor customizado (img/cursor.png, 64x74, ponto de clique 6 6).
-     Cadeia curta de propósito: navegadores ficam inconsistentes
-     quando você empilha 3-4 url() diferentes numa cadeia de cursor
-     (o SVG embutido de reserva foi removido daqui por causa disso). */
-  cursor: url("../img/cursor.png") 6 6, auto;
+    cursor: url("../img/cursor.png") 6 6, auto;
 }
 
-/* Cursor diferente ao passar por cima de botões/links, usando o
-   segundo arquivo (img/cursor-hover.png). Cadeia igualmente curta:
-   só o arquivo de hover + a mesma patinha normal como reserva. */
 a, button, .gallery-item, .status-closed{
   cursor: url("../img/cursor-hover.png") 6 6, url("../img/cursor.png") 6 6, pointer;
 }
 
-/* Cursor de "hover" também aparece ENQUANTO você clica em QUALQUER
-   lugar da página, mesmo em área vazia sem link/botão nenhum —
-   é uma "interação vazia", só um feedback visual do clique.
-   :active dispara em qualquer elemento enquanto o botão do mouse
-   está pressionado, e volta ao normal assim que solta o clique. */
 body:active{
   cursor: url("../img/cursor-hover.png") 6 6, url("../img/cursor.png") 6 6, auto;
 }
 
-/* ===== TRANSIÇÃO ENTRE PÁGINAS =====
-   O body começa invisível; o JS adiciona "page-in" assim que a
-   página carrega e troca por "page-out" antes de navegar pra um
-   link interno, criando um fade suave entre as páginas. */
 body.page-fade{
   opacity:0;
   transition:opacity 0.28s ease;
@@ -124,7 +94,6 @@ body.page-fade.page-out{ opacity:0; }
   body.page-fade{ opacity:1 !important; transition:none; }
 }
 
-/* ===== BOTÃO DE MODO CLARO/ESCURO ===== */
 .theme-toggle{
   position:fixed;
   top:16px;
@@ -148,15 +117,13 @@ body.page-fade.page-out{ opacity:0; }
 :root[data-theme="light"] .theme-toggle .icon-sun{ display:none; }
 :root[data-theme="light"] .theme-toggle .icon-moon{ display:block; }
 
-/* ===== PLAYER DE ÁUDIO (trilha sonora opcional) ===== */
 .music-player{
   position:fixed;
   top:68px;
   right:16px;
   z-index:500;
   display:flex;
-  flex-direction:row-reverse; /* botão fica fixo na ponta, painel abre pra esquerda */
-  align-items:center;
+  flex-direction:row-reverse;   align-items:center;
   gap:10px;
 }
 
@@ -177,7 +144,6 @@ body.page-fade.page-out{ opacity:0; }
 .music-toggle:hover{ transform:scale(1.06); }
 .music-toggle svg{ width:18px; height:18px; }
 
-/* Painel que "abre pro lado" — largura anima de 0 até o conteúdo */
 .music-panel{
   display:flex;
   align-items:center;
@@ -236,7 +202,6 @@ body.page-fade.page-out{ opacity:0; }
   background:var(--card-accent);
 }
 
-/* ===== PARTÍCULAS / BRILHO SUTIL DE FUNDO ===== */
 .sparkles{
   position:absolute;
   inset:0;
@@ -271,7 +236,6 @@ body.page-fade.page-out{ opacity:0; }
   .sparkle{ animation:none; opacity:0.35; }
 }
 
-/* ===== EASTER EGG: CORAÇÕES ===== */
 .floating-heart{
   position:absolute;
   font-size:1.4rem;
@@ -287,7 +251,6 @@ body.page-fade.page-out{ opacity:0; }
   100%{ opacity:0; transform:translate(calc(-50% + var(--drift, 0px)), -140px) scale(0.9); }
 }
 
-/* ===== EFEITO "ESTALO" (desintegração do personagem) ===== */
 .dust-container{
   position:absolute;
   pointer-events:none;
@@ -307,7 +270,6 @@ body.page-fade.page-out{ opacity:0; }
   100%{ opacity:0; transform:translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.25); }
 }
 
-/* ===== SELETOR DE IDIOMA (PT/EN) ===== */
 .lang-toggle{
   position:fixed;
   bottom:20px;
@@ -322,8 +284,6 @@ body.page-fade.page-out{ opacity:0; }
   box-shadow:0 4px 14px rgba(0,0,0,0.18);
 }
 
-/* Nas páginas que já têm o botão "voltar ao topo" (mesmo canto),
-   o seletor de idioma sobe pra não ficar em cima dele. */
 .lang-toggle--stacked{
   bottom:76px;
 }
@@ -345,13 +305,10 @@ body.page-fade.page-out{ opacity:0; }
   color:var(--card-bg);
 }
 
-/* Ícone de pagamento: Pix em português, cartão genérico em inglês
-   (não usamos a logo oficial do PayPal por ser marca registrada). */
 .pay-icon-en{ display:none; }
 :root[data-lang="en"] .pay-icon-pt{ display:none; }
 :root[data-lang="en"] .pay-icon-en{ display:block; }
 
-/* ===== BOTÃO VOLTAR AO TOPO ===== */
 .back-to-top{
   position:fixed;
   bottom:20px;
@@ -381,12 +338,6 @@ body.page-fade.page-out{ opacity:0; }
   transform:translateY(0);
 }
 
-/* =========================================================
-   FUNDO DA PÁGINA (imagem ou GIF)
-   Troque o arquivo em img/fundo.jpg (ou .gif) pela sua arte.
-   Se usar GIF, o navegador anima ele automaticamente sozinho —
-   não precisa de nada além de trocar a extensão/arquivo aqui.
-   ========================================================= */
 .hero{
   position:relative;
   min-height:100vh;
@@ -402,12 +353,8 @@ body.page-fade.page-out{ opacity:0; }
     url("../img/fundo.webp");
   background-size:cover;
   background-position:center;
-  background-color:var(--rosa-claro); /* aparece caso a imagem não carregue */
-}
+  background-color:var(--rosa-claro); }
 
-/* =========================================================
-   IMAGEM CENTRAL — sem moldura, sem fundo, "solta" na tela
-   ========================================================= */
 .hero-img{
   width:min(340px, 65vw);
   height:auto;
@@ -415,8 +362,6 @@ body.page-fade.page-out{ opacity:0; }
   filter:drop-shadow(0 14px 24px rgba(0,0,0,0.3));
 }
 
-/* aparece só se a imagem não for encontrada, pra você saber
-   que precisa colocar o arquivo em img/personagem.png */
 .hero-img.img-missing{
   width:min(280px, 55vw);
   aspect-ratio:1/1;
@@ -444,7 +389,6 @@ body.page-fade.page-out{ opacity:0; }
   opacity:0.95;
 }
 
-/* ===== BOTÕES DE REDES SOCIAIS ===== */
 .social-row{
   display:flex;
   gap:16px;
@@ -472,9 +416,6 @@ body.page-fade.page-out{ opacity:0; }
 }
 .social-btn svg{ width:22px; height:22px; }
 
-/* ===== INDICADOR DE STATUS DE COMISSÃO =====
-   Editável: troque a classe "status-open" <-> "status-closed"
-   no HTML (e o texto dentro do badge) pra abrir/fechar. */
 .status-badge{
   position:relative;
   display:inline-flex;
@@ -493,9 +434,6 @@ body.page-fade.page-out{ opacity:0; }
   transition:left 0.18s ease, top 0.18s ease;
 }
 
-/* Modo "fujão": o badge vira posicionamento fixo pra poder desviar
-   do cursor livremente pela tela, em vez de ficar preso no fluxo
-   normal da página. */
 .status-badge.dodging{
   position:fixed;
   z-index:600;
@@ -504,8 +442,7 @@ body.page-fade.page-out{ opacity:0; }
 
 @media (prefers-reduced-motion: reduce){
   .status-badge{ transition:none; }
-  .status-badge.dodging{ position:relative; } /* desativa a fuga pra quem prefere menos movimento */
-}
+  .status-badge.dodging{ position:relative; } }
 
 #statusLabel{ transition:opacity 0.15s ease; }
 
@@ -545,10 +482,6 @@ body.page-fade.page-out{ opacity:0; }
   .status-dot{ animation:none; }
 }
 
-/* ===== CONTADOR DE VAGAS =====
-   Só aparece quando o badge de status está com a classe
-   status-open — se estiver status-closed, fica escondido
-   automaticamente (não precisa apagar a div na mão). */
 .slots-counter{
   display:none;
   margin-top:10px;
@@ -563,7 +496,6 @@ body.page-fade.page-out{ opacity:0; }
   font-weight:700;
 }
 
-/* ===== CARD/CAIXA COM BORDAS ARREDONDADAS (links de página) ===== */
 .links-section{
   width:100%;
   max-width:520px;
@@ -612,7 +544,6 @@ body.page-fade.page-out{ opacity:0; }
   margin-left:12px;
 }
 
-/* ===== RODAPÉ ===== */
 .footer{
   margin-top:50px;
   font-size:0.78rem;
@@ -620,13 +551,6 @@ body.page-fade.page-out{ opacity:0; }
   padding-bottom:10px;
 }
 
-/* =========================================================
-   FADE-IN SEQUENCIAL AO CARREGAR A PÁGINA
-   Cada elemento tem a classe "fade-item" + a variável --delay
-   definida inline no HTML (style="--delay:0.3s"), controlando
-   a ordem: imagem → título → subtítulo → botões → caixa de links.
-   Feito só com CSS, sem precisar de JavaScript.
-   ========================================================= */
 .fade-item{
   opacity:0;
   transform:translateY(16px);
@@ -634,11 +558,6 @@ body.page-fade.page-out{ opacity:0; }
   animation-delay:var(--delay, 0s);
 }
 
-/* Assim que a animação de entrada termina, o JS troca pra essa
-   classe (ver script.js) — isso "solta" a propriedade transform,
-   que uma animação com "forwards" prende pra sempre, permitindo
-   que outros efeitos (como o hover 3D da galeria) voltem a
-   funcionar normalmente nesse elemento depois da entrada. */
 .fade-item.fade-done{
   animation:none;
   opacity:1;
@@ -665,9 +584,6 @@ body.page-fade.page-out{ opacity:0; }
   .link-card{ padding:16px 18px; }
 }
 
-/* =========================================================
-   PÁGINA DE COMISSÕES (pages/comissoes.html)
-   ========================================================= */
 .page{
   position:relative;
   min-height:100vh;
@@ -676,9 +592,6 @@ body.page-fade.page-out{ opacity:0; }
   overflow:hidden;
 }
 
-/* Personagem grande no canto, esmaecida — fica atrás do conteúdo,
-   as imagens da galeria (opacas) sobrepõem ela e por isso se
-   destacam mais na tela. */
 .page-character{
   position:absolute;
   top:0;
@@ -702,9 +615,6 @@ body.page-fade.page-out{ opacity:0; }
   margin:0 auto;
 }
 
-/* Título, botão voltar e textos ficam presos numa coluna mais
-   estreita do lado esquerdo — o "outro lado" da personagem —
-   pra não brigar visualmente com ela. */
 .text-col{
   max-width:560px;
 }
@@ -727,15 +637,10 @@ body.page-fade.page-out{ opacity:0; }
   margin-bottom:36px;
 }
 
-/* Galeria — imagens de exemplo dos trabalhos.
-   Ocupa a largura toda, podendo se sobrepor à personagem do fundo. */
 .gallery{
   width:100%;
   display:grid;
-  /* sempre 3 colunas — os quadros encolhem juntos em telas
-     pequenas em vez de quebrar linha (era auto-fit com um mínimo
-     de 200px, que forçava 1 coluna no celular) */
-  grid-template-columns:repeat(3, 1fr);
+    grid-template-columns:repeat(3, 1fr);
   gap:18px;
   margin-bottom:44px;
 }
@@ -746,20 +651,12 @@ body.page-fade.page-out{ opacity:0; }
   overflow:hidden;
   background:var(--gallery-item-bg);
   border:1px solid var(--gallery-item-border);
-  /* cursor de hover já definido na regra "a, button, .gallery-item" */
-
-  /* efeito 3D ao passar o mouse (o JS calcula o ângulo e escreve
-     direto no style; esse transition só deixa o movimento suave e
-     faz a inclinação voltar ao normal quando o mouse sai) */
-  transition:transform 0.15s ease;
+  
+    transition:transform 0.15s ease;
   transform-style:preserve-3d;
   will-change:transform;
 }
 
-/* ===== SKELETON LOADING =====
-   Efeito de "brilho passando" enquanto a imagem carrega. O JS
-   remove a classe "is-loading" assim que a imagem termina de
-   carregar (ou falha), revelando a imagem real com um fade. */
 .gallery-item.is-loading{
   background:linear-gradient(
     100deg,
@@ -798,7 +695,6 @@ body.page-fade.page-out{ opacity:0; }
   transform:scale(1.04);
 }
 
-/* placeholder visível enquanto a imagem real não é adicionada */
 .gallery-item img.img-missing{
   display:flex;
   align-items:center;
@@ -816,8 +712,6 @@ body.page-fade.page-out{ opacity:0; }
   margin-bottom:36px;
 }
 
-/* Bloco de tipo de comissão — fica na coluna estreita (text-col)
-   junto com o título, do lado oposto à personagem. */
 .commission-block{
   margin-bottom:38px;
   text-align:left;
@@ -831,9 +725,6 @@ body.page-fade.page-out{ opacity:0; }
   margin-bottom:14px;
 }
 
-/* Cada categoria (Chibi, Halfbody, Referência...) tem seu próprio
-   título, galeria de 3 imagens e texto — copie o bloco inteiro
-   no HTML pra adicionar uma nova categoria. */
 .category-block{
   margin-bottom:10px;
 }
@@ -846,7 +737,6 @@ body.page-fade.page-out{ opacity:0; }
   margin-bottom:16px;
 }
 
-/* ===== FORMULÁRIO DE ENCOMENDA ===== */
 .order-form{
   margin-top:16px;
   display:flex;
@@ -892,7 +782,6 @@ body.page-fade.page-out{ opacity:0; }
 .order-form-submit:hover{ transform:translateY(-2px); }
 .order-form-submit:disabled{ opacity:0.6; }
 
-/* ===== CARD "COMO ENCOMENDAR" (pagamento + contato) ===== */
 .order-card{
   background:var(--card-bg);
   border:1px solid var(--card-borda);
@@ -984,8 +873,6 @@ body.page-fade.page-out{ opacity:0; }
   font-size:1.05rem;
 }
 
-/* Preço com mais de uma faixa (ex: Referência simples/padrão) —
-   copie um bloco .price-tier pra adicionar mais faixas. */
 .price-tiers{
   margin-top:14px;
   display:flex;
@@ -1018,9 +905,6 @@ body.page-fade.page-out{ opacity:0; }
   .gallery{ gap:8px; }
 }
 
-/* =========================================================
-   LIGHTBOX — abre a imagem clicada em tela cheia
-   ========================================================= */
 .lightbox{
   position:fixed;
   inset:0;
