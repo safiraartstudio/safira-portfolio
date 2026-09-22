@@ -1,8 +1,3 @@
-// ===== TRADUÇÃO PT/EN =====
-// Dicionário central: cada chave tem o texto em pt e em en. Os
-// elementos que devem trocar de texto têm um atributo data-i18n
-// com essa chave (e, quando precisam traduzir um atributo em vez
-// do texto visível, data-i18n-attr="aria-label" ou "aria-label,title").
 const I18N = {
   'idx.title': { pt: 'SafiraWolfFox — Portfólio', en: 'SafiraWolfFox — Portfolio' },
   'theme.label': { pt: 'Alternar tema claro/escuro', en: 'Toggle light/dark theme' },
@@ -161,9 +156,6 @@ function applyLang(lang) {
     }
   });
 
-  // O texto do status (aberto/fechado) depende de qual classe está
-  // ativa no badge — não dá pra usar uma chave fixa, porque você
-  // pode trocar status-open/status-closed a qualquer momento.
   const statusLabel = document.getElementById('statusLabel');
   const statusBadge = document.getElementById('statusBadge');
   if (statusLabel && statusBadge) {
@@ -175,12 +167,12 @@ function applyLang(lang) {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
 
-  try { localStorage.setItem('siteLang', lang); } catch (err) { /* ignora */ }
+  try { localStorage.setItem('siteLang', lang); } catch (err) {}
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   let lang = 'pt';
-  try { lang = localStorage.getItem('siteLang') || 'pt'; } catch (err) { /* ignora */ }
+  try { lang = localStorage.getItem('siteLang') || 'pt'; } catch (err) {}
   applyLang(lang);
 
   document.querySelectorAll('.lang-btn').forEach((btn) => {
@@ -188,15 +180,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// ===== FORMULÁRIO DE ENCOMENDA =====
-// Monta uma mensagem com os dados preenchidos e abre o Telegram já
-// com o texto pronto (o link https://t.me/usuario?text=... faz o
-// Telegram preencher a caixa de mensagem sozinho).
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('orderForm');
   if (!form) return;
 
-  const TELEGRAM_HANDLE = 'Safirawolffox'; // EDITAR aqui se trocar de usuário
+  const TELEGRAM_HANDLE = 'Safirawolffox';
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -216,10 +204,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// ===== EASTER EGG: BOTÃO FUJÃO NO STATUS "FECHADAS" =====
-// Só ativa se o badge estiver com a classe status-closed. Clique
-// 4x: "O que foi?" / 5x: "Quer comissionar?" / 6x: "Brincadeirinha
-// Haha!" e o botão passa a desviar do cursor pelo resto da visita.
 document.addEventListener('DOMContentLoaded', () => {
   const badge = document.getElementById('statusBadge');
   const label = document.getElementById('statusLabel');
@@ -237,9 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let labelTimer = null;
   let dodging = false;
 
-  // Troca o texto do próprio badge (com uma piscadinha rápida) em
-  // vez de abrir uma bolha de fala à parte. No 6º clique, o texto
-  // fica em "Brincadeirinha Haha!" e não volta mais ao original.
   function rewriteLabel(text, revert) {
     label.style.opacity = '0';
     clearTimeout(labelTimer);
@@ -252,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
           setTimeout(() => {
             label.textContent = originalText();
             label.style.opacity = '1';
-            clicks = 0; // voltou ao normal — reseta a contagem
+            clicks = 0;
           }, 150);
         }, 10000);
       }
@@ -260,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function startDodging() {
-    if (dodging || reduceMotion) return; // respeita "reduzir movimento"
+    if (dodging || reduceMotion) return;
     dodging = true;
     const rect = badge.getBoundingClientRect();
     badge.classList.add('dodging');
@@ -282,16 +263,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const maxLeft = window.innerWidth - r.width - margin;
         const maxTop = window.innerHeight - r.height - margin;
 
-        // Pequena aleatoriedade no ângulo pra não ficar sempre
-        // quicando exatamente na mesma direção (evita ping-pong
-        // previsível entre duas paredes).
         const jitter = (Math.random() - 0.5) * 0.6;
         let vx = Math.cos(Math.atan2(dy, dx) + jitter);
         let vy = Math.sin(Math.atan2(dy, dx) + jitter);
 
-        // Se o pulo for bater numa borda, inverte a direção desse
-        // eixo — ele "quica" pra longe da parede em vez de ficar
-        // prensado nela, o que tornaria fácil de encurralar.
         if (r.left + vx * jump < margin || r.left + vx * jump > maxLeft) vx = -vx;
         if (r.top + vy * jump < margin || r.top + vy * jump > maxTop) vy = -vy;
 
@@ -320,18 +295,10 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Se a pessoa ainda assim conseguir clicar de novo (pegou o
-    // botão fujão), prega a peça de verdade.
     window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank', 'noopener');
   });
 });
 
-// ===== BLOQUEIO CASUAL DE CÓPIA DE IMAGEM =====
-// Impede o menu de botão direito ("salvar imagem como") e o
-// arrastar de qualquer <img> da página. Junto com o CSS que tira a
-// seleção de texto, isso cobre os jeitos mais comuns de copiar
-// conteúdo casualmente — mas não é proteção real (print de tela,
-// ferramentas de desenvolvedor etc. sempre contornam isso).
 document.addEventListener('contextmenu', (e) => {
   if (e.target.tagName === 'IMG') e.preventDefault();
 });
@@ -339,24 +306,12 @@ document.addEventListener('dragstart', (e) => {
   if (e.target.tagName === 'IMG') e.preventDefault();
 });
 
-// ===== LIBERA A ANIMAÇÃO DE ENTRADA (fade-item) DEPOIS QUE ACABA =====
-// Uma animação com "forwards" prende a propriedade transform no
-// valor final pra sempre — o que impede outros efeitos (tipo o
-// hover 3D da galeria) de mudar o transform depois. Assim que cada
-// fade-item termina de animar, trocamos pra uma classe estática
-// (fade-done) que solta o transform de volta pro controle normal.
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.fade-item').forEach((el) => {
     el.addEventListener('animationend', () => el.classList.add('fade-done'), { once: true });
   });
 });
 
-// ===== PLAYER DE ÁUDIO (trilha sonora opcional) =====
-// 100% opt-in: nada toca sozinho. O botão de nota expande/recolhe
-// o painel com a barra de progresso; o play/pause de dentro do
-// painel controla a música sem fechar o painel. Recolher o painel
-// (clicando de novo no botão de nota) só esconde a barra — não
-// pausa a música, ela continua tocando se já estiver tocando.
 document.addEventListener('DOMContentLoaded', () => {
   const musicToggle = document.getElementById('musicToggle');
   const musicPanel = document.getElementById('musicPanel');
@@ -368,8 +323,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const STORAGE_KEY = 'sw_musicState';
 
-  // Salva tempo atual, se está tocando, e se o painel está aberto —
-  // assim a próxima página consegue continuar de onde parou.
   function saveState() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
@@ -377,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
         playing: !audio.paused,
         expanded: musicPanel.classList.contains('expanded'),
       }));
-    } catch (err) { /* localStorage pode falhar em modo privado — ignora */ }
+    } catch (err) {}
   }
 
   let hasError = false;
@@ -417,19 +370,14 @@ document.addEventListener('DOMContentLoaded', () => {
     saveState();
   });
 
-  // Salva periodicamente enquanto toca, e também ao sair da página
-  // (troca de página, fechar aba) — cobre o caso de o navegador não
-  // disparar 'pause' a tempo antes de navegar.
   setInterval(saveState, 3000);
   window.addEventListener('pagehide', saveState);
 
-  // ===== RETOMA DE ONDE PAROU =====
-  // Lê o estado salvo pela página anterior e continua a música daqui.
   let saved = null;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) saved = JSON.parse(raw);
-  } catch (err) { /* ignora se não der pra ler */ }
+  } catch (err) {}
 
   if (saved) {
     if (saved.expanded) musicPanel.classList.add('expanded');
@@ -442,19 +390,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (saved.playing) {
       audio.play().catch(() => {
-        // Navegadores bloqueiam autoplay sem gesto do usuário nessa
-        // página nova — deixa o painel aberto, pausado, pronto pra
-        // retomar com 1 clique.
         musicPanel.classList.add('expanded');
       });
     }
   }
 });
 
-// ===== BOTÃO DE MODO CLARO/ESCURO =====
-// A leitura do tema salvo já acontece antes, num script inline no
-// <head> de cada página (evita o "flash" da cor errada). Aqui só
-// cuidamos do clique no botão pra trocar e salvar a preferência.
 document.addEventListener('DOMContentLoaded', () => {
   const themeToggle = document.getElementById('themeToggle');
   if (!themeToggle) return;
@@ -471,10 +412,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// ===== TRANSIÇÃO (FADE) ENTRE PÁGINAS =====
-// Ao carregar, o body fica visível com um fade suave. Ao clicar num
-// link interno (mesma origem, sem target="_blank", sem "#"), a
-// página atual esmaece antes de navegar pra próxima.
 document.addEventListener('DOMContentLoaded', () => {
   document.body.classList.add('page-fade');
   requestAnimationFrame(() => document.body.classList.add('page-in'));
@@ -505,36 +442,20 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// ===== CORREÇÃO DO BOTÃO VOLTAR NO CELULAR (bfcache) =====
-// Ao voltar pela seta do navegador, o celular costuma restaurar a
-// página exatamente como ela ficou "congelada" ao sair — nesse
-// caso, com a classe "page-out" (invisível), porque o clique de
-// saída já tinha rodado antes de você navegar. Como isso é uma
-// restauração de cache, o DOMContentLoaded acima não dispara de
-// novo pra corrigir. O evento "pageshow" dispara nos dois casos
-// (carregamento normal E restauração), com event.persisted=true só
-// na restauração — é aí que garantimos que o body volte a aparecer.
 window.addEventListener('pageshow', (event) => {
   if (event.persisted) {
     document.body.classList.remove('page-out');
     document.body.classList.add('page-in');
 
-    // Mesmo motivo do fade: a página restaurada do cache pode não
-    // refletir o idioma mais atual salvo no localStorage (ex: se
-    // foi trocado em outra aba, ou o "instantâneo" congelado ficou
-    // desatualizado por algum motivo). Reaplica pra garantir.
     let lang = 'pt';
-    try { lang = localStorage.getItem('siteLang') || 'pt'; } catch (err) { /* ignora */ }
+    try { lang = localStorage.getItem('siteLang') || 'pt'; } catch (err) {}
     applyLang(lang);
   }
 });
 
-// Lightbox da galeria de comissões: clique numa imagem pra abrir
-// em tela cheia, feche clicando no X ou fora da imagem.
-// Não faz nada em páginas que não têm galeria (como a inicial).
 document.addEventListener('DOMContentLoaded', () => {
   const lightbox = document.querySelector('.lightbox');
-  if (!lightbox) return; // página sem galeria/lightbox — não faz nada
+  if (!lightbox) return;
 
   const lightboxImg = lightbox.querySelector('img');
   const closeBtn = lightbox.querySelector('.lightbox-close');
@@ -551,28 +472,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.querySelectorAll('.gallery-item img').forEach((img) => {
-    // ignora os placeholders (imagens ainda não adicionadas)
     if (img.classList.contains('img-missing')) return;
     img.addEventListener('click', () => openLightbox(img.currentSrc || img.src, img.alt));
   });
 
   closeBtn.addEventListener('click', closeLightbox);
 
-  // fecha ao clicar fora da imagem (no fundo escuro)
   lightbox.addEventListener('click', (e) => {
     if (e.target === lightbox) closeLightbox();
   });
 
-  // fecha com a tecla Esc
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
   });
 });
 
-// ===== SKELETON LOADING =====
-// Tira o "brilho passando" (classe is-loading) assim que a imagem
-// termina de carregar — ou falha, nesse caso ela vira o placeholder
-// de sempre (img-missing) em vez de ficar brilhando pra sempre.
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.gallery-item').forEach((item) => {
     const img = item.querySelector('img');
@@ -592,9 +506,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// ===== HOVER 3D NA GALERIA =====
-// A caixa da imagem se inclina seguindo a posição do mouse.
-// Desativado se a pessoa tiver "reduzir movimento" ativado no sistema.
 document.addEventListener('DOMContentLoaded', () => {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduceMotion) return;
@@ -615,15 +526,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// ===== EASTER EGG: CORAÇÕES AO CLICAR NO PERSONAGEM =====
-// Só existe na página inicial (.hero-img). Cada clique solta um
-// coraçãozinho que sobe e desaparece — decorativo, sem função real.
 document.addEventListener('DOMContentLoaded', () => {
   const heroImg = document.querySelector('.hero-img');
   const hero = document.querySelector('.hero');
   if (!heroImg || !hero) return;
 
-  const DISINTEGRATE_AT = 12; // cliques até o "estalo"
+  const DISINTEGRATE_AT = 12;
   let clickCount = 0;
   let gone = false;
 
@@ -648,10 +556,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Fatia a imagem numa grade de pedacinhos (cada um mostrando só o
-// seu recorte da própria imagem via background-position) e anima
-// cada um voando pra longe e sumindo, tipo poeira ao vento — dá o
-// efeito do estalo sem precisar de canvas nem de outro arquivo.
 function disintegrate(img, hero) {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const w = img.offsetWidth;
@@ -687,11 +591,9 @@ function disintegrate(img, hero) {
       cell.style.backgroundSize = `${w}px ${h}px`;
       cell.style.backgroundPosition = `-${col * cellW}px -${row * cellH}px`;
 
-      const dx = 30 + Math.random() * 150;       // deriva pra direita
-      const dy = -(30 + Math.random() * 170);    // deriva pra cima
+      const dx = 30 + Math.random() * 150;
+      const dy = -(30 + Math.random() * 170);
       const rot = Math.random() * 120 - 60;
-      // colunas mais à esquerda somem primeiro, criando o efeito de
-      // "varredura" — igual ao estalo, que começa de um lado
       const sweepDelay = (col / cols) * 0.5 + Math.random() * 0.25;
 
       cell.style.setProperty('--dx', `${dx}px`);
@@ -704,14 +606,11 @@ function disintegrate(img, hero) {
   }
 
   hero.appendChild(container);
-  img.style.opacity = '0'; // a poeira já cobre o mesmo espaço da imagem original
+  img.style.opacity = '0';
 
   setTimeout(() => container.remove(), 2200);
 }
 
-// ===== BOTÃO VOLTAR AO TOPO =====
-// Aparece depois de rolar um pouco a página (só existe nas páginas
-// que têm o botão no HTML — Comissões e TOS, que são mais longas).
 document.addEventListener('DOMContentLoaded', () => {
   const backToTop = document.getElementById('backToTop');
   if (!backToTop) return;
