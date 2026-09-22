@@ -210,8 +210,9 @@ document.addEventListener('DOMContentLoaded', () => {
           setTimeout(() => {
             label.textContent = originalText();
             label.style.opacity = '1';
+            clicks = 0; // voltou ao normal — reseta a contagem
           }, 150);
-        }, 2000);
+        }, 10000);
       }
     }, 150);
   }
