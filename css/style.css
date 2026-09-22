@@ -714,7 +714,10 @@ body.page-fade.page-out{ opacity:0; }
 .gallery{
   width:100%;
   display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+  /* sempre 3 colunas — os quadros encolhem juntos em telas
+     pequenas em vez de quebrar linha (era auto-fit com um mínimo
+     de 200px, que forçava 1 coluna no celular) */
+  grid-template-columns:repeat(3, 1fr);
   gap:18px;
   margin-bottom:44px;
 }
@@ -948,6 +951,7 @@ body.page-fade.page-out{ opacity:0; }
 
 @media (max-width:480px){
   .page{ padding:36px 16px 50px; }
+  .gallery{ gap:8px; }
 }
 
 /* =========================================================
