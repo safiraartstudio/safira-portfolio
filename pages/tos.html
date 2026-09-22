@@ -4,12 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-i18n="tos.title">Termos de Serviço — Safira Wolf Fox</title>
-<!-- Aplica o tema salvo ANTES da página pintar, pra não piscar a cor errada -->
 <script>if(localStorage.getItem('theme')==='light')document.documentElement.setAttribute('data-theme','light');</script>
 <link rel="icon" type="image/png" href="../img/favicon.png">
 
-<!-- EDITAR: mesma ideia da página inicial — troque a URL de og:image
-     pelo link completo de uma imagem sua já publicada no repositório -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Termos de Serviço — Safira Wolf Fox" data-i18n="og.tos.title" data-i18n-attr="content">
 <meta property="og:description" content="Leia os termos antes de solicitar uma comissão." data-i18n="og.tos.desc" data-i18n-attr="content">
@@ -37,9 +34,6 @@
   <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.8 14.5A8.5 8.5 0 1 1 9.5 3.2a6.8 6.8 0 0 0 9.3 9.3c.7-.1 1.4-.3 2-.6.2.5.2 1 0 1.6Z"/></svg>
 </button>
 
-<!-- EDITAR: coloque o arquivo em ../audio/trilha.mp3 (MP3, 128kbps é
-     um bom equilíbrio de qualidade/tamanho pra música de fundo).
-     Player 100% opt-in: nada toca sozinho, só ao clicar. -->
 <div class="music-player" id="musicPlayer">
   <button class="music-toggle" id="musicToggle" aria-label="Tocar/mostrar trilha sonora" title="Trilha sonora" data-i18n="music.toggle" data-i18n-attr="aria-label,title">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 3v10.55A4 4 0 1 0 11 17V7h6V3H9Z"/></svg>
@@ -56,8 +50,6 @@
   <audio id="bgAudio" src="../audio/trilha.opus" preload="none" loop></audio>
 </div>
 
-<!-- Seletor de idioma — fixo no canto inferior direito (empilhado
-     acima do botão "voltar ao topo" nessa página, pra não sobrepor). -->
 <div class="lang-toggle lang-toggle--stacked" id="langToggle">
   <button class="lang-btn" data-lang="pt" aria-label="Português">PT</button>
   <button class="lang-btn" data-lang="en" aria-label="English">EN</button>
@@ -65,15 +57,12 @@
 
 <div class="page">
 
-  <!-- Partículas/brilho decorativo no fundo -->
-  <div class="sparkles">
+    <div class="sparkles">
     <span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span>
     <span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span>
   </div>
 
-  <!-- EDITAR: mesma personagem esmaecida da página de comissões.
-       Troque o src se quiser uma pose diferente pra essa página. -->
-  <img
+    <img
     class="page-character"
     src="../img/personagem-comissoes.jpg"
     alt=""
