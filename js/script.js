@@ -31,32 +31,35 @@ const I18N = {
 
   'cat.chibi.title': { pt: '✦ Chibi', en: '✦ Chibi' },
   'cat.chibi.desc': { pt: '[Farei seu personagem em uma estetica reduzida e mais fofo , tentando manter aspectos gerais, porem de forma mais simplificada!]', en: "[I'll draw your character in a smaller, cuter style, keeping the general look but simplified!]" },
-  'cat.chibi.price': { pt: 'A partir de R$ 30,00', en: 'Starting at $6' },
+  'cat.chibi.price': { pt: 'A partir de R$ 50,00', en: 'Starting at $25' },
 
   'cat.icone.title': { pt: '✦ Icone/Busto', en: '✦ Icon/Bust' },
   'cat.icone.desc': { pt: '[Icone ou até abaixo da margem do busto com sombreado detalhado]', en: '[Icon or down to below the bust line, with detailed shading]' },
-  'cat.icone.price': { pt: 'A partir de R$ 45,00', en: 'Starting at $9' },
+  'cat.icone.price': { pt: 'A partir de R$ 60,00', en: 'Starting at $30' },
 
   'cat.halfbody.title': { pt: '✦ Halfbody', en: '✦ Halfbody' },
   'cat.halfbody.desc': { pt: '[Meio corpo , até a cintura com sombreado detalhado!]', en: '[Half body, down to the waist, with detailed shading!]' },
-  'cat.halfbody.price': { pt: 'A partir de R$ 60,00', en: 'Starting at $12' },
+  'cat.halfbody.price': { pt: 'A partir de R$ 80,00', en: 'Starting at $40' },
 
   'cat.fullbody.title': { pt: '✦ Fullbody', en: '✦ Fullbody' },
   'cat.fullbody.desc': { pt: '[Corpo todo e extras com sombreado detalhado!]', en: '[Full body plus extras, with detailed shading!]' },
-  'cat.fullbody.price': { pt: 'A partir de R$ 80,00', en: 'Starting at $16' },
+  'cat.fullbody.price': { pt: 'A partir de R$ 100,00', en: 'Starting at $60' },
 
   'cat.referencia.title': { pt: '✦ Referência', en: '✦ Reference Sheet' },
   'cat.referencia.desc1': { pt: 'Esse estilo contém arte com linhas limpas e cor base, sem sombra/luz.', en: 'This style has clean line art with flat base colors, no shading or lighting.' },
   'cat.referencia.desc2': { pt: 'Inclui um fundo em gradiente. Um fundo simples ou com padrões pode ser adicionado por um valor extra.', en: 'Includes a gradient background. A simple or patterned background can be added for an extra fee.' },
-  'cat.referencia.price': { pt: 'A partir de R$ 70,00', en: 'Starting at $14' },
+  'cat.referencia.tier1.name': { pt: 'Simples', en: 'Simple' },
+  'cat.referencia.tier1.price': { pt: 'R$ 80,00', en: '$40' },
+  'cat.referencia.tier2.name': { pt: 'Padrão', en: 'Standard' },
+  'cat.referencia.tier2.price': { pt: 'R$ 110,00', en: '$70' },
 
   'cat.quadrinhos.title': { pt: '✦ Quadrinhos', en: '✦ Comic Panels' },
   'cat.quadrinhos.desc': { pt: '[Uma página pode conter até 6 quadros, o valor varia dependendo da complexidade e quantidade de personagens e cenario!]', en: '[A page can have up to 6 panels; price varies depending on complexity and the number of characters/backgrounds!]' },
-  'cat.quadrinhos.price': { pt: 'A partir de R$ 170,00', en: 'Starting at $34' },
+  'cat.quadrinhos.price': { pt: 'A partir de R$ 200,00', en: 'Starting at $120' },
 
   'cat.doodles.title': { pt: '✦ Pacote de Doodles', en: '✦ Doodle Pack' },
   'cat.doodles.desc': { pt: '[1 Fullbody + 1 halfbody +1 chibi]', en: '[1 Fullbody + 1 Halfbody + 1 Chibi]' },
-  'cat.doodles.price': { pt: 'A partir de R$ 35,00', en: 'Starting at $7' },
+  'cat.doodles.price': { pt: 'A partir de R$ 70,00', en: 'Starting at $50' },
 
   "cat.ych.title": { pt: "✦ YCH's em Rotação", en: "✦ Rotating YCH's" },
   'cat.ych.desc': { pt: '[Episódio da Praia de 1 a 4 Personagens]', en: '[Beach Episode, 1 to 4 characters]' },
