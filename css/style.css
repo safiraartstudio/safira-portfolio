@@ -207,14 +207,15 @@ body.page-fade.page-out{ opacity:0; }
   inset:0;
   overflow:hidden;
   pointer-events:none;
-  z-index:-1;
+  z-index:0;
 }
 .sparkle{
   position:absolute;
-  width:4px;
-  height:4px;
+  width:5px;
+  height:5px;
   background:#fff;
   border-radius:50%;
+  box-shadow:0 0 8px 2px rgba(255,255,255,0.75);
   opacity:0;
   animation:sparkle-twinkle 3.6s ease-in-out infinite;
 }
@@ -229,7 +230,7 @@ body.page-fade.page-out{ opacity:0; }
 
 @keyframes sparkle-twinkle{
   0%, 100%{ opacity:0; transform:scale(0.6) translateY(0); }
-  50%{ opacity:0.85; transform:scale(1.2) translateY(-6px); }
+  50%{ opacity:1; transform:scale(1.2) translateY(-6px); }
 }
 
 @media (prefers-reduced-motion: reduce){
