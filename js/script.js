@@ -24,7 +24,16 @@ const I18N = {
   'com.form.type': { pt: 'Tipo de comissão', en: 'Commission type' },
   'com.form.notes': { pt: 'Detalhes extras (opcional)', en: 'Extra details (optional)' },
   'com.form.submit': { pt: 'Enviar pelo Telegram', en: 'Send via Telegram' },
+  'com.form.redirecting': { pt: 'Redirecionando...', en: 'Redirecting...' },
   'com.form.note': { pt: 'Ao clicar, a mensagem já vai pronta pro meu chat no Telegram — depois é só anexar a imagem de referência do personagem por lá.', en: 'Clicking this will send the message straight to my Telegram chat — just attach the character reference image there afterward.' },
+
+  '404.title': { pt: 'Página não encontrada — Safira Wolf Fox', en: 'Page Not Found — Safira Wolf Fox' },
+  '404.subtitle': { pt: 'Essa página se perdeu no caminho...', en: 'This page got lost along the way...' },
+  '404.back.title': { pt: 'Voltar ao início', en: 'Back to home' },
+  '404.back.desc': { pt: 'Bora achar o que você tava procurando', en: "Let's find what you were looking for" },
+
+  'season.halloween': { pt: '🎃 Clima de Halloween por aqui!', en: '🎃 Halloween vibes around here!' },
+  'season.christmas': { pt: '🎄 Boas festas! Feliz Natal!', en: '🎄 Happy holidays!' },
 
   'nav.back': { pt: '← Voltar', en: '← Back' },
   'nav.top': { pt: 'Voltar ao topo', en: 'Back to top' },
@@ -182,10 +191,57 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+  const now = new Date();
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
+  let season = null;
+
+  if ((month === 10 && day >= 20) || (month === 11 && day <= 2)) season = 'halloween';
+  else if ((month === 12 && day >= 15) || (month === 1 && day <= 5)) season = 'christmas';
+
+  if (!season) return;
+
+  document.body.classList.add(`season-${season}`);
+
+  const container = document.querySelector('.hero') || document.querySelector('.page');
+  if (!container) return;
+
+  let lang = 'pt';
+  try { lang = localStorage.getItem('siteLang') || 'pt'; } catch (err) {}
+
+  const banner = document.createElement('div');
+  banner.className = 'season-banner';
+  banner.setAttribute('data-i18n', `season.${season}`);
+  banner.textContent = I18N[`season.${season}`][lang];
+  container.insertBefore(banner, container.firstChild);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('orderForm');
   if (!form) return;
 
   const TELEGRAM_HANDLE = 'Safirawolffox';
+
+  const submitBtn = form.querySelector('.order-form-submit');
+
+  function burstConfetti(x, y) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const colors = ['#f2b8bf', '#8a3d47', '#ffd166', '#06d6a0', '#118ab2'];
+    for (let i = 0; i < 26; i++) {
+      const piece = document.createElement('span');
+      piece.className = 'confetti-piece';
+      piece.style.left = `${x}px`;
+      piece.style.top = `${y}px`;
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 70 + Math.random() * 110;
+      piece.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
+      piece.style.setProperty('--ty', `${Math.sin(angle) * distance - 50}px`);
+      piece.style.setProperty('--rot', `${Math.random() * 360}deg`);
+      document.body.appendChild(piece);
+      piece.addEventListener('animationend', () => piece.remove());
+    }
+  }
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -201,7 +257,23 @@ document.addEventListener('DOMContentLoaded', () => {
       : `Olá! Gostaria de uma comissão.\nPersonagem: ${name}\nTipo: ${type}\nDetalhes: ${notes || '-'}`;
 
     const url = `https://t.me/${TELEGRAM_HANDLE}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank', 'noopener');
+
+    if (submitBtn) {
+      const rect = submitBtn.getBoundingClientRect();
+      burstConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2);
+
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = I18N['com.form.redirecting'][lang];
+
+      setTimeout(() => {
+        window.open(url, '_blank', 'noopener');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }, 2000);
+    } else {
+      window.open(url, '_blank', 'noopener');
+    }
   });
 });
 
@@ -555,6 +627,50 @@ document.addEventListener('DOMContentLoaded', () => {
       disintegrate(heroImg, hero);
     }
   });
+
+  const PAT_INTERVAL = 180;
+  let isPatting = false;
+  let lastPat = 0;
+
+  function triggerSquish() {
+    if (gone) return;
+    heroImg.classList.remove('is-patting');
+    void heroImg.offsetWidth;
+    heroImg.classList.add('is-patting');
+  }
+
+  heroImg.addEventListener('mousedown', () => {
+    isPatting = true;
+    triggerSquish();
+    lastPat = Date.now();
+  });
+  window.addEventListener('mouseup', () => { isPatting = false; });
+
+  heroImg.addEventListener('mousemove', () => {
+    if (!isPatting) return;
+    const now = Date.now();
+    if (now - lastPat > PAT_INTERVAL) {
+      triggerSquish();
+      lastPat = now;
+    }
+  });
+
+  heroImg.addEventListener('touchstart', () => {
+    isPatting = true;
+    triggerSquish();
+    lastPat = Date.now();
+  }, { passive: true });
+
+  heroImg.addEventListener('touchmove', () => {
+    if (!isPatting) return;
+    const now = Date.now();
+    if (now - lastPat > PAT_INTERVAL) {
+      triggerSquish();
+      lastPat = now;
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchend', () => { isPatting = false; });
 });
 
 function disintegrate(img, hero) {
