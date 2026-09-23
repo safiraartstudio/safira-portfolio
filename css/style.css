@@ -782,6 +782,13 @@ body.page-fade.page-out{ opacity:0; }
 .order-form-submit:hover{ transform:translateY(-2px); }
 .order-form-submit:disabled{ opacity:0.6; }
 
+.order-form-note{
+  margin-top:10px;
+  font-size:0.78rem;
+  color:var(--page-text-secondary);
+  line-height:1.5;
+}
+
 .order-card{
   background:var(--card-bg);
   border:1px solid var(--card-borda);
