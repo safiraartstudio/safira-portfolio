@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n="404.title">Página não encontrada — Safira Wolf Fox</title>
+<script>if(localStorage.getItem('theme')==='light')document.documentElement.setAttribute('data-theme','light');</script>
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Alternar tema claro/escuro" data-i18n="theme.label" data-i18n-attr="aria-label">
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v3M12 18.5v3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M2.5 12h3M18.5 12h3M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></svg>
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.8 14.5A8.5 8.5 0 1 1 9.5 3.2a6.8 6.8 0 0 0 9.3 9.3c.7-.1 1.4-.3 2-.6.2.5.2 1 0 1.6Z"/></svg>
+</button>
+
+<div class="lang-toggle" id="langToggle">
+  <button class="lang-btn" data-lang="pt" aria-label="Português">PT</button>
+  <button class="lang-btn" data-lang="en" aria-label="English">EN</button>
+</div>
+
+<div class="hero">
+
+  <div class="sparkles">
+    <span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span>
+    <span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span>
+    <span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span>
+    <span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span>
+    <span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span><span class="sparkle"></span>
+  </div>
+
+  <img
+    class="hero-img fade-item"
+    style="--delay:0s"
+    src="img/personagem.png"
+    alt="Seu personagem/logo"
+    onerror="this.classList.add('img-missing')">
+
+  <h1 class="hero-title fade-item" style="--delay:0.3s">404</h1>
+  <p class="hero-subtitle fade-item" style="--delay:0.5s" data-i18n="404.subtitle">Essa página se perdeu no caminho...</p>
+
+  <div class="links-section fade-item" style="--delay:0.7s">
+    <a class="link-card" href="index.html">
+      <div class="link-card-text">
+        <div class="link-card-title" data-i18n="404.back.title">Voltar ao início</div>
+        <div class="link-card-desc" data-i18n="404.back.desc">Bora achar o que você tava procurando</div>
+      </div>
+      <span class="link-card-arrow">›</span>
+    </a>
+  </div>
+
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
