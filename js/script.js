@@ -24,6 +24,7 @@ const I18N = {
   'com.form.type': { pt: 'Tipo de comissão', en: 'Commission type' },
   'com.form.notes': { pt: 'Detalhes extras (opcional)', en: 'Extra details (optional)' },
   'com.form.submit': { pt: 'Enviar pelo Telegram', en: 'Send via Telegram' },
+  'com.form.note': { pt: 'Ao clicar, a mensagem já vai pronta pro meu chat no Telegram — depois é só anexar a imagem de referência do personagem por lá.', en: 'Clicking this will send the message straight to my Telegram chat — just attach the character reference image there afterward.' },
 
   'nav.back': { pt: '← Voltar', en: '← Back' },
   'nav.top': { pt: 'Voltar ao topo', en: 'Back to top' },
