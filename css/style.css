@@ -414,7 +414,8 @@ body.season-christmas{ --sparkle-color:#8fe3a1; }
   100%{ transform:scale(1, 1); }
 }
 
-.hero-img.is-patting{
+.hero-img.is-patting,
+.fade-item.fade-done.is-patting{
   animation:pat-squish 0.35s ease-in-out;
 }
 
