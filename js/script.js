@@ -302,18 +302,26 @@ function startGravityMode() {
   document.body.classList.add('gravity-active');
   document.body.style.overflow = 'hidden';
 
+  const vw0 = window.innerWidth;
+  const vh0 = window.innerHeight;
+
   const selector = 'a, button, img, h1, h2, .status-badge, .link-card, .order-row, .gallery-item, .price-tier, .season-banner, .commission-heading, p, li';
   let candidates = Array.from(document.querySelectorAll(selector));
   candidates = candidates.filter((el) => !candidates.some((other) => other !== el && other.contains(el)));
 
-  const GRAVITY = 0.6;
-  const BOUNCE = 0.55;
-  const FRICTION = 0.85;
+  const GRAVITY = 0.02; // praticamente flutuando, tipo gravidade espacial
+  const WALL_BOUNCE = 0.75;
+  const OBJ_BOUNCE = 0.8;
+  const ANGULAR_DAMPING = 0.985;
   const items = [];
 
   candidates.forEach((el) => {
     const rect = el.getBoundingClientRect();
     if (rect.width === 0 || rect.height === 0) return;
+
+    // ignora qualquer objeto que já esteja fora da área visível
+    // no momento em que o código foi digitado
+    if (rect.bottom <= 0 || rect.top >= vh0 || rect.right <= 0 || rect.left >= vw0) return;
 
     el.style.position = 'fixed';
     el.style.left = `${rect.left}px`;
@@ -323,6 +331,7 @@ function startGravityMode() {
     el.style.zIndex = '9998';
     el.style.transition = 'none';
     el.style.cursor = 'grab';
+    el.style.willChange = 'transform, left, top';
 
     items.push({
       el,
@@ -330,8 +339,10 @@ function startGravityMode() {
       y: rect.top,
       w: rect.width,
       h: rect.height,
-      vx: (Math.random() - 0.5) * 6,
-      vy: 0,
+      vx: (Math.random() - 0.5) * 3,
+      vy: (Math.random() - 0.5) * 3,
+      angle: 0,
+      angVel: (Math.random() - 0.5) * 2,
       dragging: false,
     });
   });
@@ -366,6 +377,7 @@ function startGravityMode() {
     const newY = clientY - dragOffsetY;
     draggingItem.vx = newX - draggingItem.x;
     draggingItem.vy = newY - draggingItem.y;
+    draggingItem.angVel = draggingItem.vx * 0.15;
     draggingItem.x = newX;
     draggingItem.y = newY;
   }
@@ -394,6 +406,39 @@ function startGravityMode() {
     }
   }, true);
 
+  function resolveCollisions() {
+    for (let i = 0; i < items.length; i++) {
+      const a = items[i];
+      if (a.dragging) continue;
+      for (let j = i + 1; j < items.length; j++) {
+        const b = items[j];
+        if (b.dragging) continue;
+
+        const overlapX = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+        const overlapY = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+        if (overlapX <= 0 || overlapY <= 0) continue;
+
+        if (overlapX < overlapY) {
+          const push = overlapX / 2;
+          if (a.x < b.x) { a.x -= push; b.x += push; } else { a.x += push; b.x -= push; }
+          const vxA = a.vx;
+          a.vx = b.vx * OBJ_BOUNCE;
+          b.vx = vxA * OBJ_BOUNCE;
+        } else {
+          const push = overlapY / 2;
+          if (a.y < b.y) { a.y -= push; b.y += push; } else { a.y += push; b.y -= push; }
+          const vyA = a.vy;
+          a.vy = b.vy * OBJ_BOUNCE;
+          b.vy = vyA * OBJ_BOUNCE;
+        }
+
+        const spin = (Math.random() - 0.5) * 4;
+        a.angVel += spin;
+        b.angVel -= spin;
+      }
+    }
+  }
+
   function tick() {
     if (!document.body.classList.contains('gravity-active')) return;
     const vw = window.innerWidth;
@@ -404,18 +449,22 @@ function startGravityMode() {
       item.vy += GRAVITY;
       item.x += item.vx;
       item.y += item.vy;
+      item.angle += item.angVel;
+      item.angVel *= ANGULAR_DAMPING;
 
-      if (item.y + item.h > vh) {
-        item.y = vh - item.h;
-        item.vy *= -BOUNCE;
-        item.vx *= FRICTION;
-        if (Math.abs(item.vy) < 1) item.vy = 0;
-      }
-      if (item.x < 0) { item.x = 0; item.vx *= -BOUNCE; }
-      if (item.x + item.w > vw) { item.x = vw - item.w; item.vx *= -BOUNCE; }
+      // preso na área visível — quica nos 4 lados, nunca sai da tela
+      if (item.y + item.h > vh) { item.y = vh - item.h; item.vy *= -WALL_BOUNCE; item.angVel += (Math.random() - 0.5) * 2; }
+      if (item.y < 0) { item.y = 0; item.vy *= -WALL_BOUNCE; item.angVel += (Math.random() - 0.5) * 2; }
+      if (item.x < 0) { item.x = 0; item.vx *= -WALL_BOUNCE; item.angVel += (Math.random() - 0.5) * 2; }
+      if (item.x + item.w > vw) { item.x = vw - item.w; item.vx *= -WALL_BOUNCE; item.angVel += (Math.random() - 0.5) * 2; }
+    });
 
+    resolveCollisions();
+
+    items.forEach((item) => {
       item.el.style.left = `${item.x}px`;
       item.el.style.top = `${item.y}px`;
+      item.el.style.transform = `rotate(${item.angle}deg)`;
     });
 
     requestAnimationFrame(tick);
