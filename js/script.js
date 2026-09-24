@@ -34,6 +34,7 @@ const I18N = {
 
   'season.halloween': { pt: '🎃 Clima de Halloween por aqui!', en: '🎃 Halloween vibes around here!' },
   'season.christmas': { pt: '🎄 Boas festas! Feliz Natal!', en: '🎄 Happy holidays!' },
+  'konami.msg': { pt: '✨ Código secreto ativado! Você é demais! ✨', en: "✨ Secret code activated! You're awesome! ✨" },
 
   'nav.back': { pt: '← Voltar', en: '← Back' },
   'nav.top': { pt: 'Voltar ao topo', en: 'Back to top' },
@@ -112,6 +113,13 @@ const I18N = {
   'cat.ych.tier3.price': { pt: 'R$ 75,00', en: '$30' },
   'cat.ych.tier4.name': { pt: '4 OCs', en: '4 OCs' },
   'cat.ych.tier4.price': { pt: 'R$ 80,00', en: '$40' },
+
+  'ych.praia.name': { pt: 'Episódio da Praia', en: 'Beach Episode' },
+  'ych.acampamento.name': { pt: 'Acampamento Estrelado', en: 'Starry Campout' },
+  'cat.ych2.tier1.price': { pt: 'R$ 00,00', en: '$0' },
+  'cat.ych2.tier2.price': { pt: 'R$ 00,00', en: '$0' },
+  'cat.ych2.tier3.price': { pt: 'R$ 00,00', en: '$0' },
+  'cat.ych2.tier4.price': { pt: 'R$ 00,00', en: '$0' },
 
   'com.order.heading': { pt: '✦ Como encomendar', en: '✦ How to order' },
   'com.order.pay.title': { pt: 'Pagamento via Pix', en: 'Payment via PayPal' },
@@ -217,31 +225,90 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+  const tabButtons = document.querySelectorAll('.ych-tab-btn');
+  if (!tabButtons.length) return;
+
+  tabButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-ych-tab');
+      document.querySelectorAll('.ych-tab-btn').forEach((b) => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.ych-panel').forEach((p) => {
+        p.classList.toggle('active', p.getAttribute('data-ych-panel') === target);
+      });
+    });
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+  let progress = 0;
+
+  document.addEventListener('keydown', (e) => {
+    const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    const expected = KONAMI[progress];
+
+    if (key === expected) {
+      progress += 1;
+      if (progress === KONAMI.length) {
+        progress = 0;
+        triggerKonami();
+      }
+    } else {
+      progress = key === KONAMI[0] ? 1 : 0;
+    }
+  });
+
+  function triggerKonami() {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!reduceMotion) {
+      burstConfetti(window.innerWidth / 2, window.innerHeight / 2, 60);
+      burstConfetti(window.innerWidth * 0.2, window.innerHeight * 0.3, 30);
+      burstConfetti(window.innerWidth * 0.8, window.innerHeight * 0.3, 30);
+    }
+
+    let lang = 'pt';
+    try { lang = localStorage.getItem('siteLang') || 'pt'; } catch (err) {}
+
+    const toast = document.createElement('div');
+    toast.className = 'konami-toast';
+    toast.textContent = I18N['konami.msg'][lang];
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('visible'));
+    setTimeout(() => {
+      toast.classList.remove('visible');
+      setTimeout(() => toast.remove(), 400);
+    }, 2600);
+  }
+});
+
+function burstConfetti(x, y, count) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const colors = ['#f2b8bf', '#8a3d47', '#ffd166', '#06d6a0', '#118ab2'];
+  const total = count || 26;
+  for (let i = 0; i < total; i++) {
+    const piece = document.createElement('span');
+    piece.className = 'confetti-piece';
+    piece.style.left = `${x}px`;
+    piece.style.top = `${y}px`;
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 70 + Math.random() * 110;
+    piece.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
+    piece.style.setProperty('--ty', `${Math.sin(angle) * distance - 50}px`);
+    piece.style.setProperty('--rot', `${Math.random() * 360}deg`);
+    document.body.appendChild(piece);
+    piece.addEventListener('animationend', () => piece.remove());
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('orderForm');
   if (!form) return;
 
   const TELEGRAM_HANDLE = 'Safirawolffox';
 
   const submitBtn = form.querySelector('.order-form-submit');
-
-  function burstConfetti(x, y) {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const colors = ['#f2b8bf', '#8a3d47', '#ffd166', '#06d6a0', '#118ab2'];
-    for (let i = 0; i < 26; i++) {
-      const piece = document.createElement('span');
-      piece.className = 'confetti-piece';
-      piece.style.left = `${x}px`;
-      piece.style.top = `${y}px`;
-      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-      const angle = Math.random() * Math.PI * 2;
-      const distance = 70 + Math.random() * 110;
-      piece.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
-      piece.style.setProperty('--ty', `${Math.sin(angle) * distance - 50}px`);
-      piece.style.setProperty('--rot', `${Math.random() * 360}deg`);
-      document.body.appendChild(piece);
-      piece.addEventListener('animationend', () => piece.remove());
-    }
-  }
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
