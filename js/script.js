@@ -117,7 +117,7 @@ const I18N = {
   'ych.praia.name': { pt: 'Episódio da Praia', en: 'Beach Episode' },
   'ych.acampamento.name': { pt: 'Acampamento Estrelado', en: 'Starry Campout' },
   'cat.ych2.desc': { pt: 'Preço único, já incluindo os dois personagens', en: 'Flat price, already including both characters' },
-  'cat.ych2.price': { pt: 'A partir de R$ 40,00', en: 'Starting at $15' },
+  'cat.ych2.price': { pt: 'Valor fixo: R$ 40,00', en: 'Fixed price: $15' },
 
   'com.order.heading': { pt: '✦ Como encomendar', en: '✦ How to order' },
   'com.order.pay.title': { pt: 'Pagamento via Pix', en: 'Payment via PayPal' },
