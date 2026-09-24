@@ -266,6 +266,57 @@ body.season-christmas{ --sparkle-color:#8fe3a1; }
   border:1px solid var(--card-borda);
 }
 
+.ych-tabs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.ych-tab-btn{
+  padding:9px 18px;
+  border-radius:999px;
+  border:1px solid var(--card-borda);
+  background:var(--card-bg);
+  color:var(--card-text-secondary);
+  font-family:'Poppins', sans-serif;
+  font-weight:600;
+  font-size:0.85rem;
+  transition:background 0.15s ease, color 0.15s ease;
+}
+
+.ych-tab-btn.active{
+  background:var(--card-text);
+  color:var(--card-bg);
+}
+
+.ych-panel{ display:none; }
+.ych-panel.active{ display:block; }
+
+.konami-toast{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%) scale(0.85);
+  z-index:900;
+  background:var(--card-bg);
+  color:var(--card-text);
+  border:1px solid var(--card-borda);
+  padding:16px 28px;
+  border-radius:16px;
+  font-weight:700;
+  font-size:1.05rem;
+  text-align:center;
+  box-shadow:0 12px 30px rgba(0,0,0,0.3);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.3s ease, transform 0.3s ease;
+}
+.konami-toast.visible{
+  opacity:1;
+  transform:translate(-50%, -50%) scale(1);
+}
+
 .confetti-piece{
   position:fixed;
   width:8px;
