@@ -1,3 +1,16 @@
+(function () {
+  const bigStyle = 'color:#8a3d47; font-size:48px; font-weight:900; text-shadow:2px 2px 0 #f2b8bf;';
+  const warnStyle = 'color:#4a2530; font-size:16px; font-weight:600; line-height:1.6;';
+  const smallStyle = 'color:#8a3d47; font-size:13px;';
+
+  console.log('%c🐾 PARE!', bigStyle);
+  console.log(
+    '%cEssa é uma função do navegador feita pra desenvolvedores. Se alguém te mandou colar algo aqui pra "desbloquear", "ganhar" ou "hackear" alguma coisa, é golpe — não cole nada que você não entende, isso pode comprometer suas contas.',
+    warnStyle
+  );
+  console.log('%cSe você só é curioso(a) e chegou até aqui de boa, oi! 💗 — Safira', smallStyle);
+})();
+
 const I18N = {
   'idx.title': { pt: 'SafiraWolfFox — Portfólio', en: 'SafiraWolfFox — Portfolio' },
   'theme.label': { pt: 'Alternar tema claro/escuro', en: 'Toggle light/dark theme' },
