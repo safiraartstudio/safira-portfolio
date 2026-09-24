@@ -290,8 +290,138 @@ document.addEventListener('DOMContentLoaded', () => {
       toast.classList.remove('visible');
       setTimeout(() => toast.remove(), 400);
     }, 2600);
+
+    if (!reduceMotion) {
+      setTimeout(startGravityMode, 500);
+    }
   }
 });
+
+function startGravityMode() {
+  if (document.body.classList.contains('gravity-active')) return;
+  document.body.classList.add('gravity-active');
+  document.body.style.overflow = 'hidden';
+
+  const selector = 'a, button, img, h1, h2, .status-badge, .link-card, .order-row, .gallery-item, .price-tier, .season-banner, .commission-heading, p, li';
+  let candidates = Array.from(document.querySelectorAll(selector));
+  candidates = candidates.filter((el) => !candidates.some((other) => other !== el && other.contains(el)));
+
+  const GRAVITY = 0.6;
+  const BOUNCE = 0.55;
+  const FRICTION = 0.85;
+  const items = [];
+
+  candidates.forEach((el) => {
+    const rect = el.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+
+    el.style.position = 'fixed';
+    el.style.left = `${rect.left}px`;
+    el.style.top = `${rect.top}px`;
+    el.style.width = `${rect.width}px`;
+    el.style.margin = '0';
+    el.style.zIndex = '9998';
+    el.style.transition = 'none';
+    el.style.cursor = 'grab';
+
+    items.push({
+      el,
+      x: rect.left,
+      y: rect.top,
+      w: rect.width,
+      h: rect.height,
+      vx: (Math.random() - 0.5) * 6,
+      vy: 0,
+      dragging: false,
+    });
+  });
+
+  let draggingItem = null;
+  let dragOffsetX = 0;
+  let dragOffsetY = 0;
+
+  function pointerDown(item, clientX, clientY) {
+    draggingItem = item;
+    item.dragging = true;
+    dragOffsetX = clientX - item.x;
+    dragOffsetY = clientY - item.y;
+    item.el.style.cursor = 'grabbing';
+    item.el.style.zIndex = '9999';
+  }
+
+  items.forEach((item) => {
+    item.el.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      pointerDown(item, e.clientX, e.clientY);
+    });
+    item.el.addEventListener('touchstart', (e) => {
+      const t = e.touches[0];
+      pointerDown(item, t.clientX, t.clientY);
+    }, { passive: true });
+  });
+
+  function pointerMove(clientX, clientY) {
+    if (!draggingItem) return;
+    const newX = clientX - dragOffsetX;
+    const newY = clientY - dragOffsetY;
+    draggingItem.vx = newX - draggingItem.x;
+    draggingItem.vy = newY - draggingItem.y;
+    draggingItem.x = newX;
+    draggingItem.y = newY;
+  }
+
+  document.addEventListener('mousemove', (e) => pointerMove(e.clientX, e.clientY));
+  document.addEventListener('touchmove', (e) => {
+    const t = e.touches[0];
+    pointerMove(t.clientX, t.clientY);
+  }, { passive: true });
+
+  function pointerUp() {
+    if (!draggingItem) return;
+    draggingItem.dragging = false;
+    draggingItem.el.style.cursor = 'grab';
+    draggingItem = null;
+  }
+  document.addEventListener('mouseup', pointerUp);
+  document.addEventListener('touchend', pointerUp);
+
+  // bloqueia qualquer clique virar navegação enquanto o modo tá ativo
+  // (arrastar continua funcionando normalmente)
+  document.addEventListener('click', (e) => {
+    if (document.body.classList.contains('gravity-active')) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, true);
+
+  function tick() {
+    if (!document.body.classList.contains('gravity-active')) return;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    items.forEach((item) => {
+      if (item.dragging) return;
+      item.vy += GRAVITY;
+      item.x += item.vx;
+      item.y += item.vy;
+
+      if (item.y + item.h > vh) {
+        item.y = vh - item.h;
+        item.vy *= -BOUNCE;
+        item.vx *= FRICTION;
+        if (Math.abs(item.vy) < 1) item.vy = 0;
+      }
+      if (item.x < 0) { item.x = 0; item.vx *= -BOUNCE; }
+      if (item.x + item.w > vw) { item.x = vw - item.w; item.vx *= -BOUNCE; }
+
+      item.el.style.left = `${item.x}px`;
+      item.el.style.top = `${item.y}px`;
+    });
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
 
 function burstConfetti(x, y, count) {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
