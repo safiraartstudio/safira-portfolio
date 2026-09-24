@@ -317,24 +317,42 @@
         <h2 class="category-title fade-item" style="--delay:0s" data-i18n="cat.ych.title">✦ YCH's em Rotação</h2>
       </div>
 
-      <div class="gallery">
-      <div class="gallery-item is-loading fade-item" style="--delay:0.1s">
-        <img src="../img/ych-1.jpg" alt="Exemplo de YCH's em Rotação 1" onerror="this.classList.add('img-missing'); this.removeAttribute('src'); this.alt='Coloque aqui img/ych-1.jpg';">
-      </div>
-      <div class="gallery-item is-loading fade-item" style="--delay:0.25s">
-        <img src="../img/ych-2.jpg" alt="Exemplo de YCH's em Rotação 2" onerror="this.classList.add('img-missing'); this.removeAttribute('src'); this.alt='Coloque aqui img/ych-2.jpg';">
-      </div>
-      <div class="gallery-item is-loading fade-item" style="--delay:0.4s">
-        <img src="../img/ych-3.jpg" alt="Exemplo de YCH's em Rotação 3" onerror="this.classList.add('img-missing'); this.removeAttribute('src'); this.alt='Coloque aqui img/ych-3.jpg';">
-      </div>
-      </div>
-
       <div class="text-col">
-        <div class="commission-text fade-item" style="--delay:0.55s">
+        <div class="commission-text fade-item" style="--delay:0.1s">
           <ul>
             <li data-i18n="cat.ych.desc1">Para até 4 OCs</li>
             <li data-i18n="cat.ych.desc2">Disponível em versão PC e Móvel</li>
           </ul>
+        </div>
+      </div>
+
+      <!-- ===== ABAS DOS YCH's =====
+           Cada botão mostra um YCH diferente (nome, imagens e preços
+           próprios). Pra adicionar um novo YCH: copie um botão aqui
+           embaixo com um novo data-ych-tab, e copie um bloco
+           .ych-panel inteiro (logo abaixo) com o mesmo valor no
+           data-ych-panel. -->
+      <div class="text-col">
+        <div class="ych-tabs fade-item" style="--delay:0.2s">
+          <button class="ych-tab-btn active" data-ych-tab="praia" data-i18n="ych.praia.name">Episódio da Praia</button>
+          <button class="ych-tab-btn" data-ych-tab="acampamento" data-i18n="ych.acampamento.name">Acampamento Estrelado</button>
+        </div>
+      </div>
+
+      <!-- Painel: Episódio da Praia -->
+      <div class="ych-panel active" data-ych-panel="praia">
+        <div class="gallery">
+          <div class="gallery-item is-loading fade-item" style="--delay:0.1s">
+            <img src="../img/ych-1.jpg" alt="Exemplo de Episódio da Praia 1" onerror="this.classList.add('img-missing'); this.removeAttribute('src'); this.alt='Coloque aqui img/ych-1.jpg';">
+          </div>
+          <div class="gallery-item is-loading fade-item" style="--delay:0.25s">
+            <img src="../img/ych-2.jpg" alt="Exemplo de Episódio da Praia 2" onerror="this.classList.add('img-missing'); this.removeAttribute('src'); this.alt='Coloque aqui img/ych-2.jpg';">
+          </div>
+          <div class="gallery-item is-loading fade-item" style="--delay:0.4s">
+            <img src="../img/ych-3.jpg" alt="Exemplo de Episódio da Praia 3" onerror="this.classList.add('img-missing'); this.removeAttribute('src'); this.alt='Coloque aqui img/ych-3.jpg';">
+          </div>
+        </div>
+        <div class="text-col">
           <div class="price-tiers">
             <div class="price-tier">
               <span class="price-tier-name" data-i18n="cat.ych.tier1.name">1 OC</span>
@@ -351,6 +369,43 @@
             <div class="price-tier">
               <span class="price-tier-name" data-i18n="cat.ych.tier4.name">4 OCs</span>
               <span class="price-tier-value" data-i18n="cat.ych.tier4.price">R$ 80,00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Painel: Acampamento Estrelado (EDITAR: coloque as imagens em
+           img/ych2-1.jpg, ych2-2.jpg, ych2-3.jpg, e ajuste os preços
+           — estão como R$ 00,00 até você definir os valores) -->
+      <div class="ych-panel" data-ych-panel="acampamento">
+        <div class="gallery">
+          <div class="gallery-item is-loading fade-item" style="--delay:0.1s">
+            <img src="../img/ych2-1.jpg" alt="Exemplo de Acampamento Estrelado 1" onerror="this.classList.add('img-missing'); this.removeAttribute('src'); this.alt='Coloque aqui img/ych2-1.jpg';">
+          </div>
+          <div class="gallery-item is-loading fade-item" style="--delay:0.25s">
+            <img src="../img/ych2-2.jpg" alt="Exemplo de Acampamento Estrelado 2" onerror="this.classList.add('img-missing'); this.removeAttribute('src'); this.alt='Coloque aqui img/ych2-2.jpg';">
+          </div>
+          <div class="gallery-item is-loading fade-item" style="--delay:0.4s">
+            <img src="../img/ych2-3.jpg" alt="Exemplo de Acampamento Estrelado 3" onerror="this.classList.add('img-missing'); this.removeAttribute('src'); this.alt='Coloque aqui img/ych2-3.jpg';">
+          </div>
+        </div>
+        <div class="text-col">
+          <div class="price-tiers">
+            <div class="price-tier">
+              <span class="price-tier-name" data-i18n="cat.ych.tier1.name">1 OC</span>
+              <span class="price-tier-value" data-i18n="cat.ych2.tier1.price">R$ 00,00</span>
+            </div>
+            <div class="price-tier">
+              <span class="price-tier-name" data-i18n="cat.ych.tier2.name">2 OCs</span>
+              <span class="price-tier-value" data-i18n="cat.ych2.tier2.price">R$ 00,00</span>
+            </div>
+            <div class="price-tier">
+              <span class="price-tier-name" data-i18n="cat.ych.tier3.name">3 OCs</span>
+              <span class="price-tier-value" data-i18n="cat.ych2.tier3.price">R$ 00,00</span>
+            </div>
+            <div class="price-tier">
+              <span class="price-tier-name" data-i18n="cat.ych.tier4.name">4 OCs</span>
+              <span class="price-tier-value" data-i18n="cat.ych2.tier4.price">R$ 00,00</span>
             </div>
           </div>
         </div>
