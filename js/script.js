@@ -340,7 +340,59 @@ function startGravityMode() {
 
   const pairs = [];
 
-  function makeBody(el, rect) {
+  // ===== ETAPA 1: MEDIR TUDO =====
+  // Cada elemento é medido ENQUANTO ainda está no fluxo normal da
+  // página — sem converter nada pra "fixed" ainda. Isso é crucial:
+  // assim que um elemento vira position:fixed, ele some do fluxo e
+  // empurra/reorganiza os vizinhos que ainda não foram medidos
+  // (grids, texto que reflui, etc.), corrompendo a posição deles.
+  // Por isso separamos tudo em "medir primeiro, converter depois".
+  const toConvert = []; // { el, rect }
+
+  const wholeSelector = 'a, button, img, .status-badge, .gallery-item, .season-banner';
+  let wholeCandidates = Array.from(document.querySelectorAll(wholeSelector));
+  wholeCandidates = wholeCandidates.filter((el) => !wholeCandidates.some((other) => other !== el && other.contains(el)));
+
+  wholeCandidates.forEach((el) => {
+    const rect = el.getBoundingClientRect();
+    if (!isOnScreen(rect)) return;
+    toConvert.push({ el, rect });
+  });
+
+  const textSelector = 'h1, h2, .commission-heading, p, li, .price-tier-name, .price-tier-value';
+  let textCandidates = Array.from(document.querySelectorAll(textSelector));
+  textCandidates = textCandidates.filter((el) => !wholeCandidates.some((w) => w.contains(el)));
+  textCandidates = textCandidates.filter((el) => !textCandidates.some((other) => other !== el && other.contains(el)));
+
+  // pra texto, primeiro quebra em spans (ainda em fluxo normal) e só
+  // DEPOIS mede cada letra — todas as letras de todos os textos são
+  // medidas antes de qualquer uma virar "fixed"
+  const letterSpans = [];
+  textCandidates.forEach((el) => {
+    const elRect = el.getBoundingClientRect();
+    if (!isOnScreen(elRect)) return;
+
+    const text = el.textContent;
+    el.textContent = '';
+
+    for (const ch of text) {
+      const span = document.createElement('span');
+      span.textContent = ch === ' ' ? '\u00A0' : ch;
+      span.style.display = 'inline-block';
+      el.appendChild(span);
+    }
+    letterSpans.push(...Array.from(el.children));
+  });
+
+  letterSpans.forEach((span) => {
+    const rect = span.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+    if (!isOnScreen(rect)) return;
+    toConvert.push({ el: span, rect });
+  });
+
+  // ===== ETAPA 2: CONVERTER TUDO (agora que já medimos tudo) =====
+  toConvert.forEach(({ el, rect }) => {
     el.style.position = 'fixed';
     el.style.left = '0';
     el.style.top = '0';
@@ -362,45 +414,6 @@ function startGravityMode() {
     Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.15);
     World.add(world, body);
     pairs.push({ el, body, w: rect.width, h: rect.height });
-  }
-
-  // ===== ELEMENTOS "INTEIROS" (botões, links, imagens, cards) =====
-  const wholeSelector = 'a, button, img, .status-badge, .gallery-item, .season-banner';
-  let wholeCandidates = Array.from(document.querySelectorAll(wholeSelector));
-  wholeCandidates = wholeCandidates.filter((el) => !wholeCandidates.some((other) => other !== el && other.contains(el)));
-
-  wholeCandidates.forEach((el) => {
-    const rect = el.getBoundingClientRect();
-    if (!isOnScreen(rect)) return;
-    makeBody(el, rect);
-  });
-
-  // ===== TEXTOS — cada LETRA vira um corpo físico próprio, separado =====
-  const textSelector = 'h1, h2, .commission-heading, p, li, .price-tier-name, .price-tier-value';
-  let textCandidates = Array.from(document.querySelectorAll(textSelector));
-  textCandidates = textCandidates.filter((el) => !wholeCandidates.some((w) => w.contains(el)));
-  textCandidates = textCandidates.filter((el) => !textCandidates.some((other) => other !== el && other.contains(el)));
-
-  textCandidates.forEach((el) => {
-    const elRect = el.getBoundingClientRect();
-    if (!isOnScreen(elRect)) return;
-
-    const text = el.textContent;
-    el.textContent = '';
-
-    for (const ch of text) {
-      const span = document.createElement('span');
-      span.textContent = ch === ' ' ? '\u00A0' : ch;
-      span.style.display = 'inline-block';
-      el.appendChild(span);
-    }
-
-    Array.from(el.children).forEach((span) => {
-      const rect = span.getBoundingClientRect();
-      if (rect.width === 0 || rect.height === 0) return;
-      if (!isOnScreen(rect)) return;
-      makeBody(span, rect);
-    });
   });
 
   // ===== ARRASTAR E JOGAR — usando o próprio motor de física =====
