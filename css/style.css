@@ -293,6 +293,17 @@ body.season-christmas{ --sparkle-color:#8fe3a1; }
 .ych-panel{ display:none; }
 .ych-panel.active{ display:block; }
 
+/* Esses widgets ficam fixos na tela por design (tema, música,
+   idioma, voltar ao topo) e não fazem parte da física — em vez de
+   ficarem "congelados" parados no meio do caos, somem enquanto o
+   modo gravidade estiver ativo. */
+body.gravity-active .theme-toggle,
+body.gravity-active .music-player,
+body.gravity-active .lang-toggle,
+body.gravity-active .back-to-top{
+  display:none;
+}
+
 .konami-toast{
   position:fixed;
   top:50%;
