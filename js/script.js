@@ -301,28 +301,27 @@ function startGravityMode() {
   if (document.body.classList.contains('gravity-active')) return;
   document.body.classList.add('gravity-active');
   document.body.style.overflow = 'hidden';
+  document.documentElement.style.overflow = 'hidden';
 
   const vw0 = window.innerWidth;
   const vh0 = window.innerHeight;
 
-  const selector = 'a, button, img, h1, h2, .status-badge, .link-card, .order-row, .gallery-item, .price-tier, .season-banner, .commission-heading, p, li';
-  let candidates = Array.from(document.querySelectorAll(selector));
-  candidates = candidates.filter((el) => !candidates.some((other) => other !== el && other.contains(el)));
+  function isOnScreen(rect) {
+    return rect.width > 0 && rect.height > 0 &&
+      rect.bottom > 0 && rect.top < vh0 &&
+      rect.right > 0 && rect.left < vw0;
+  }
 
-  const GRAVITY = 0.02; // praticamente flutuando, tipo gravidade espacial
+  const GRAVITY = 0; // desligada de vez — flutuação livre, tipo espaço
   const WALL_BOUNCE = 0.75;
-  const OBJ_BOUNCE = 0.8;
-  const ANGULAR_DAMPING = 0.985;
+  const OBJ_BOUNCE = 0.7;
+  const ANGULAR_DAMPING = 0.94;
+  const LINEAR_DAMPING = 0.997;
+  const MAX_SPEED = 14;
+  const MAX_SPIN = 8;
   const items = [];
 
-  candidates.forEach((el) => {
-    const rect = el.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) return;
-
-    // ignora qualquer objeto que já esteja fora da área visível
-    // no momento em que o código foi digitado
-    if (rect.bottom <= 0 || rect.top >= vh0 || rect.right <= 0 || rect.left >= vw0) return;
-
+  function makeItem(el, rect) {
     el.style.position = 'fixed';
     el.style.left = `${rect.left}px`;
     el.style.top = `${rect.top}px`;
@@ -344,6 +343,46 @@ function startGravityMode() {
       angle: 0,
       angVel: (Math.random() - 0.5) * 2,
       dragging: false,
+    });
+  }
+
+  // ===== ELEMENTOS "INTEIROS" (botões, links, imagens, cards) =====
+  const wholeSelector = 'a, button, img, .status-badge, .gallery-item, .season-banner';
+  let wholeCandidates = Array.from(document.querySelectorAll(wholeSelector));
+  wholeCandidates = wholeCandidates.filter((el) => !wholeCandidates.some((other) => other !== el && other.contains(el)));
+
+  wholeCandidates.forEach((el) => {
+    const rect = el.getBoundingClientRect();
+    if (!isOnScreen(rect)) return; // ignora o que já tava fora da tela
+    makeItem(el, rect);
+  });
+
+  // ===== TEXTOS — cada LETRA vira uma entidade própria, separada =====
+  const textSelector = 'h1, h2, .commission-heading, p, li, .price-tier-name, .price-tier-value';
+  let textCandidates = Array.from(document.querySelectorAll(textSelector));
+  textCandidates = textCandidates.filter((el) => !wholeCandidates.some((w) => w.contains(el)));
+  textCandidates = textCandidates.filter((el) => !textCandidates.some((other) => other !== el && other.contains(el)));
+
+  textCandidates.forEach((el) => {
+    const elRect = el.getBoundingClientRect();
+    if (!isOnScreen(elRect)) return; // ignora texto fora da tela
+
+    const text = el.textContent;
+    el.textContent = '';
+    el.style.position = 'static';
+
+    for (const ch of text) {
+      const span = document.createElement('span');
+      span.textContent = ch === ' ' ? '\u00A0' : ch;
+      span.style.display = 'inline-block';
+      el.appendChild(span);
+    }
+
+    Array.from(el.children).forEach((span) => {
+      const rect = span.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      if (!isOnScreen(rect)) return;
+      makeItem(span, rect);
     });
   });
 
@@ -432,11 +471,15 @@ function startGravityMode() {
           b.vy = vyA * OBJ_BOUNCE;
         }
 
-        const spin = (Math.random() - 0.5) * 4;
-        a.angVel += spin;
-        b.angVel -= spin;
+        const spin = (Math.random() - 0.5) * 1.2;
+        a.angVel = clamp(a.angVel + spin, -MAX_SPIN, MAX_SPIN);
+        b.angVel = clamp(b.angVel - spin, -MAX_SPIN, MAX_SPIN);
       }
     }
+  }
+
+  function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
   }
 
   function tick() {
@@ -447,18 +490,28 @@ function startGravityMode() {
     items.forEach((item) => {
       if (item.dragging) return;
       item.vy += GRAVITY;
+      item.vx *= LINEAR_DAMPING;
+      item.vy *= LINEAR_DAMPING;
+      item.vx = clamp(item.vx, -MAX_SPEED, MAX_SPEED);
+      item.vy = clamp(item.vy, -MAX_SPEED, MAX_SPEED);
+
       item.x += item.vx;
       item.y += item.vy;
       item.angle += item.angVel;
-      item.angVel *= ANGULAR_DAMPING;
+      item.angVel = clamp(item.angVel * ANGULAR_DAMPING, -MAX_SPIN, MAX_SPIN);
 
       // preso na área visível — quica nos 4 lados, nunca sai da tela
-      if (item.y + item.h > vh) { item.y = vh - item.h; item.vy *= -WALL_BOUNCE; item.angVel += (Math.random() - 0.5) * 2; }
-      if (item.y < 0) { item.y = 0; item.vy *= -WALL_BOUNCE; item.angVel += (Math.random() - 0.5) * 2; }
-      if (item.x < 0) { item.x = 0; item.vx *= -WALL_BOUNCE; item.angVel += (Math.random() - 0.5) * 2; }
-      if (item.x + item.w > vw) { item.x = vw - item.w; item.vx *= -WALL_BOUNCE; item.angVel += (Math.random() - 0.5) * 2; }
+      if (item.y + item.h > vh) { item.y = vh - item.h; item.vy *= -WALL_BOUNCE; item.angVel = clamp(item.angVel + (Math.random() - 0.5) * 1.5, -MAX_SPIN, MAX_SPIN); }
+      if (item.y < 0) { item.y = 0; item.vy *= -WALL_BOUNCE; item.angVel = clamp(item.angVel + (Math.random() - 0.5) * 1.5, -MAX_SPIN, MAX_SPIN); }
+      if (item.x < 0) { item.x = 0; item.vx *= -WALL_BOUNCE; item.angVel = clamp(item.angVel + (Math.random() - 0.5) * 1.5, -MAX_SPIN, MAX_SPIN); }
+      if (item.x + item.w > vw) { item.x = vw - item.w; item.vx *= -WALL_BOUNCE; item.angVel = clamp(item.angVel + (Math.random() - 0.5) * 1.5, -MAX_SPIN, MAX_SPIN); }
     });
 
+    // várias passagens por quadro pra separar direito quando muitos
+    // objetos (ou letras) estão se tocando ao mesmo tempo — sem isso
+    // eles ficam "brigando" e parecem atravessar uns aos outros
+    resolveCollisions();
+    resolveCollisions();
     resolveCollisions();
 
     items.forEach((item) => {
