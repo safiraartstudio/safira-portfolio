@@ -292,16 +292,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2600);
 
     if (!reduceMotion) {
-      setTimeout(startGravityMode, 500);
+      setTimeout(() => loadMatterJS(startGravityMode), 500);
     }
   }
 });
 
+function loadMatterJS(callback) {
+  if (window.Matter) { callback(); return; }
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.20.0/matter.min.js';
+  script.onload = callback;
+  script.onerror = () => console.warn('Não foi possível carregar o motor de física (sem internet?).');
+  document.head.appendChild(script);
+}
+
 function startGravityMode() {
   if (document.body.classList.contains('gravity-active')) return;
+  if (typeof Matter === 'undefined') return;
   document.body.classList.add('gravity-active');
   document.body.style.overflow = 'hidden';
   document.documentElement.style.overflow = 'hidden';
+
+  const { Engine, World, Bodies, Body, Mouse, MouseConstraint } = Matter;
 
   const vw0 = window.innerWidth;
   const vh0 = window.innerHeight;
@@ -312,38 +324,44 @@ function startGravityMode() {
       rect.right > 0 && rect.left < vw0;
   }
 
-  const GRAVITY = 0; // desligada de vez — flutuação livre, tipo espaço
-  const WALL_BOUNCE = 0.75;
-  const OBJ_BOUNCE = 0.7;
-  const ANGULAR_DAMPING = 0.94;
-  const LINEAR_DAMPING = 0.997;
-  const MAX_SPEED = 14;
-  const MAX_SPIN = 8;
-  const items = [];
+  const engine = Engine.create();
+  engine.gravity.x = 0;
+  engine.gravity.y = 0; // gravidade do espaço — desligada de vez
 
-  function makeItem(el, rect) {
+  const world = engine.world;
+  const wallThickness = 60;
+  const wallOptions = { isStatic: true, restitution: 0.6 };
+  World.add(world, [
+    Bodies.rectangle(vw0 / 2, -wallThickness / 2, vw0 + wallThickness * 2, wallThickness, wallOptions),
+    Bodies.rectangle(vw0 / 2, vh0 + wallThickness / 2, vw0 + wallThickness * 2, wallThickness, wallOptions),
+    Bodies.rectangle(-wallThickness / 2, vh0 / 2, wallThickness, vh0 + wallThickness * 2, wallOptions),
+    Bodies.rectangle(vw0 + wallThickness / 2, vh0 / 2, wallThickness, vh0 + wallThickness * 2, wallOptions),
+  ]);
+
+  const pairs = [];
+
+  function makeBody(el, rect) {
     el.style.position = 'fixed';
-    el.style.left = `${rect.left}px`;
-    el.style.top = `${rect.top}px`;
+    el.style.left = '0';
+    el.style.top = '0';
     el.style.width = `${rect.width}px`;
     el.style.margin = '0';
     el.style.zIndex = '9998';
     el.style.transition = 'none';
     el.style.cursor = 'grab';
-    el.style.willChange = 'transform, left, top';
+    el.style.willChange = 'transform';
 
-    items.push({
-      el,
-      x: rect.left,
-      y: rect.top,
-      w: rect.width,
-      h: rect.height,
-      vx: (Math.random() - 0.5) * 3,
-      vy: (Math.random() - 0.5) * 3,
-      angle: 0,
-      angVel: (Math.random() - 0.5) * 2,
-      dragging: false,
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const body = Bodies.rectangle(cx, cy, rect.width, rect.height, {
+      restitution: 0.6,
+      friction: 0.05,
+      frictionAir: 0.008,
     });
+    Body.setVelocity(body, { x: (Math.random() - 0.5) * 6, y: (Math.random() - 0.5) * 6 });
+    Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.15);
+    World.add(world, body);
+    pairs.push({ el, body, w: rect.width, h: rect.height });
   }
 
   // ===== ELEMENTOS "INTEIROS" (botões, links, imagens, cards) =====
@@ -353,11 +371,11 @@ function startGravityMode() {
 
   wholeCandidates.forEach((el) => {
     const rect = el.getBoundingClientRect();
-    if (!isOnScreen(rect)) return; // ignora o que já tava fora da tela
-    makeItem(el, rect);
+    if (!isOnScreen(rect)) return;
+    makeBody(el, rect);
   });
 
-  // ===== TEXTOS — cada LETRA vira uma entidade própria, separada =====
+  // ===== TEXTOS — cada LETRA vira um corpo físico próprio, separado =====
   const textSelector = 'h1, h2, .commission-heading, p, li, .price-tier-name, .price-tier-value';
   let textCandidates = Array.from(document.querySelectorAll(textSelector));
   textCandidates = textCandidates.filter((el) => !wholeCandidates.some((w) => w.contains(el)));
@@ -365,11 +383,10 @@ function startGravityMode() {
 
   textCandidates.forEach((el) => {
     const elRect = el.getBoundingClientRect();
-    if (!isOnScreen(elRect)) return; // ignora texto fora da tela
+    if (!isOnScreen(elRect)) return;
 
     const text = el.textContent;
     el.textContent = '';
-    el.style.position = 'static';
 
     for (const ch of text) {
       const span = document.createElement('span');
@@ -382,62 +399,22 @@ function startGravityMode() {
       const rect = span.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) return;
       if (!isOnScreen(rect)) return;
-      makeItem(span, rect);
+      makeBody(span, rect);
     });
   });
 
-  let draggingItem = null;
-  let dragOffsetX = 0;
-  let dragOffsetY = 0;
-
-  function pointerDown(item, clientX, clientY) {
-    draggingItem = item;
-    item.dragging = true;
-    dragOffsetX = clientX - item.x;
-    dragOffsetY = clientY - item.y;
-    item.el.style.cursor = 'grabbing';
-    item.el.style.zIndex = '9999';
-  }
-
-  items.forEach((item) => {
-    item.el.addEventListener('mousedown', (e) => {
-      e.preventDefault();
-      pointerDown(item, e.clientX, e.clientY);
-    });
-    item.el.addEventListener('touchstart', (e) => {
-      const t = e.touches[0];
-      pointerDown(item, t.clientX, t.clientY);
-    }, { passive: true });
+  // ===== ARRASTAR E JOGAR — usando o próprio motor de física =====
+  // O Matter cuida de tudo: pegar o objeto sob o cursor, seguir o
+  // movimento com uma leve "mola" (feito o Box2D original) e soltar
+  // com a velocidade certa pra ele continuar voando.
+  const mouse = Mouse.create(document.body);
+  const mouseConstraint = MouseConstraint.create(engine, {
+    mouse,
+    constraint: { stiffness: 0.2, render: { visible: false } },
   });
-
-  function pointerMove(clientX, clientY) {
-    if (!draggingItem) return;
-    const newX = clientX - dragOffsetX;
-    const newY = clientY - dragOffsetY;
-    draggingItem.vx = newX - draggingItem.x;
-    draggingItem.vy = newY - draggingItem.y;
-    draggingItem.angVel = draggingItem.vx * 0.15;
-    draggingItem.x = newX;
-    draggingItem.y = newY;
-  }
-
-  document.addEventListener('mousemove', (e) => pointerMove(e.clientX, e.clientY));
-  document.addEventListener('touchmove', (e) => {
-    const t = e.touches[0];
-    pointerMove(t.clientX, t.clientY);
-  }, { passive: true });
-
-  function pointerUp() {
-    if (!draggingItem) return;
-    draggingItem.dragging = false;
-    draggingItem.el.style.cursor = 'grab';
-    draggingItem = null;
-  }
-  document.addEventListener('mouseup', pointerUp);
-  document.addEventListener('touchend', pointerUp);
+  World.add(world, mouseConstraint);
 
   // bloqueia qualquer clique virar navegação enquanto o modo tá ativo
-  // (arrastar continua funcionando normalmente)
   document.addEventListener('click', (e) => {
     if (document.body.classList.contains('gravity-active')) {
       e.preventDefault();
@@ -445,79 +422,15 @@ function startGravityMode() {
     }
   }, true);
 
-  function resolveCollisions() {
-    for (let i = 0; i < items.length; i++) {
-      const a = items[i];
-      if (a.dragging) continue;
-      for (let j = i + 1; j < items.length; j++) {
-        const b = items[j];
-        if (b.dragging) continue;
-
-        const overlapX = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
-        const overlapY = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
-        if (overlapX <= 0 || overlapY <= 0) continue;
-
-        if (overlapX < overlapY) {
-          const push = overlapX / 2;
-          if (a.x < b.x) { a.x -= push; b.x += push; } else { a.x += push; b.x -= push; }
-          const vxA = a.vx;
-          a.vx = b.vx * OBJ_BOUNCE;
-          b.vx = vxA * OBJ_BOUNCE;
-        } else {
-          const push = overlapY / 2;
-          if (a.y < b.y) { a.y -= push; b.y += push; } else { a.y += push; b.y -= push; }
-          const vyA = a.vy;
-          a.vy = b.vy * OBJ_BOUNCE;
-          b.vy = vyA * OBJ_BOUNCE;
-        }
-
-        const spin = (Math.random() - 0.5) * 1.2;
-        a.angVel = clamp(a.angVel + spin, -MAX_SPIN, MAX_SPIN);
-        b.angVel = clamp(b.angVel - spin, -MAX_SPIN, MAX_SPIN);
-      }
-    }
-  }
-
-  function clamp(value, min, max) {
-    return Math.min(Math.max(value, min), max);
-  }
-
-  function tick() {
+  let lastTime = performance.now();
+  function tick(now) {
     if (!document.body.classList.contains('gravity-active')) return;
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
+    const delta = Math.min(now - lastTime, 33);
+    lastTime = now;
+    Engine.update(engine, delta);
 
-    items.forEach((item) => {
-      if (item.dragging) return;
-      item.vy += GRAVITY;
-      item.vx *= LINEAR_DAMPING;
-      item.vy *= LINEAR_DAMPING;
-      item.vx = clamp(item.vx, -MAX_SPEED, MAX_SPEED);
-      item.vy = clamp(item.vy, -MAX_SPEED, MAX_SPEED);
-
-      item.x += item.vx;
-      item.y += item.vy;
-      item.angle += item.angVel;
-      item.angVel = clamp(item.angVel * ANGULAR_DAMPING, -MAX_SPIN, MAX_SPIN);
-
-      // preso na área visível — quica nos 4 lados, nunca sai da tela
-      if (item.y + item.h > vh) { item.y = vh - item.h; item.vy *= -WALL_BOUNCE; item.angVel = clamp(item.angVel + (Math.random() - 0.5) * 1.5, -MAX_SPIN, MAX_SPIN); }
-      if (item.y < 0) { item.y = 0; item.vy *= -WALL_BOUNCE; item.angVel = clamp(item.angVel + (Math.random() - 0.5) * 1.5, -MAX_SPIN, MAX_SPIN); }
-      if (item.x < 0) { item.x = 0; item.vx *= -WALL_BOUNCE; item.angVel = clamp(item.angVel + (Math.random() - 0.5) * 1.5, -MAX_SPIN, MAX_SPIN); }
-      if (item.x + item.w > vw) { item.x = vw - item.w; item.vx *= -WALL_BOUNCE; item.angVel = clamp(item.angVel + (Math.random() - 0.5) * 1.5, -MAX_SPIN, MAX_SPIN); }
-    });
-
-    // várias passagens por quadro pra separar direito quando muitos
-    // objetos (ou letras) estão se tocando ao mesmo tempo — sem isso
-    // eles ficam "brigando" e parecem atravessar uns aos outros
-    resolveCollisions();
-    resolveCollisions();
-    resolveCollisions();
-
-    items.forEach((item) => {
-      item.el.style.left = `${item.x}px`;
-      item.el.style.top = `${item.y}px`;
-      item.el.style.transform = `rotate(${item.angle}deg)`;
+    pairs.forEach(({ el, body, w, h }) => {
+      el.style.transform = `translate(${body.position.x - w / 2}px, ${body.position.y - h / 2}px) rotate(${body.angle}rad)`;
     });
 
     requestAnimationFrame(tick);
