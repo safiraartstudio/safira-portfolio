@@ -341,15 +341,41 @@ function startGravityMode() {
   const pairs = [];
 
   function makeBody(el, rect) {
-    el.style.position = 'fixed';
-    el.style.left = '0';
-    el.style.top = '0';
-    el.style.width = `${rect.width}px`;
-    el.style.margin = '0';
-    el.style.zIndex = '9998';
-    el.style.transition = 'none';
-    el.style.cursor = 'grab';
-    el.style.willChange = 'transform';
+    let physicsTarget = el;
+
+    if (el.classList.contains('hero-img')) {
+      // wrapper especial: a física mexe SÓ no wrapper (posição e
+      // rotação); o hero-img continua livre por dentro pra tocar a
+      // própria animação de squish (escala) sem os dois brigarem
+      // pela mesma propriedade transform ao mesmo tempo.
+      const wrapper = document.createElement('div');
+      wrapper.className = 'gravity-wrapper';
+      wrapper.style.position = 'fixed';
+      wrapper.style.left = '0';
+      wrapper.style.top = '0';
+      wrapper.style.width = `${rect.width}px`;
+      wrapper.style.height = `${rect.height}px`;
+      wrapper.style.zIndex = '9998';
+      wrapper.style.willChange = 'transform';
+      el.parentNode.insertBefore(wrapper, el);
+      wrapper.appendChild(el);
+      el.style.position = 'static';
+      el.style.width = '100%';
+      el.style.height = '100%';
+      el.style.margin = '0';
+      el.style.cursor = 'grab';
+      physicsTarget = wrapper;
+    } else {
+      el.style.position = 'fixed';
+      el.style.left = '0';
+      el.style.top = '0';
+      el.style.width = `${rect.width}px`;
+      el.style.margin = '0';
+      el.style.zIndex = '9998';
+      el.style.transition = 'none';
+      el.style.cursor = 'grab';
+      el.style.willChange = 'transform';
+    }
 
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
@@ -361,11 +387,17 @@ function startGravityMode() {
     Body.setVelocity(body, { x: (Math.random() - 0.5) * 6, y: (Math.random() - 0.5) * 6 });
     Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.15);
     World.add(world, body);
-    pairs.push({ el, body, w: rect.width, h: rect.height });
+    pairs.push({ el: physicsTarget, body, w: rect.width, h: rect.height });
   }
 
   // ===== ELEMENTOS "INTEIROS" (botões, links, imagens, cards) =====
-  const wholeSelector = 'a, button, img, .status-badge, .gallery-item, .season-banner';
+  // .page-character continua fora (é arte de fundo decorativa das
+  // páginas internas). Tudo mais participa normalmente, inclusive
+  // .hero-img (que ganha um "wrapper" especial mais abaixo pra
+  // continuar dando squish mesmo caindo/girando) e .music-player
+  // (a barra inteira se move como uma unidade só, em vez de ficar
+  // parada enquanto só o botão de nota voa sozinho).
+  const wholeSelector = 'a, button, img:not(.page-character), .status-badge, .gallery-item, .season-banner, .music-player';
   let wholeCandidates = Array.from(document.querySelectorAll(wholeSelector));
   wholeCandidates = wholeCandidates.filter((el) => !wholeCandidates.some((other) => other !== el && other.contains(el)));
 
