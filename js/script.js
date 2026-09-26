@@ -390,32 +390,43 @@ function startGravityMode() {
     pairs.push({ el: physicsTarget, body, w: rect.width, h: rect.height });
   }
 
-  // ===== ELEMENTOS "INTEIROS" (botões, links, imagens, cards) =====
-  // .page-character continua fora (é arte de fundo decorativa das
-  // páginas internas). Tudo mais participa normalmente, inclusive
-  // .hero-img (que ganha um "wrapper" especial mais abaixo pra
-  // continuar dando squish mesmo caindo/girando) e .music-player
-  // (a barra inteira se move como uma unidade só, em vez de ficar
-  // parada enquanto só o botão de nota voa sozinho).
+  // ===== ETAPA 1: MEDIR TUDO PRIMEIRO =====
+  // Crucial: nada é convertido pra "fixed" nessa etapa. Assim que um
+  // elemento vira fixed, ele sai do fluxo e a página pode ENCOLHER
+  // de altura — o que "puxa" pra cima conteúdo que antes estava fora
+  // da tela, fazendo ele ser contado por engano como visível. Por
+  // isso medimos TUDO primeiro (com a página intacta) e só depois
+  // convertemos, em uma segunda etapa separada.
+  const toConvert = []; // { el, rect } — só o que realmente estava na tela
+
   const wholeSelector = 'a, button, img:not(.page-character), .status-badge, .gallery-item, .season-banner, .music-player';
   let wholeCandidates = Array.from(document.querySelectorAll(wholeSelector));
   wholeCandidates = wholeCandidates.filter((el) => !wholeCandidates.some((other) => other !== el && other.contains(el)));
 
   wholeCandidates.forEach((el) => {
     const rect = el.getBoundingClientRect();
-    if (!isOnScreen(rect)) return;
-    makeBody(el, rect);
+    if (!isOnScreen(rect)) {
+      el.style.display = 'none'; // fora da tela: some de vez, não só ignora
+      return;
+    }
+    toConvert.push({ el, rect });
   });
 
-  // ===== TEXTOS — cada LETRA vira um corpo físico próprio, separado =====
   const textSelector = 'h1, h2, .commission-heading, p, li, .price-tier-name, .price-tier-value';
   let textCandidates = Array.from(document.querySelectorAll(textSelector));
   textCandidates = textCandidates.filter((el) => !wholeCandidates.some((w) => w.contains(el)));
   textCandidates = textCandidates.filter((el) => !textCandidates.some((other) => other !== el && other.contains(el)));
 
+  // pro texto, primeiro quebra em spans (ainda no fluxo normal) e só
+  // DEPOIS mede cada letra — todas as letras de todos os textos são
+  // medidas antes de qualquer uma virar "fixed"
+  const letterSpans = [];
   textCandidates.forEach((el) => {
     const elRect = el.getBoundingClientRect();
-    if (!isOnScreen(elRect)) return;
+    if (!isOnScreen(elRect)) {
+      el.style.display = 'none'; // parágrafo/título inteiro fora da tela
+      return;
+    }
 
     const text = el.textContent;
     el.textContent = '';
@@ -427,13 +438,24 @@ function startGravityMode() {
       el.appendChild(span);
     }
 
-    Array.from(el.children).forEach((span) => {
-      const rect = span.getBoundingClientRect();
-      if (rect.width === 0 || rect.height === 0) return;
-      if (!isOnScreen(rect)) return;
-      makeBody(span, rect);
-    });
+    letterSpans.push(...Array.from(el.children));
   });
+
+  // agora que TODOS os parágrafos/títulos visíveis já foram quebrados
+  // em letras, medimos cada letra (ainda em fluxo normal) antes de
+  // converter qualquer uma
+  letterSpans.forEach((span) => {
+    const rect = span.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+    if (!isOnScreen(rect)) {
+      span.style.display = 'none'; // letra fora da tela: some de vez
+      return;
+    }
+    toConvert.push({ el: span, rect });
+  });
+
+  // ===== ETAPA 2: CONVERTER TUDO (só agora que já medimos tudo) =====
+  toConvert.forEach(({ el, rect }) => makeBody(el, rect));
 
   // ===== ARRASTAR E JOGAR — usando o próprio motor de física =====
   // O Matter cuida de tudo: pegar o objeto sob o cursor, seguir o
