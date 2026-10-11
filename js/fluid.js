@@ -32,28 +32,44 @@ function resolveFluidLib(mod) {
   return candidates.find((c) => c && typeof c.simulation === 'function') || null;
 }
 
+// Todas as opções da biblioteca (versão 0.6.1). Os valores que não
+// estavam aqui antes foram preenchidos com o padrão da própria
+// biblioteca, então o visual inicial continua o mesmo de antes.
 const initialConfig = {
   INITIAL: true,
   SPLAT_AMOUNT: 5,
   HOVER: false,
   SIM_RESOLUTION: 128,
   DYE_RESOLUTION: 512,
+  CAPTURE_RESOLUTION: 512,
   DENSITY_DISSIPATION: 0.98,
   VELOCITY_DISSIPATION: 0.99,
   PRESSURE: 0.8,
   PRESSURE_ITERATIONS: 20,
   CURL: 30,
   SPLAT_RADIUS: 0.35,
+  SPLAT_FORCE: 6000,
+  SPLAT_KEY: 'Space',
+  SHADING: true,
+  COLORFUL: true,
   COLOR_UPDATE_SPEED: 10,
+  COLOR_PALETTE: [],
   BACK_COLOR: '#0c0410',
   TRANSPARENT: false,
+  BRIGHTNESS: 0.5,
   BLOOM: true,
   BLOOM_ITERATIONS: 8,
   BLOOM_RESOLUTION: 256,
   BLOOM_INTENSITY: 0.8,
   BLOOM_THRESHOLD: 0.6,
   BLOOM_SOFT_KNEE: 0.7,
+  SUNRAYS: true,
+  SUNRAYS_RESOLUTION: 196,
+  SUNRAYS_WEIGHT: 1.0,
 };
+
+// Paleta personalizada: 5 cores que o usuário pode escolher.
+const defaultPalette = { usar: false, c1: '#c77dff', c2: '#ff7eb6', c3: '#7ee8fa', c4: '#ffd166', c5: '#06d6a0' };
 
 async function setupPanel(lib) {
   let TweakpaneModule;
@@ -68,32 +84,105 @@ async function setupPanel(lib) {
     if (typeof lib.config === 'function') lib.config(partial);
   };
 
-  const params = {
-    radius: initialConfig.SPLAT_RADIUS,
-    curl: initialConfig.CURL,
-    bloom: initialConfig.BLOOM,
-    dissipation: initialConfig.DENSITY_DISSIPATION,
-    velocity: initialConfig.VELOCITY_DISSIPATION,
-  };
+  // "params" espelha a configuração; cada controle mexe numa chave
+  // com o mesmo nome da opção da biblioteca.
+  const params = { ...initialConfig };
+  const palette = { ...defaultPalette };
 
   const pane = new TweakpaneModule.Pane({
     container: document.getElementById('fluidPanel'),
     title: 'Controles do fluido',
+    expanded: window.innerWidth > 700, // no celular começa fechado
   });
 
-  pane.addBinding(params, 'radius', { label: 'Tamanho', min: 0.1, max: 1.0, step: 0.01 })
-    .on('change', (ev) => update({ SPLAT_RADIUS: ev.value }));
-  pane.addBinding(params, 'curl', { label: 'Redemoinhos', min: 0, max: 50, step: 1 })
-    .on('change', (ev) => update({ CURL: ev.value }));
-  pane.addBinding(params, 'dissipation', { label: 'Fade da Cor', min: 0.9, max: 1.0, step: 0.001 })
-    .on('change', (ev) => update({ DENSITY_DISSIPATION: ev.value }));
-  pane.addBinding(params, 'velocity', { label: 'Fade do Movimento', min: 0.9, max: 1.0, step: 0.001 })
-    .on('change', (ev) => update({ VELOCITY_DISSIPATION: ev.value }));
-  pane.addBinding(params, 'bloom', { label: 'Brilho Neon' })
-    .on('change', (ev) => update({ BLOOM: ev.value }));
+  function bind(folder, key, options) {
+    return folder
+      .addBinding(params, key, options)
+      .on('change', (ev) => update({ [key]: ev.value }));
+  }
 
-  pane.addButton({ title: '✨ Novos respingos' }).on('click', () => {
+  // ----- Pincel -----
+  const brush = pane.addFolder({ title: 'Pincel', expanded: true });
+  bind(brush, 'SPLAT_RADIUS', { label: 'Tamanho', min: 0.01, max: 1, step: 0.01 });
+  bind(brush, 'SPLAT_FORCE', { label: 'Força', min: 500, max: 15000, step: 100 });
+  bind(brush, 'SPLAT_AMOUNT', { label: 'Qtd. respingos', min: 1, max: 20, step: 1 });
+  bind(brush, 'HOVER', { label: 'Só passar o mouse' });
+  bind(brush, 'SPLAT_KEY', { label: 'Tecla de respingo', options: { 'Espaço': 'Space', 'Desativada': '' } });
+
+  // ----- Movimento -----
+  const motion = pane.addFolder({ title: 'Movimento', expanded: true });
+  bind(motion, 'CURL', { label: 'Redemoinhos', min: 0, max: 100, step: 1 });
+  bind(motion, 'PRESSURE', { label: 'Pressão', min: 0, max: 1, step: 0.01 });
+  bind(motion, 'PRESSURE_ITERATIONS', { label: 'Passos de pressão', min: 1, max: 50, step: 1 });
+  bind(motion, 'DENSITY_DISSIPATION', { label: 'Fade da cor', min: 0, max: 4, step: 0.01 });
+  bind(motion, 'VELOCITY_DISSIPATION', { label: 'Fade do movimento', min: 0, max: 4, step: 0.01 });
+
+  // ----- Cores -----
+  const colors = pane.addFolder({ title: 'Cores', expanded: false });
+  bind(colors, 'COLORFUL', { label: 'Cores variando' });
+  bind(colors, 'COLOR_UPDATE_SPEED', { label: 'Veloc. das cores', min: 1, max: 50, step: 1 });
+  bind(colors, 'BRIGHTNESS', { label: 'Brilho das cores', min: 0.1, max: 2, step: 0.05 });
+  bind(colors, 'BACK_COLOR', { label: 'Cor de fundo', view: 'color' });
+  bind(colors, 'TRANSPARENT', { label: 'Fundo transparente' });
+
+  const applyPalette = () => {
+    update({ COLOR_PALETTE: palette.usar ? [palette.c1, palette.c2, palette.c3, palette.c4, palette.c5] : [] });
+  };
+  colors.addBinding(palette, 'usar', { label: 'Usar paleta' }).on('change', applyPalette);
+  ['c1', 'c2', 'c3', 'c4', 'c5'].forEach((key, i) => {
+    colors.addBinding(palette, key, { label: `Cor ${i + 1}`, view: 'color' }).on('change', applyPalette);
+  });
+
+  // ----- Visual -----
+  const look = pane.addFolder({ title: 'Visual', expanded: false });
+  bind(look, 'SHADING', { label: 'Sombreamento' });
+
+  // ----- Brilho neon (bloom) -----
+  const bloom = pane.addFolder({ title: 'Brilho neon', expanded: false });
+  bind(bloom, 'BLOOM', { label: 'Ativar' });
+  bind(bloom, 'BLOOM_INTENSITY', { label: 'Intensidade', min: 0.1, max: 2, step: 0.05 });
+  bind(bloom, 'BLOOM_THRESHOLD', { label: 'Limiar', min: 0, max: 1, step: 0.01 });
+  bind(bloom, 'BLOOM_SOFT_KNEE', { label: 'Suavização', min: 0, max: 1, step: 0.01 });
+  bind(bloom, 'BLOOM_ITERATIONS', { label: 'Iterações', min: 1, max: 8, step: 1 });
+  bind(bloom, 'BLOOM_RESOLUTION', { label: 'Resolução', options: { 64: 64, 128: 128, 256: 256, 512: 512 } });
+
+  // ----- Raios de sol -----
+  const rays = pane.addFolder({ title: 'Raios de sol', expanded: false });
+  bind(rays, 'SUNRAYS', { label: 'Ativar' });
+  bind(rays, 'SUNRAYS_WEIGHT', { label: 'Intensidade', min: 0.1, max: 2, step: 0.05 });
+  bind(rays, 'SUNRAYS_RESOLUTION', { label: 'Resolução', options: { 64: 64, 128: 128, 196: 196, 256: 256 } });
+
+  // ----- Qualidade (resoluções: mais alto = mais bonito e mais pesado) -----
+  const quality = pane.addFolder({ title: 'Qualidade', expanded: false });
+  bind(quality, 'SIM_RESOLUTION', { label: 'Simulação', options: { 32: 32, 64: 64, 128: 128, 256: 256 } });
+  bind(quality, 'DYE_RESOLUTION', { label: 'Cor', options: { 256: 256, 512: 512, 1024: 1024 } });
+  bind(quality, 'CAPTURE_RESOLUTION', { label: 'Print', options: { 256: 256, 512: 512, 1024: 1024, 2048: 2048 } });
+
+  // ----- Ações -----
+  const actions = pane.addFolder({ title: 'Ações', expanded: true });
+
+  actions.addButton({ title: '✨ Novos respingos' }).on('click', () => {
     if (typeof lib.splats === 'function') lib.splats();
+  });
+
+  let paused = false;
+  const pauseButton = actions.addButton({ title: '⏸ Pausar' });
+  pauseButton.on('click', () => {
+    if (typeof lib.pause !== 'function') return;
+    paused = !paused;
+    lib.pause(true); // true = dá pra continuar desenhando enquanto pausado
+    pauseButton.title = paused ? '▶ Retomar' : '⏸ Pausar';
+  });
+
+  actions.addButton({ title: '📷 Tirar print' }).on('click', () => {
+    if (typeof lib.screenshot === 'function') lib.screenshot();
+  });
+
+  actions.addButton({ title: '↺ Restaurar padrões' }).on('click', () => {
+    Object.assign(params, initialConfig);
+    Object.assign(palette, defaultPalette);
+    update({ ...initialConfig });
+    pane.refresh();
   });
 }
 
