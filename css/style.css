@@ -267,6 +267,33 @@ body.page-fade.page-out{ opacity:0; }
   z-index:5;
   filter:drop-shadow(0 3px 6px rgba(0,0,0,0.35));
 }
+/* Adorno "atrás" (position: 'behind' no decorations-config.js):
+   centralizado atrás do alvo, com tamanho em % da largura dele (nunca
+   passa da largura da tela). */
+.decoration-behind{
+  position:absolute;
+  top:50%;
+  left:50%;
+  z-index:0;
+  width:min(var(--behind-size, 150%), 96vw);
+  height:auto;
+  aspect-ratio:1 / 1;
+  transform:translate(-50%, -50%);
+  pointer-events:none;
+  user-select:none;
+  -webkit-user-drag:none;
+  filter:drop-shadow(0 6px 14px rgba(0,0,0,0.35));
+  transition:opacity 0.6s ease;
+  animation:decoration-behind-in 0.9s ease 0.15s backwards;
+}
+@keyframes decoration-behind-in{
+  from{ opacity:0; transform:translate(-50%, -50%) scale(0.88); }
+}
+.hero-img-stage.is-gone .decoration-behind{ opacity:0; }
+@media (prefers-reduced-motion: reduce){
+  .decoration-behind{ animation:none; transition:none; }
+}
+
 .decoration-badge.pos-top-right{ top:-14px; right:-14px; }
 .decoration-badge.pos-top-left{ top:-14px; left:-14px; }
 .decoration-badge.pos-bottom-right{ bottom:-14px; right:-14px; }
@@ -481,6 +508,27 @@ body.page-fade.page-out{ opacity:0; }
   transform-origin:center bottom;
 }
 
+/* Palco do personagem: uma caixa quadrada do mesmo tamanho dele, que
+   serve de referência pra qualquer adorno "atrás" (guirlanda de Natal,
+   etc.) e vira UM objeto só no modo gravidade — o adorno acompanha o
+   personagem em vez de ficar parado. */
+.hero-img-stage{
+  position:relative;
+  z-index:1;
+  width:min(340px, 65vw);
+  aspect-ratio:1 / 1;
+  margin-bottom:28px;
+  flex-shrink:0;
+}
+.hero-img-stage .hero-img{
+  position:relative;
+  z-index:1;
+  margin-bottom:0;
+}
+.hero-img-stage .hero-img:not(.img-missing){
+  display:block;
+}
+
 @keyframes pat-squish{
   0%{ transform:scale(1, 1); }
   30%{ transform:scale(1.08, 0.9); }
@@ -509,6 +557,8 @@ body.page-fade.page-out{ opacity:0; }
 }
 
 .hero-title{
+  position:relative;
+  z-index:2;
   font-family:'Fredoka', sans-serif;
   font-weight:700;
   font-size:clamp(2.4rem, 8vw, 4.2rem);
@@ -518,6 +568,8 @@ body.page-fade.page-out{ opacity:0; }
 }
 
 .hero-subtitle{
+  position:relative;
+  z-index:2;
   margin-top:18px;
   font-size:1rem;
   color:var(--texto-claro);
