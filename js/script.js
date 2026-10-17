@@ -210,14 +210,41 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-document.addEventListener('DOMContentLoaded', () => {
+// ===== DATAS DAS ESTAÇÕES (Halloween, Natal) =====
+// Normalmente vêm de window.SITE_SEASONS (js/decorations-config.js, o
+// arquivo feito pra você editar). Estes valores só valem se a estação
+// não estiver definida lá.
+const DEFAULT_SEASONS = {
+  halloween: { start: '10-20', end: '10-31' },
+  christmas: { start: '11-01', end: '01-05' },
+};
+
+function seasonRange(name) {
+  const custom = (window.SITE_SEASONS || {})[name];
+  return custom && custom.start && custom.end ? custom : DEFAULT_SEASONS[name];
+}
+
+// start/end no formato "MM-DD". Aceita período que vira o ano
+// (ex: "11-01" até "01-05"). Sem datas = sempre ativo.
+function isDateInRange(start, end) {
+  if (!start || !end) return true;
   const now = new Date();
-  const month = now.getMonth() + 1;
-  const day = now.getDate();
+  const [sm, sd] = start.split('-').map(Number);
+  const [em, ed] = end.split('-').map(Number);
+  const toDays = (m, d) => m * 31 + d;
+  const today = toDays(now.getMonth() + 1, now.getDate());
+  const from = toDays(sm, sd);
+  const to = toDays(em, ed);
+  return from <= to ? (today >= from && today <= to) : (today >= from || today <= to);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
   let season = null;
 
-  if ((month === 10 && day >= 20) || (month === 11 && day <= 2)) season = 'halloween';
-  else if ((month === 12 && day >= 15) || (month === 1 && day <= 5)) season = 'christmas';
+  const hal = seasonRange('halloween');
+  const xmas = seasonRange('christmas');
+  if (isDateInRange(hal.start, hal.end)) season = 'halloween';
+  else if (isDateInRange(xmas.start, xmas.end)) season = 'christmas';
 
   if (!season) return;
 
@@ -287,7 +314,10 @@ function showKonamiTerminal(heroImg) {
     <input type="text" class="konami-terminal-input" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="text">
   `;
   // logo depois do personagem no HTML, não no fim da página
-  heroImg.insertAdjacentElement('afterend', terminal);
+  // depois do palco (e não dentro dele): o palco tem altura fixa e o
+  // adorno de trás (guirlanda) é centralizado nele
+  const anchor = heroImg.closest('.hero-img-stage') || heroImg;
+  anchor.insertAdjacentElement('afterend', terminal);
 
   const input = terminal.querySelector('.konami-terminal-input');
   input.placeholder = I18N['konami.placeholder'][lang];
@@ -313,41 +343,78 @@ function showKonamiTerminal(heroImg) {
 // ===== ADORNOS NOS BOTÕES =====
 // Lê window.SITE_DECORATIONS (definido em js/decorations-config.js,
 // que é o arquivo feito pra VOCÊ editar) e coloca cada imagem no
-// canto do botão indicado. Cuida sozinho do caminho da imagem
-// (index.html x páginas dentro de pages/) e de janelas sazonais.
+// alvo indicado: num canto (top-right, top-left...) ou "behind"
+// (centralizado ATRÁS do alvo, tipo uma guirlanda em volta do
+// personagem). Cuida sozinho do caminho da imagem (index.html x
+// páginas dentro de pages/) e das datas.
 document.addEventListener('DOMContentLoaded', () => {
   const list = window.SITE_DECORATIONS;
   if (!Array.isArray(list) || !list.length) return;
 
   const siteRoot = location.pathname.includes('/pages/') ? '../' : '';
 
-  function isWithinSeason(start, end) {
-    if (!start || !end) return true; // sem datas = sempre ativo
-    const now = new Date();
-    const [sm, sd] = start.split('-').map(Number);
-    const [em, ed] = end.split('-').map(Number);
-    const toDays = (m, d) => m * 31 + d; // aproximação simples, mesmo padrão usado no banner sazonal
-    const today = toDays(now.getMonth() + 1, now.getDate());
-    const from = toDays(sm, sd);
-    const to = toDays(em, ed);
-    return from <= to ? (today >= from && today <= to) : (today >= from || today <= to);
+  // Coloca o adorno atrás do alvo. O tamanho (deco.size) é em % da
+  // largura do alvo. Como o adorno é maior que o alvo e sai pra fora
+  // dele, abre espaço em cima/embaixo pra ele não ser cortado no topo
+  // da página nem ficar por cima do título.
+  function placeBehind(el, badge, deco) {
+    badge.className = 'decoration-behind';
+    badge.style.setProperty('--behind-size', `${deco.size || 150}%`);
+    el.insertBefore(badge, el.firstChild);
+
+    const baseMarginBottom = parseFloat(getComputedStyle(el).marginBottom) || 0;
+
+    const adjust = () => {
+      const extra = Math.max(0, (badge.offsetHeight - el.offsetHeight) / 2);
+      const hero = el.closest('.hero');
+      const padTop = hero ? parseFloat(getComputedStyle(hero).paddingTop) || 0 : 0;
+      el.style.marginTop = `${Math.max(0, extra - padTop + 10)}px`;
+      el.style.marginBottom = `${baseMarginBottom + extra * 0.5}px`;
+    };
+
+    badge.onerror = () => {
+      badge.remove();
+      el.style.marginTop = '';
+      el.style.marginBottom = '';
+      window.removeEventListener('resize', adjust);
+    };
+
+    adjust();
+    window.addEventListener('resize', adjust);
   }
 
   list.forEach((deco) => {
     if (!deco || !deco.image || !deco.target) return;
-    if (!isWithinSeason(deco.start, deco.end)) return;
+
+    // "season" reaproveita as datas de SITE_SEASONS (as mesmas do
+    // banner e das partículas) — muda num lugar só. Sem "season",
+    // valem os start/end do próprio adorno (ou sempre ativo).
+    let start = deco.start;
+    let end = deco.end;
+    if (deco.season) {
+      const range = seasonRange(deco.season);
+      if (!range) return; // nome de estação que não existe: não mostra
+      start = range.start;
+      end = range.end;
+    }
+    if (!isDateInRange(start, end)) return;
 
     document.querySelectorAll(deco.target).forEach((el) => {
-      el.style.position = el.style.position || 'relative';
-
       const badge = document.createElement('img');
       badge.src = siteRoot + deco.image;
+      badge.alt = '';
+      badge.draggable = false;
+      badge.setAttribute('aria-hidden', 'true');
+
+      if (deco.position === 'behind') {
+        placeBehind(el, badge, deco);
+        return;
+      }
+
+      el.style.position = el.style.position || 'relative';
       badge.className = `decoration-badge pos-${deco.position || 'top-right'}`;
       badge.style.width = `${deco.size || 40}px`;
-      badge.alt = '';
-      badge.setAttribute('aria-hidden', 'true');
       badge.onerror = () => badge.remove(); // imagem não encontrada: some sem quebrar nada
-
       el.appendChild(badge);
     });
   });
@@ -502,7 +569,11 @@ function startGravityMode() {
   // convertemos, em uma segunda etapa separada.
   const toConvert = []; // { el, rect } — só o que realmente estava na tela
 
-  const wholeSelector = 'a, button, img:not(.page-character):not(.is-gone), .status-badge, .gallery-item, .season-banner, .music-player, .divider, .order-row, input, select, textarea, label';
+  // .hero-img-stage entra como um objeto só (personagem + adorno de trás
+  // caem juntos); quando o personagem já se desintegrou, o palco fica
+  // de fora pra não virar um objeto fantasma. As imagens de adorno não
+  // entram sozinhas — andam junto com o alvo delas.
+  const wholeSelector = 'a, button, img:not(.page-character):not(.is-gone):not(.decoration-behind):not(.decoration-badge), .hero-img-stage:not(.is-gone), .status-badge, .gallery-item, .season-banner, .music-player, .divider, .order-row, input, select, textarea, label';
   let wholeCandidates = Array.from(document.querySelectorAll(wholeSelector));
   wholeCandidates = wholeCandidates.filter((el) => !wholeCandidates.some((other) => other !== el && other.contains(el)));
 
@@ -1173,6 +1244,8 @@ function disintegrate(img, hero) {
   // gravidade do Konami ignora ela, em vez de tratá-la como um objeto
   // físico fantasma que ficaria colidindo com tudo sem ninguém ver
   img.classList.add('is-gone');
+  const stage = img.closest('.hero-img-stage');
+  if (stage) stage.classList.add('is-gone'); // a guirlanda some junto (fade)
 
   if (reduceMotion || !w || !h) {
     img.style.transition = 'opacity 0.6s ease';
@@ -1187,8 +1260,12 @@ function disintegrate(img, hero) {
 
   const container = document.createElement('div');
   container.className = 'dust-container';
-  container.style.left = `${img.offsetLeft}px`;
-  container.style.top = `${img.offsetTop}px`;
+  // pelos retângulos (e não offsetLeft/Top): a imagem agora está dentro
+  // do palco, então esses valores seriam relativos a ele, não ao hero
+  const imgBox = img.getBoundingClientRect();
+  const heroBox = hero.getBoundingClientRect();
+  container.style.left = `${imgBox.left - heroBox.left}px`;
+  container.style.top = `${imgBox.top - heroBox.top}px`;
   container.style.width = `${w}px`;
   container.style.height = `${h}px`;
 
