@@ -234,10 +234,16 @@ body.page-fade.page-out{ opacity:0; }
 
 .ych-tabs{
   display:flex;
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
   gap:10px;
   margin-bottom:20px;
   justify-content:center;
+}
+
+@media (max-width:480px){
+  .ych-tabs{
+    flex-wrap:wrap;
+  }
 }
 
 .ych-tab-btn{
