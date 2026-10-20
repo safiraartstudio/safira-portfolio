@@ -312,14 +312,6 @@
         <h2 class="category-title fade-item" style="--delay:0s" data-i18n="cat.ych.title">✦ YCH's em Rotação</h2>
       </div>
 
-      <div class="text-col">
-        <div class="commission-text fade-item" style="--delay:0.1s">
-          <ul>
-            <li data-i18n="cat.ych.desc1">Para até 4 OCs</li>
-            <li data-i18n="cat.ych.desc2">Disponível em versão PC e Móvel</li>
-          </ul>
-        </div>
-      </div>
 
       <!-- ===== ABAS DOS YCH's =====
            Cada botão mostra um YCH diferente (nome, imagens e preços
@@ -329,15 +321,15 @@
            data-ych-panel. -->
       <div class="text-col">
         <div class="ych-tabs fade-item" style="--delay:0.2s">
-          <button class="ych-tab-btn active" data-ych-tab="praia" data-i18n="ych.praia.name">Episódio da Praia</button>
-          <button class="ych-tab-btn" data-ych-tab="acampamento" data-i18n="ych.acampamento.name">Acampamento Estrelado</button>
-          <button class="ych-tab-btn" data-ych-tab="bruxinha">Bruxinha <span class="new-badge">NOVO</span></button>
+          <button class="ych-tab-btn active" data-ych-tab="bruxinha">Bruxinha <span class="new-badge">NOVO</span></button>
           <button class="ych-tab-btn" data-ych-tab="bardepocoes">Bar de poções <span class="new-badge">NOVO</span></button>
+          <button class="ych-tab-btn" data-ych-tab="praia" data-i18n="ych.praia.name">Episódio da Praia</button>
+          <button class="ych-tab-btn" data-ych-tab="acampamento" data-i18n="ych.acampamento.name">Acampamento Estrelado</button>
         </div>
       </div>
 
       <!-- Painel: Episódio da Praia -->
-      <div class="ych-panel active" data-ych-panel="praia">
+      <div class="ych-panel" data-ych-panel="praia">
         <div class="gallery">
           <div class="gallery-item is-loading fade-item" style="--delay:0.1s">
             <img src="../img/ych-1.jpg" alt="Exemplo de Episódio da Praia 1" onerror="this.classList.add('img-missing'); this.removeAttribute('src'); this.alt='Coloque aqui img/ych-1.jpg';">
@@ -397,7 +389,7 @@
       </div>
 
        <!-- Painel: Bruxinha -->
-       <div class="ych-panel" data-ych-panel="bruxinha">
+       <div class="ych-panel active" data-ych-panel="bruxinha">
          <div class="gallery">
            <div class="gallery-item is-loading fade-item" style="--delay:0.1s">
              <img src="../img/bruxinha-1.jpg" alt="Exemplo de Bruxinha 1" onerror="this.classList.add('img-missing'); this.removeAttribute('src'); this.alt='Coloque aqui img/bruxinha-1.jpg';">
@@ -419,11 +411,11 @@
              <div class="price-tiers">
                <div class="price-tier">
                  <span class="price-tier-name" data-i18n="cat.ych.tier1.name">1 OC</span>
-                 <span class="price-tier-value">25R$ / 9$</span>
+                 <span class="price-tier-value" data-i18n="cat.ychbruxinha1.price"></span>
                </div>
                <div class="price-tier">
                  <span class="price-tier-name" data-i18n="cat.ych.tier2.name">2 OCs</span>
-                 <span class="price-tier-value">50R$ / 18$</span>
+                 <span class="price-tier-value" data-i18n="cat.ychbruxinha2.price"></span>
                </div>
              </div>
            </div>
@@ -453,11 +445,11 @@
              <div class="price-tiers">
                <div class="price-tier">
                  <span class="price-tier-name" data-i18n="cat.ych.tier1.name">1 OC</span>
-                 <span class="price-tier-value">25R$ / 9$</span>
+                 <span class="price-tier-value" data-i18n="cat.ychbardepocoes1.price"></span>
                </div>
                <div class="price-tier">
                  <span class="price-tier-name" data-i18n="cat.ych.tier2.name">2 OCs</span>
-                 <span class="price-tier-value">50R$ / 18$</span>
+                 <span class="price-tier-value" data-i18n="cat.ychbardepocoes2.price"></span>
                </div>
              </div>
            </div>
