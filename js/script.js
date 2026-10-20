@@ -137,6 +137,9 @@ const I18N = {
   'cat.ychbruxinha2.price': { pt: '50R$', en: '$18' },
   'cat.ychbardepocoes1.price': { pt: '25R$', en: '$9' },
   'cat.ychbardepocoes2.price': { pt: '50R$', en: '$18' },
+  'cat.ychbruxinha.desc1': { pt: 'voce pode escolher a fantasia que quiser!', en: 'you can choose the fantasy you want!' },
+  'cat.ychbruxinha.desc2': { pt: 'voce pode escolher a cor da sua vassoura!', en: 'you can choose the color of your broom!' },
+  'cat.ychbardepocoes.desc1': { pt: 'voce pode escolher a fantasia que quiser!', en: 'you can choose the fantasy you want!' },
 
   'com.order.heading': { pt: '✦ Como encomendar', en: '✦ How to order' },
   'com.order.pay.title': { pt: 'Pagamento via Pix', en: 'Payment via PayPal' },
