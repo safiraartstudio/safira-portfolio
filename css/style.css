@@ -505,6 +505,11 @@ body.page-fade.page-out{ opacity:0; }
   animation:pulse 2s infinite;
 }
 
+/* Hide missing images in YCH panels instead of showing star placeholder */
+.ych-panel .gallery-item img.img-missing {
+  display: none !important;
+}
+
 @keyframes pulse{
   0%{ transform:scale(1); }
   50%{ transform:scale(1.05); }
@@ -1216,6 +1221,11 @@ body.page-fade.page-out{ opacity:0; }
   margin-left:6px;
   vertical-align:middle;
   animation:pulse 2s infinite;
+}
+
+/* Hide missing images in YCH panels instead of showing star placeholder */
+.ych-panel .gallery-item img.img-missing {
+  display: none !important;
 }
 
 @keyframes pulse{
