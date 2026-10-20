@@ -237,6 +237,7 @@ body.page-fade.page-out{ opacity:0; }
   flex-wrap:wrap;
   gap:10px;
   margin-bottom:20px;
+  justify-content:center;
 }
 
 .ych-tab-btn{
@@ -931,10 +932,23 @@ body.page-fade.page-out{ opacity:0; }
   display:flex;
   align-items:center;
   justify-content:center;
-  color:var(--page-text-secondary);
-  font-size:0.85rem;
+  color:transparent; /* Hide the alt text */
+  font-size:0; /* Hide the alt text */
   text-align:center;
   padding:16px;
+  position:relative;
+}
+
+/* Add star placeholder */
+.gallery-item img.img-missing::before{
+  content:"★";
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  font-size:2rem;
+  color:var(--page-text-secondary);
+  display:block;
 }
 
 .divider{
