@@ -132,6 +132,7 @@ const I18N = {
   'ych.bardepocoes.name': { pt: 'Bar de poções', en: 'Potion Bar' },
   'ych.praia.name': { pt: 'Episódio da Praia', en: 'Beach Episode' },
   'ych.acampamento.name': { pt: 'Acampamento Estrelado', en: 'Starry Campout' },
+  'badge.new': { pt: 'NOVO', en: 'NEW' },
   'cat.ych2.desc': { pt: 'Preço único, já incluindo os dois personagens', en: 'Flat price, already including both characters' },
   'cat.ych2.price': { pt: 'Valor fixo: R$ 40,00', en: 'Fixed price: $15' },
 
