@@ -133,6 +133,11 @@ const I18N = {
   'cat.ych2.desc': { pt: 'Preço único, já incluindo os dois personagens', en: 'Flat price, already including both characters' },
   'cat.ych2.price': { pt: 'Valor fixo: R$ 40,00', en: 'Fixed price: $15' },
 
+  'cat.ychbruxinha1.price': { pt: '25R$', en: '$9' },
+  'cat.ychbruxinha2.price': { pt: '50R$', en: '$18' },
+  'cat.ychbardepocoes1.price': { pt: '25R$', en: '$9' },
+  'cat.ychbardepocoes2.price': { pt: '50R$', en: '$18' },
+
   'com.order.heading': { pt: '✦ Como encomendar', en: '✦ How to order' },
   'com.order.pay.title': { pt: 'Pagamento via Pix', en: 'Payment via PayPal' },
   'com.order.pay.desc': { pt: 'Chave enviada após confirmar seu pedido', en: 'Details sent once your order is confirmed' },
