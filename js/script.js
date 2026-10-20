@@ -129,7 +129,7 @@ const I18N = {
   'cat.ych.tier4.price': { pt: 'R$ 80,00', en: '$40' },
   
   'ych.bruxinha.name': { pt: 'Bruxinha', en: 'Little Witch' },
-  'ych.bar.name': { pt: 'Bar de Poções', en: 'Potions Bar' },
+  'ych.bardepocoes.name': { pt: 'Bar de poções', en: 'Potion Bar' },
   'ych.praia.name': { pt: 'Episódio da Praia', en: 'Beach Episode' },
   'ych.acampamento.name': { pt: 'Acampamento Estrelado', en: 'Starry Campout' },
   'cat.ych2.desc': { pt: 'Preço único, já incluindo os dois personagens', en: 'Flat price, already including both characters' },
