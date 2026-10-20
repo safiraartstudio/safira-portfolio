@@ -483,6 +483,27 @@ body.page-fade.page-out{ opacity:0; }
   transform:translateY(0);
 }
 
+/* ===== NOVO BADGE ===== */
+.new-badge{
+  display:inline-block;
+  background:#ffe082;
+  color:#4a2530;
+  font-size:0.75rem;
+  font-weight:600;
+  padding:2px 6px;
+  border-radius:3px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.2);
+  margin-left:6px;
+  vertical-align:middle;
+  animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+  0%{ transform:scale(1); }
+  50%{ transform:scale(1.05); }
+  100%{ transform:scale(1); }
+}
+
 .hero{
   position:relative;
   min-height:100vh;
@@ -1161,3 +1182,24 @@ body.page-fade.page-out{ opacity:0; }
   justify-content:center;
 }
 .lightbox-close:hover{ background:rgba(255,255,255,0.3); }
+
+/* ===== NOVO BADGE ===== */
+.new-badge{
+  display:inline-block;
+  background:#ffe082;
+  color:#4a2530;
+  font-size:0.75rem;
+  font-weight:600;
+  padding:2px 6px;
+  border-radius:3px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.2);
+  margin-left:6px;
+  vertical-align:middle;
+  animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+  0%{ transform:scale(1); }
+  50%{ transform:scale(1.05); }
+  100%{ transform:scale(1); }
+}
