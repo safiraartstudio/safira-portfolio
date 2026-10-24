@@ -140,9 +140,9 @@ const I18N = {
   'cat.ychbruxinha2.price': { pt: '50R$', en: '$18' },
   'cat.ychbardepocoes1.price': { pt: '25R$', en: '$9' },
   'cat.ychbardepocoes2.price': { pt: '50R$', en: '$18' },
-  'cat.ychbruxinha.desc1': { pt: 'voce pode escolher a fantasia que quiser!', en: 'you can choose the fantasy you want!' },
-  'cat.ychbruxinha.desc2': { pt: 'voce pode escolher a cor da sua vassoura!', en: 'you can choose the color of your broom!' },
-  'cat.ychbardepocoes.desc1': { pt: 'voce pode escolher a fantasia que quiser!', en: 'you can choose the fantasy you want!' },
+  'cat.ychbruxinha.desc1': { pt: 'você pode escolher a fantasia que quiser!', en: 'you can choose the costume you want!' },
+  'cat.ychbruxinha.desc2': { pt: 'você pode escolher a cor da sua vassoura!', en: 'you can choose the color of your broom!' },
+  'cat.ychbardepocoes.desc1': { pt: 'você pode escolher a fantasia que quiser!', en: 'you can choose the costume you want!' },
 
   'com.order.heading': { pt: '✦ Como encomendar', en: '✦ How to order' },
   'com.order.pay.title': { pt: 'Pagamento via Pix', en: 'Payment via PayPal' },
@@ -1125,6 +1125,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (img.complete && img.naturalWidth > 0) {
       markLoaded();
+    } else if (img.complete) {
+      // já falhou antes deste código rodar (o onerror do HTML tira o src):
+      // sem isso o slot vazio ficaria "carregando" (brilho passando) pra sempre
+      item.classList.remove('is-loading');
     } else {
       img.addEventListener('load', markLoaded);
       img.addEventListener('error', () => item.classList.remove('is-loading'));
