@@ -23,7 +23,6 @@ const I18N = {
   'idx.card2.title': { pt: 'Termos de Uso (TOS)', en: 'Terms of Service (TOS)' },
   'idx.card2.desc': { pt: 'Regras para comissões/uso da arte', en: 'Rules for commissions/art usage' },
   'idx.footer': { pt: '© 2026 SafiraWolfFox — todos os direitos reservados', en: '© 2026 SafiraWolfFox — All rights reserved' },
-  'slots.label': { pt: 'Vagas disponíveis', en: 'Slots available' },
 
   'og.idx.title': { pt: 'Safira Wolf Fox — Portfólio', en: 'Safira Wolf Fox — Portfolio' },
   'og.idx.desc': { pt: 'Confira meus trabalhos, comissões abertas e termos de serviço.', en: 'Check out my work, open commissions and terms of service.' },
